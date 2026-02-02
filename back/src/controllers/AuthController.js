@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import { comparePassword, hashPassword } from "../utils/password.js";
 import jwt from "jsonwebtoken";
+import { sendRegistrationEmail } from "../services/emailService.js";
 
 function login(req, res) {
   const { email, password } = req.body;
@@ -59,6 +60,11 @@ async function register(req, res) {
     });
 
     const { password: _, ...safeUser } = user.dataValues;
+
+    sendRegistrationEmail(user).catch((err) =>
+      console.error("Erreur envoi email inscription :", err)
+    );
+
     res.status(201).json({ message: "Inscription réussie", user: safeUser });
   } catch (error) {
     res.status(500).json({ error: error.message });

@@ -1,5 +1,6 @@
 import { Film, User, Tag } from "../models/index.js";
 import { videoDuration } from "@numairawan/video-duration";
+import { sendFilmSubmissionEmail, sendFilmStatusEmail } from "../services/emailService.js";
 
 export const getAllFilms = async (req, res) => {
   try {
@@ -108,6 +109,16 @@ export const createFilm = async (req, res) => {
     }
 
     const result = await Film.findByPk(film.id, { include: [{ model: Tag, as: "tags" }] });
+
+    if (req.user) {
+      const owner = await User.findByPk(req.user.id);
+      if (owner) {
+        sendFilmSubmissionEmail(owner, result).catch((err) =>
+          console.error("Erreur envoi email soumission film :", err)
+        );
+      }
+    }
+
     res.status(201).json(result);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -136,7 +147,17 @@ export const updateFilm = async (req, res) => {
       }
     }
 
+    const previousStatus = film.status;
     await film.update(data);
+
+    if (data.status && data.status !== previousStatus) {
+      const owner = await User.findByPk(film.user_id);
+      if (owner) {
+        sendFilmStatusEmail(owner, film, data.status).catch((err) =>
+          console.error("Erreur envoi email statut film :", err)
+        );
+      }
+    }
 
     if (data.tags) {
       const tagNames = typeof data.tags === "string" ? JSON.parse(data.tags) : data.tags;
