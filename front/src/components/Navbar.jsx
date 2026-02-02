@@ -49,6 +49,7 @@ export default function Navbar() {
 
 
 
+
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
   <path d="M8 21h8"></path>
   <path d="M12 17v4"></path>
@@ -63,6 +64,8 @@ export default function Navbar() {
   <line x1="8" y1="2" x2="8" y2="6"></line>
   <line x1="3" y1="10" x2="21" y2="10"></line>
 </svg>
+
+
 
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
   <circle cx="12" cy="7" r="4"></circle>

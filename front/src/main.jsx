@@ -14,6 +14,7 @@ import { Register } from "./pages/auth/Register.jsx";
 import { RoleGuard } from "./middlewares/RoleGuard.jsx";
 import GalerieDesFilmsPage from "./pages/Gallerie.jsx";
 import Videos from "./pages/admin/Videos.jsx";
+import Agenda from "./pages/Agenda.jsx";
 
 
 const queryClient = new QueryClient({
@@ -33,6 +34,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/" element={<PublicLayout />}>
             <Route index element={<Home />} />
             <Route path="/gallerie" element={<GalerieDesFilmsPage />} />
+            <Route path="/agenda" element={<Agenda/>} />
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/register" element={<Register />} />
           </Route>
