@@ -1,8 +1,8 @@
 /* Footer */
 .footer {
-  background: #0a0a0a;
+  background: var(--bg-primary);
   padding: 4rem 2rem 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--border-color);
 }
 
 .footer-container {
@@ -20,7 +20,7 @@
 .footer-logo {
   font-size: 2rem;
   font-weight: 800;
-  color: white;
+  color: var(--text-primary);
   margin: 0 0 1.5rem 0;
 }
 
@@ -32,7 +32,7 @@
 }
 
 .footer-tagline {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-secondary);
   font-size: 0.95rem;
   font-style: italic;
   line-height: 1.6;
@@ -50,18 +50,18 @@
   height: 3rem;
   border-radius: 50%;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--border-color);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
   transition: all 0.3s ease;
 }
 
 .social-link:hover {
   background: rgba(255, 255, 255, 0.05);
   border-color: rgba(255, 255, 255, 0.3);
-  color: white;
+  color: var(--text-primary);
 }
 
 .social-link svg {
@@ -89,14 +89,14 @@
 }
 
 .footer-link {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
   font-size: 1rem;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .footer-link:hover {
-  color: white;
+  color: var(--text-primary);
 }
 
 .footer-newsletter {
@@ -107,7 +107,7 @@
 }
 
 .newsletter-title {
-  color: white;
+  color: var(--text-primary);
   font-size: 1.75rem;
   font-weight: 700;
   margin: 0 0 2rem 0;
@@ -125,12 +125,12 @@
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 0.75rem;
-  color: white;
+  color: var(--text-primary);
   font-size: 0.95rem;
 }
 
 .newsletter-input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-muted);
 }
 
 .newsletter-input:focus {
@@ -157,7 +157,7 @@
 
 .footer-bottom {
   padding-top: 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -170,7 +170,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-muted);
   font-size: 0.75rem;
   letter-spacing: 0.1em;
 }
@@ -180,13 +180,13 @@
 }
 
 .footer-bottom-link {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-muted);
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .footer-bottom-link:hover {
-  color: white;
+  color: var(--text-primary);
 }
 
 /* Responsive */

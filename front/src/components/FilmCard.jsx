@@ -28,14 +28,14 @@ export default function FilmCard({ film }) {
         onKeyDown={onKeyDown}
         className="cursor-pointer outline-none"
       >
-        <article className="relative overflow-hidden rounded-[40px] border border-white/10 bg-white/5 shadow-[0_24px_80px_rgba(0,0,0,0.55)] transition hover:scale-[1.01]">
+        <article className="relative overflow-hidden rounded-[40px] shadow-[0_24px_80px_rgba(0,0,0,0.55)] transition hover:scale-[1.01]" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
           <div className="flex justify-between items-start p-4">
             <div className="flex flex-col gap-2">
               <span className="inline-flex rounded-full border border-purple-500/50 bg-purple-600/30 px-4 py-2 text-[10px] font-black tracking-wide">
                 {film.category}
               </span>
 
-              <span className="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[10px] font-black tracking-wide text-white/90">
+              <span className="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[10px] font-black tracking-wide opacity-90">
                 {film.ai}
               </span>
             </div>
@@ -56,20 +56,20 @@ export default function FilmCard({ film }) {
 
           <div className="mt-6 grid grid-cols-2 gap-10">
             <div>
-              <div className="text-[12px] font-black tracking-widest text-white/50">
+              <div className="text-[12px] font-black tracking-widest opacity-50">
                 RÉALISATEUR
               </div>
-              <div className="mt-3 text-lg font-semibold text-white/90 whitespace-nowrap">
+              <div className="mt-3 text-lg font-semibold opacity-90 whitespace-nowrap">
                 {film.director}
               </div>
             </div>
 
             <div className="text-right">
-              <div className="text-[12px] font-black tracking-widest text-white/50">
+              <div className="text-[12px] font-black tracking-widest opacity-50">
                 ORIGINE
               </div>
 
-              <div className="mt-3 flex items-center justify-end gap-2 text-xl font-semibold text-white/90">
+              <div className="mt-3 flex items-center justify-end gap-2 text-xl font-semibold opacity-90">
                 <img src={Globe} alt="Globe" className="h-4 w-4 opacity-80" />
                 <span>{film.origin}</span>
               </div>

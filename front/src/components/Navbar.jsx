@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { Search, Home, Trophy, Calendar, User } from "lucide-react";
+import { Search, Home, Trophy, Calendar, User, Sun, Moon } from "lucide-react";
+import { useTheme } from "../contexts/ThemeContext.jsx";
 
 export default function Navbar() {
+  const { theme, toggleTheme } = useTheme();
   const firstName = localStorage.getItem("first_name");
   const role = localStorage.getItem("role");
   const [menuOpen, setMenuOpen] = useState(false);
@@ -17,8 +19,8 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="bg-black p-4 md:p-5">
-      <div className="flex bg-white/5 text-white border border-white/10 rounded-full justify-between items-center px-6 h-16">
+    <nav className="p-4 md:p-5" style={{ background: 'var(--nav-bg)' }}>
+      <div className="flex rounded-full justify-between items-center px-6 h-16" style={{ background: 'var(--bg-card)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}>
         {/* Logo */}
         <Link to="/" className="flex font-bold gap-1 px-3 text-xl flex-shrink-0">
           <span>MARS</span>
@@ -29,25 +31,28 @@ export default function Navbar() {
 
         {/* Center icons - desktop */}
         <div className="hidden md:flex items-center gap-8">
-          <Link to="/films" className="text-white/70 hover:text-white transition-colors" title="Films">
+          <Link to="/films" className="hover:opacity-100 transition-colors" style={{ color: 'var(--text-secondary)' }} title="Films">
             <Search className="w-5 h-5" />
           </Link>
-          <Link to="/" className="text-white/70 hover:text-white transition-colors" title="Accueil">
+          <Link to="/" className="hover:opacity-100 transition-colors" style={{ color: 'var(--text-secondary)' }} title="Accueil">
             <Home className="w-5 h-5" />
           </Link>
-          <Link to="/palmares" className="text-white/70 hover:text-white transition-colors" title="Palmarès">
+          <Link to="/palmares" className="hover:opacity-100 transition-colors" style={{ color: 'var(--text-secondary)' }} title="Palmarès">
             <Trophy className="w-5 h-5" />
           </Link>
-          <Link to="/agenda" className="text-white/70 hover:text-white transition-colors" title="Agenda">
+          <Link to="/agenda" className="hover:opacity-100 transition-colors" style={{ color: 'var(--text-secondary)' }} title="Agenda">
             <Calendar className="w-5 h-5" />
           </Link>
-          <Link to="/contact" className="text-white/70 hover:text-white transition-colors" title="Contact">
+          <Link to="/contact" className="hover:opacity-100 transition-colors" style={{ color: 'var(--text-secondary)' }} title="Contact">
             <User className="w-5 h-5" />
           </Link>
         </div>
 
         {/* Right side */}
         <div className="hidden md:flex items-center gap-4">
+          <button onClick={toggleTheme} className="p-2 rounded-full transition-colors" style={{ color: 'var(--text-secondary)' }} title="Toggle theme">
+            {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
           {firstName ? (
             <>
               {role === "ADMIN" && (
@@ -97,15 +102,19 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden mt-2 bg-white/5 border border-white/10 rounded-2xl text-white">
+        <div className="md:hidden mt-2 rounded-2xl" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}>
           <div className="flex flex-col gap-4 px-6 py-6">
-            <Link to="/" onClick={() => setMenuOpen(false)} className="text-white/80 hover:text-white text-sm">ACCUEIL</Link>
-            <Link to="/films" onClick={() => setMenuOpen(false)} className="text-white/80 hover:text-white text-sm">FILMS</Link>
-            <Link to="/palmares" onClick={() => setMenuOpen(false)} className="text-white/80 hover:text-white text-sm">PALMARÈS</Link>
-            <Link to="/agenda" onClick={() => setMenuOpen(false)} className="text-white/80 hover:text-white text-sm">AGENDA</Link>
-            <Link to="/contact" onClick={() => setMenuOpen(false)} className="text-white/80 hover:text-white text-sm">CONTACT</Link>
+            <button onClick={toggleTheme} className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
+              {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              {theme === "dark" ? "Mode clair" : "Mode sombre"}
+            </button>
+            <Link to="/" onClick={() => setMenuOpen(false)} className="hover:opacity-100 text-sm" style={{ color: 'var(--text-secondary)' }}>ACCUEIL</Link>
+            <Link to="/films" onClick={() => setMenuOpen(false)} className="hover:opacity-100 text-sm" style={{ color: 'var(--text-secondary)' }}>FILMS</Link>
+            <Link to="/palmares" onClick={() => setMenuOpen(false)} className="hover:opacity-100 text-sm" style={{ color: 'var(--text-secondary)' }}>PALMARÈS</Link>
+            <Link to="/agenda" onClick={() => setMenuOpen(false)} className="hover:opacity-100 text-sm" style={{ color: 'var(--text-secondary)' }}>AGENDA</Link>
+            <Link to="/contact" onClick={() => setMenuOpen(false)} className="hover:opacity-100 text-sm" style={{ color: 'var(--text-secondary)' }}>CONTACT</Link>
             {role !== "ADMIN" && role !== "JURY" && (
-              <Link to="/soumettre" onClick={() => setMenuOpen(false)} className="text-white/80 hover:text-white text-sm">SOUMETTRE</Link>
+              <Link to="/soumettre" onClick={() => setMenuOpen(false)} className="hover:opacity-100 text-sm" style={{ color: 'var(--text-secondary)' }}>SOUMETTRE</Link>
             )}
             {firstName ? (
               <>
@@ -121,7 +130,7 @@ export default function Navbar() {
               </>
             ) : (
               <>
-                <Link to="/auth/login" onClick={() => setMenuOpen(false)} className="text-white/80 hover:text-white text-sm">CONNEXION</Link>
+                <Link to="/auth/login" onClick={() => setMenuOpen(false)} className="hover:opacity-100 text-sm" style={{ color: 'var(--text-secondary)' }}>CONNEXION</Link>
                 <Link to="/auth/register" onClick={() => setMenuOpen(false)} className="text-white bg-[linear-gradient(180deg,rgba(81,162,255,1)_0%,rgba(152,16,250,1)_100%)] px-5 py-2 rounded-full text-sm text-center font-bold">
                   INSCRIPTION
                 </Link>

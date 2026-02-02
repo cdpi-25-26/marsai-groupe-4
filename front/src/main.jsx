@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import "./index.css";
+import { ThemeProvider } from "./contexts/ThemeContext.jsx";
 import Home from "./pages/public/Home.jsx";
 import Films from "./pages/public/Films.jsx";
 import Palmares from "./pages/public/Palmares.jsx";
@@ -33,6 +34,7 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
+    <ThemeProvider>
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <Routes>
@@ -81,5 +83,6 @@ createRoot(document.getElementById("root")).render(
         </Routes>
       </QueryClientProvider>
     </BrowserRouter>
+    </ThemeProvider>
   </StrictMode>,
 );

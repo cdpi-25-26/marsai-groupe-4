@@ -58,17 +58,17 @@ export default function Films() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-        <p className="text-white/60">Chargement...</p>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-primary)' }}>
+        <p style={{ color: 'var(--text-secondary)' }}>Chargement...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-2xl sm:text-4xl font-bold text-white mb-2">SÉLECTION OFFICIELLE</h1>
-        <p className="text-white/60 mb-8">Films retenus et finalistes du festival Mars.A.I</p>
+        <h1 className="text-2xl sm:text-4xl font-bold mb-2">SÉLECTION OFFICIELLE</h1>
+        <p className="opacity-60 mb-8">Films retenus et finalistes du festival Mars.A.I</p>
 
         {/* Filters */}
         <div className="space-y-4 mb-8">
@@ -79,12 +79,12 @@ export default function Films() {
               placeholder="Rechercher un film…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 bg-gray-900 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-white/40 focus:outline-none focus:border-purple-500"
+              className="flex-1 rounded-lg px-4 py-2 focus:outline-none focus:border-purple-500" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}
             />
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-              className="bg-gray-900 border border-white/10 rounded-lg px-4 py-2 text-white/80 focus:outline-none focus:border-purple-500"
+              className="rounded-lg px-4 py-2 focus:outline-none focus:border-purple-500" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}
             >
               <option value="recent">Plus récents</option>
               <option value="oldest">Plus anciens</option>
@@ -103,7 +103,7 @@ export default function Films() {
                   className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
                     type === t
                       ? "bg-purple-600 text-white"
-                      : "bg-gray-900 text-white/60 border border-white/10 hover:border-purple-500/50"
+                      : "border hover:border-purple-500/50"
                   }`}
                 >
                   {t}
@@ -114,7 +114,7 @@ export default function Films() {
               <select
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
-                className="bg-gray-900 border border-white/10 rounded-lg px-4 py-1.5 text-white/80 text-sm focus:outline-none focus:border-purple-500"
+                className="rounded-lg px-4 py-1.5 text-sm focus:outline-none focus:border-purple-500" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}
               >
                 <option value="Toutes">Toutes les langues</option>
                 {languages.map((l) => (
@@ -146,24 +146,24 @@ export default function Films() {
 
         {/* Film grid */}
         {filtered.length === 0 ? (
-          <p className="text-white/40 text-center py-20">Aucun film ne correspond aux filtres.</p>
+          <p className="opacity-40 text-center py-20">Aucun film ne correspond aux filtres.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map((film) => (
-              <div key={film.id} className="bg-gray-900 rounded-xl overflow-hidden border border-white/10 hover:border-purple-500/50 transition-all">
+              <div key={film.id} className="rounded-xl overflow-hidden hover:border-purple-500/50 transition-all" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
                 <div className="aspect-video bg-gray-800 relative">
                   {film.thumbnail ? (
                     <img src={`${API_URL}${film.thumbnail}`} alt={film.title} className="w-full h-full object-cover" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-white/20">16:9</div>
+                    <div className="w-full h-full flex items-center justify-center opacity-20">16:9</div>
                   )}
                   {film.status === "finalist" && (
                     <span className="absolute top-2 right-2 bg-purple-600 text-white text-xs px-2 py-1 rounded">FINALISTE</span>
                   )}
                 </div>
                 <div className="p-4">
-                  <h3 className="text-white font-semibold">{film.title}</h3>
-                  <p className="text-white/50 text-sm mt-1">{film.language || ""}</p>
+                  <h3 className="font-semibold">{film.title}</h3>
+                  <p className="opacity-50 text-sm mt-1">{film.language || ""}</p>
                   {film.tags && film.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-2">
                       {film.tags.map((tag) => (

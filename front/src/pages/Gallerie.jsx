@@ -29,7 +29,7 @@ export default function GalerieDesFilmsPage() {
   }, [films, page]);
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white font-sans p-4">
+    <div className="min-h-screen font-sans p-4" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
       <main className="mx-auto max-w-[1180px] px-6 pb-10 pt-10">
         {/* Title */}
         <section className="mb-8">
@@ -114,7 +114,7 @@ export default function GalerieDesFilmsPage() {
             </button>
           </div>
 
-          <div className="text-[11px] font-black tracking-widest text-white/50">
+          <div className="text-[11px] font-black tracking-widest opacity-50">
             PAGE {page} SUR {totalPages} — {films.length} FILMS TROUVÉS
           </div>
         </section>
