@@ -43,7 +43,7 @@ export default function Contact() {
       </div>
 
       {/* КАРТА ПО ЦЕНТРУ КВАДРАТОМ */}
-      <div className="w-[500px] h-[500px] rounded-3xl overflow-hidden shadow-2xl">
+      <div className="w-full max-w-[500px] h-[300px] sm:h-[500px] rounded-3xl overflow-hidden shadow-2xl">
         <iframe
           title="Google Map Marseille"
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2903.0039725154948!2d5.366207076332768!3d43.31417627112024!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12c9c0f3f2295ed9%3A0xe8332bddf8f8ffdb!2s155%20Rue%20Peyssonnel%2C%2013002%20Marseille!5e0!3m2!1sru!2sfr!4v1769764213092!5m2!1sru!2sfr"
