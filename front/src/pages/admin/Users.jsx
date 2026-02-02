@@ -10,7 +10,6 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 const registerSchema = z.object({
-  // Champs de notre formulaire
   id: z.number().optional(),
   username: z.string(),
   password: z.string(),
@@ -87,62 +86,89 @@ function Users() {
   }
 
   return (
-    <section>
-      <div className="border-b pb-4 mb-4">
-        <h2 className="text-2xl font-bold mb-4">Liste des utilisateurs</h2>
+    <section className="p-8">
+      <div className="border-b border-white/10 pb-6 mb-6">
+        <h2 className="text-2xl font-bold text-white mb-4">Liste des utilisateurs</h2>
         {users.length > 0 &&
           users.map((user) => (
-            <div key={user.id} className="flex gap-2">
-              <h2>{user.username}</h2>
-              <p>{user.password}</p>
-              <button onClick={() => handleEdit(user)}>Modifier</button>
-              <button onClick={() => handleDelete(user.id)}>Delete</button>
+            <div key={user.id} className="flex items-center gap-3 py-2">
+              <span className="text-white font-medium">{user.username}</span>
+              <span className="text-white/40 text-sm">{user.password}</span>
+              <button
+                onClick={() => handleEdit(user)}
+                className="text-sm px-3 py-1 rounded-lg bg-purple-600/20 text-purple-400 hover:bg-purple-600/30 transition-colors"
+              >
+                Modifier
+              </button>
+              <button
+                onClick={() => handleDelete(user.id)}
+                className="text-sm px-3 py-1 rounded-lg bg-red-600/20 text-red-400 hover:bg-red-600/30 transition-colors"
+              >
+                Delete
+              </button>
             </div>
           ))}
-        {users.length === 0 && <div>Aucun utilisateur trouvé.</div>}
+        {users.length === 0 && <div className="text-white/40">Aucun utilisateur trouvé.</div>}
       </div>
 
-      <div className="border-b pb-4 mb-4">
-        <h2 className="text-2xl font-bold mb-4">Créer un utilisateur</h2>
+      <div>
+        <h2 className="text-2xl font-bold text-white mb-4">Créer un utilisateur</h2>
         <form
           onSubmit={modeEdit ? handleSubmit(onUpdate) : handleSubmit(onSubmit)}
+          className="space-y-4 max-w-md"
         >
           <input type="hidden" id="id" {...register("id")} />
-          <label
-            htmlFor="username"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            Username
-          </label>
-          <input
-            id="username"
-            type="text"
-            placeholder="Votre nom d'utilisateur"
-            {...register("username")}
-            required
-          />
+          <div>
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium text-white/70 mb-1"
+            >
+              Username
+            </label>
+            <input
+              id="username"
+              type="text"
+              placeholder="Votre nom d'utilisateur"
+              {...register("username")}
+              required
+              className="w-full bg-gray-900 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-white/40 focus:outline-none focus:border-purple-500"
+            />
+          </div>
 
-          <label
-            htmlFor="password"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            Password
-          </label>
-          <input
-            id="password"
-            type="password"
-            placeholder="Votre mot de passe"
-            {...register("password")}
-            required
-          />
-          {modeEdit && (
-            <button type="button" onClick={handleReset}>
-              Annuler la modification
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-white/70 mb-1"
+            >
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              placeholder="Votre mot de passe"
+              {...register("password")}
+              required
+              className="w-full bg-gray-900 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-white/40 focus:outline-none focus:border-purple-500"
+            />
+          </div>
+
+          <div className="flex gap-3">
+            {modeEdit && (
+              <button
+                type="button"
+                onClick={handleReset}
+                className="px-4 py-2 rounded-lg border border-white/10 text-white/60 hover:border-white/30 transition-colors"
+              >
+                Annuler la modification
+              </button>
+            )}
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-lg bg-purple-600 text-white font-medium hover:bg-purple-700 transition-colors"
+            >
+              {modeEdit ? "Mettre à jour" : "Créer un utilisateur"}
             </button>
-          )}
-          <button type="submit">
-            {modeEdit ? "Mettre à jour" : "Créer un utilisateur"}
-          </button>
+          </div>
         </form>
       </div>
     </section>

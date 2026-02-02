@@ -31,6 +31,7 @@ export default function Upload() {
   const [duration, setDuration] = useState(null);
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
+  const [videoFile, setVideoFile] = useState(null);
 
   async function handleFileChange(e) {
     setError(null);
@@ -50,14 +51,11 @@ export default function Upload() {
       }
 
       setDuration(d);
-      // Optionnel : stocke le fichier validé dans un state
       setVideoFile(selectedFile);
     } catch (err) {
       setError(err.message);
     }
   }
-
-  const [videoFile, setVideoFile] = useState(null);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -78,13 +76,12 @@ export default function Upload() {
     try {
       const formData = new FormData();
       formData.append("title", title);
-      formData.append("video", videoFile); // ← le fichier validé
-      // Ajoute d'autres champs si besoin : formData.append("synopsis", synopsis);
+      formData.append("video", videoFile);
 
-      const response = await fetch("http://localhost:3000/uploads", { // ← ton endpoint
+      const response = await fetch("http://localhost:3000/uploads", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // ton JWT
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: formData,
       });
@@ -96,7 +93,6 @@ export default function Upload() {
       }
 
       alert("Vidéo uploadée avec succès !");
-      // Reset form
       setTitle("");
       setVideoFile(null);
       setDuration(null);
@@ -109,56 +105,51 @@ export default function Upload() {
   }
 
   return (
-    <div style={{ maxWidth: 500, margin: "0 auto", padding: "20px" }}>
-      <h2>Upload vidéo (max 1 minute)</h2>
+    <div className="min-h-screen bg-gray-950 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md mx-auto">
+        <h2 className="text-2xl font-bold text-white mb-6">Upload vidéo (max 1 minute)</h2>
 
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "16px" }}>
-          <label>Titre de la vidéo</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Mon court métrage..."
-            required
-            style={{ width: "100%", padding: "8px", marginTop: "4px" }}
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="block text-sm font-medium text-white/70 mb-1">Titre de la vidéo</label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Mon court métrage..."
+              required
+              className="w-full bg-gray-900 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-white/40 focus:outline-none focus:border-purple-500"
+            />
+          </div>
 
-        <div style={{ marginBottom: "16px" }}>
-          <label>Vidéo (MP4, MOV, WebM)</label>
-          <input
-            type="file"
-            accept="video/mp4,video/quicktime,video/webm"
-            onChange={handleFileChange}
-            required
-            style={{ width: "100%", padding: "8px", marginTop: "4px" }}
-          />
-        </div>
+          <div>
+            <label className="block text-sm font-medium text-white/70 mb-1">Vidéo (MP4, MOV, WebM)</label>
+            <input
+              type="file"
+              accept="video/mp4,video/quicktime,video/webm"
+              onChange={handleFileChange}
+              required
+              className="w-full bg-gray-900 border border-white/10 rounded-lg px-4 py-2 text-white/70 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:bg-purple-600 file:text-white file:text-sm file:cursor-pointer"
+            />
+          </div>
 
-        {duration !== null && (
-          <p style={{ color: "green" }}>
-            Durée : {Math.ceil(duration)} secondes (OK)
-          </p>
-        )}
+          {duration !== null && (
+            <p className="text-green-400 text-sm">
+              Durée : {Math.ceil(duration)} secondes (OK)
+            </p>
+          )}
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+          {error && <p className="text-red-400 text-sm">{error}</p>}
 
-        <button
-          type="submit"
-          disabled={loading || !videoFile || !title.trim()}
-          style={{
-            padding: "10px 20px",
-            background: loading ? "#ccc" : "#28a745",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            cursor: loading ? "not-allowed" : "pointer",
-          }}
-        >
-          {loading ? "Envoi en cours..." : "Uploader la vidéo"}
-        </button>
-      </form>
+          <button
+            type="submit"
+            disabled={loading || !videoFile || !title.trim()}
+            className="w-full py-2.5 rounded-lg font-medium text-white transition-colors bg-purple-600 hover:bg-purple-700 disabled:bg-gray-700 disabled:text-white/40 disabled:cursor-not-allowed"
+          >
+            {loading ? "Envoi en cours..." : "Uploader la vidéo"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

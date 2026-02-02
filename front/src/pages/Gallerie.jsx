@@ -78,7 +78,7 @@ export default function GalerieDesFilmsPage() {
   }, [films, page]);
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans p-4">
+    <div className="min-h-screen bg-gray-950 text-white font-sans p-4">
       {/* Header */}
       <header className="flex justify-between bg-[#000000] max-w-[800px] mx-auto border border-white/30 rounded-[40px] px-6 py-4 mt-4">
         <div className="font-extrabold tracking-wide">

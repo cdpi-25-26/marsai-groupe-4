@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Contact() {
   return (
-    <div className="bg-black text-white min-h-screen flex flex-col items-center px-6 py-16">
+    <div className="bg-gray-950 text-white min-h-screen flex flex-col items-center px-6 py-16">
       
       {/* Заголовок по центру */}
       <h1 className="text-4xl font-bold mb-12 text-center">
