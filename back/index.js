@@ -3,15 +3,20 @@ import express from "express";
 import cors from "cors";
 import router from "./src/routes/index.js";
 import { configDotenv } from "dotenv";
+import { fileURLToPath } from "url";
+import path from "path";
 
 configDotenv(); // Charger les variables d'environnement depuis le fichier .env
 
 const app = express(); // Créer une application Express
 
-app.use(cors({ origin: "*" ,
-   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-})); // Autoriser les requêtes CORS de toutes origines
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use("/", express.static(path.join(__dirname, "uploads")));
+
+
+app.use(cors()); // Autoriser les requêtes CORS de toutes origines
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000; // Définir le port du serveur

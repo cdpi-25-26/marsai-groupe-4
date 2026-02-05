@@ -40,6 +40,8 @@ const navItems = [
 export default function AdminSidebar() {
   const { pathname } = useLocation()
 
+
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -51,7 +53,7 @@ export default function AdminSidebar() {
                   <LayoutDashboard className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">Admin Panel</span>
+                  <span className="truncate font-semibold">Greetings, {localStorage.getItem("first_name")}</span>
                   <span className="truncate text-xs text-muted-foreground">
                     Dashboard
                   </span>

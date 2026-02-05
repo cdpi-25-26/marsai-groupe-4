@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M16.667 3.33337H3.33366C2.41318 3.33337 1.66699 4.07957 1.66699 5.00004V15C1.66699 15.9205 2.41318 16.6667 3.33366 16.6667H16.667C17.5875 16.6667 18.3337 15.9205 18.3337 15V5.00004C18.3337 4.07957 17.5875 3.33337 16.667 3.33337Z" stroke="white" stroke-opacity="0.2" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M18.3337 5.83337L10.8587 10.5834C10.6014 10.7446 10.3039 10.83 10.0003 10.83C9.69673 10.83 9.39927 10.7446 9.14199 10.5834L1.66699 5.83337" stroke="white" stroke-opacity="0.2" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
+=======
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M16.667 3.33337H3.33366C2.41318 3.33337 1.66699 4.07957 1.66699 5.00004V15C1.66699 15.9205 2.41318 16.6667 3.33366 16.6667H16.667C17.5875 16.6667 18.3337 15.9205 18.3337 15V5.00004C18.3337 4.07957 17.5875 3.33337 16.667 3.33337Z" stroke="white" stroke-opacity="0.2" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M18.3337 5.83337L10.8587 10.5834C10.6014 10.7446 10.3039 10.83 10.0003 10.83C9.69673 10.83 9.39927 10.7446 9.14199 10.5834L1.66699 5.83337" stroke="white" stroke-opacity="0.2" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+>>>>>>> main

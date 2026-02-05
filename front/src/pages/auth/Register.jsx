@@ -60,11 +60,11 @@ export function Register() {
   };
 
   // Si déjà connecté
-  if (localStorage.getItem("username")) {
+  if (localStorage.getItem("first_name")) {
     return (
       <>
         <h1 className="text-2xl">
-          You are already logged in as {localStorage.getItem("username")}
+          You are already logged in as {localStorage.getItem("first_name")}
         </h1>
         <Link to="/">Go to Home</Link>
       </>

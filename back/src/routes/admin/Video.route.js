@@ -5,11 +5,14 @@ import AuthMiddleware from "../../middlewares/AuthMiddleware.js";
 const videoRouter = express.Router();
 
 videoRouter.get("/", VideoController.getVideos); // Admin
+
 videoRouter.post("/", VideoController.createVideo); // Admin
 
-videoRouter.post("/upload", (req, res) => {
+
+videoRouter.put("/", (req, res) => {
+
   // Code à faire
-  res.send("Upload de vidéo");
+  res.json({message: "test"});
 }); // User
 
 export default videoRouter;
