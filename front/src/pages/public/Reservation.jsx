@@ -1,4 +1,4 @@
-import "./Reservation.css"
+
 import ClockIcon from "../../assets/reservation_svg/Clock.svg";
 import LocationIcon from "../../assets/reservation_svg/Location.svg";
 import UserIcon from "../../assets/reservation_svg/User.svg";
@@ -6,112 +6,100 @@ import UserIcon from "../../assets/reservation_svg/User.svg";
 
 
    
-      
-{/* affichage des event dynamiquement
-       export default function EventReservation() {
-  return (
-   <div className="event-card">
-  <img src={clockIcon} alt="horaires" className="icon" />
-  <div className="text">
-    <h4>Horaires</h4>
-    <h3>{event.date}</h3>
-  </div>
-</div>
-
-<div className="event-card">
-  <img src={locationIcon} alt="lieu" className="icon" />
-  <div className="text">
-    <h4>Lieu</h4>
-    <h3>{event.location}</h3>
-  </div>
-</div>
-
-<div className="event-card">
-  <img src={userIcon} alt="coach" className="icon" />
-  <div className="text">
-    <h4>Coach expert</h4>
-    <h3>{event.host}</h3>
-  </div>
-</div>
-
-*/}
  export default function EventReservation() {
+      const eventDetails = [
+    { title: "Lieu", value: "STUDIO 1 - LA PLATEFORME_", icon: LocationIcon },
+    { title: "Horaires", value: "14H30 — 13 JUIN", icon: ClockIcon },
+    { title: "Coach expert", value: "THOMAS AUBERT", icon: UserIcon },
+  ];
+
   return (
-    <div className="event-reservation">
    
-  <div className="event-info">
-  
-  <img src={LocationIcon} alt="lieu" className="icon" />
-  <div className="text">
-    <h4>Lieu</h4>
-    <h3>STUDIO 1 - LA PLATEFORME_</h3>
+        <div className="flex flex-col items-center min-h-screen p-10 bg-black font-sans">
+
+      {/* Bloc événement */}
+     
+
+<div className="flex flex-col w-[800px] p-5 mb-5 rounded-xl border border-white shadow-inner bg-gradient-to-b from-[#51A2FF]/20 to-[#9810FA]/20 text-gray-300 gap-4">
+  {eventDetails.map((detail, index) => (
+    <div key={index} className="flex items-center gap-4">
+      
+     <img src={detail.icon} alt={detail.title} className="w-7 h-7 object-contain"/>
+      
+      <div className="flex flex-col">
+        <h3 className="text-base">{detail.value}</h3>
+      </div>
+     
+      
+    </div>
+  ))}
+</div>
+
+
+
+     {/* Formulaire */}
+      <form className="flex flex-wrap gap-5 w-[800px] p-5 mt-8 mb-5 rounded-xl border border-white bg-[#262424]">
+
+    <div className="flex flex-row-reverse items-center mt-4 w-11/12 mx-auto">
+  <h4 className="text-sm text-gray-400">Reserver ma place</h4>
+  <div className="flex-1 border-t border-gray-400 ml-4 self-center">
+
   </div>
 
-  <div className="event-info">
 
-<img src={ClockIcon} alt="horaires" className="icon" />
-  <div className="text">
-    <h4>Horaires</h4>
-    <h3>14H30 — 13 JUIN</h3>
-  </div>
+</div>
 
-  <div className="event-info">
-  <img src={UserIcon} alt="coach" className="icon" />
-  <div className="text">
-    <h4>Coach expert</h4>
-    <h3>THOMAS AUBERT</h3>
-  </div>
-  </div>
- </div>
+        <div className="flex gap-2 w-full">
+          <div className="flex flex-col flex-1">
+            <label className="text-gray-400 text-xs mb-1">Prénom</label>
+            <input type="text" placeholder="Prénom" className="bg-[#3a3a3a] text-white rounded-xl border border-white p-2 text-sm"/>
+          </div>
+          <div className="flex flex-col flex-1">
+            <label className="text-gray-400 text-xs mb-1">Nom</label>
+            <input type="text" placeholder="Nom" className="bg-[#3a3a3a] text-white rounded-xl border border-white p-2 text-sm"/>
+          </div>
+        </div>
 
+     
+        <div className="flex flex-col w-full">
+          <label className="text-gray-400 text-xs mb-1">Adresse e-mail</label>
+          <input type="email" placeholder="email@example.com" className="bg-[#3a3a3a] text-white rounded-xl border border-white p-2 text-sm"/>
+        </div>
 
-
+      
+        <div className="flex flex-col w-full">
+          <label className="text-gray-400 text-xs mb-1">Profession / spécialité</label>
+          <input type="text" placeholder="Profession" className="bg-[#3a3a3a] text-white rounded-xl border border-white p-2 text-sm"/>
+        </div>
 
     
-      <form className="reservation-form">
-       
-        <div className="row">
-          <div className="input-field">
-            <label>Prénom</label>
-            <input type="text" placeholder="Prénom" />
-          </div>
-          <div className="input-field">
-            <label>Nom</label>
-            <input type="text" placeholder="Nom" />
-          </div>
-        </div>
-
-        <div className="input-field">
-          <label>Adresse e-mail</label>
-          <input type="email" placeholder="email@example.com" />
-        </div>
-
-        <div className="input-field">
-          <label>Profession / spécialité</label>
-          <input type="text" placeholder="Profession" />
-        </div>
-
-        <div className="checkbox">
-          <input type="checkbox" />
-          <span>
+        <div className="flex items-center gap-2 w-full text-xs mb-5">
+          <input type="checkbox" className="w-4 h-4"/>
+          <span className="text-[#602be6]">
             J'accepte les conditions générales et le règlement de protection des données.
           </span>
         </div>
 
-        <button type="submit">ENVOYER </button>
+        <button
+          type="submit"
+          className="block mx-auto w-[150px] text-white text-xs font-bold rounded-xl p-3
+                     bg-gradient-to-b from-[#51A2FF]/20 to-[#9810FA]/60
+                     transition transform hover:scale-105 hover:opacity-90 hover:shadow-lg active:scale-95"
+        >
+          ENVOYER
+        </button>
       </form>
 
      
-      <div className="certificate">
-        <h4>CERTIFICAT DE PROPRIÉTÉ</h4>
-        <p>
+      <div className="w-[800px] p-5 mb-5 rounded-xl border border-white shadow-inner bg-gradient-to-b from-[#51A2FF]/20 to-[#9810FA]/20 text-gray-300">
+        <h4 className="text-lg mb-3">CERTIFICAT DE PROPRIÉTÉ</h4>
+        <p className="text-xs">
           En soumettant ce dossier, vous certifiez sur l'honneur être l'auteur
           original de l'œuvre et détenir l'intégralité des droits de diffusion.
           Vous acceptez que MARS.AI utilise ces éléments pour la promotion du festival.
         </p>
       </div>
-      
     </div>
-    </div>
-);
+
+  );
 }
