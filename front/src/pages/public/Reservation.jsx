@@ -20,8 +20,16 @@ import UserIcon from "../../assets/reservation_svg/User.svg";
       {/* Bloc événement */}
      
 
+
 <div className="flex flex-col w-[800px] p-5 mb-5 rounded-xl border border-white shadow-inner bg-gradient-to-b from-[#51A2FF]/20 to-[#9810FA]/20 text-gray-300 gap-4">
+<h6 className="text-xs uppercase text-gray-400 mb-1 tracking-wider">
+ Evénements selectionné :
+</h6>
+<h5 className="text-lg uppercase text-gray-200 mb-1 tracking-wider">
+ GENERATION VIDEO : LES BASES
+</h5>
   {eventDetails.map((detail, index) => (
+    
     <div key={index} className="flex items-center gap-4">
       
      <img src={detail.icon} alt={detail.title} className="w-7 h-7 object-contain"/>
