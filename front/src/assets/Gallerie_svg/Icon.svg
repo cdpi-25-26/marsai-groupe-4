@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_396_772)">
 <path d="M3.50008 5.24967H2.62508C2.23831 5.24967 1.86737 5.09603 1.59388 4.82254C1.32039 4.54905 1.16675 4.17812 1.16675 3.79134C1.16675 3.40457 1.32039 3.03363 1.59388 2.76014C1.86737 2.48665 2.23831 2.33301 2.62508 2.33301H3.50008" stroke="#FDC700" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
@@ -13,3 +14,20 @@
 </clipPath>
 </defs>
 </svg>
+=======
+<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_396_772)">
+<path d="M3.50008 5.24967H2.62508C2.23831 5.24967 1.86737 5.09603 1.59388 4.82254C1.32039 4.54905 1.16675 4.17812 1.16675 3.79134C1.16675 3.40457 1.32039 3.03363 1.59388 2.76014C1.86737 2.48665 2.23831 2.33301 2.62508 2.33301H3.50008" stroke="#FDC700" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10.5 5.24967H11.375C11.7618 5.24967 12.1327 5.09603 12.4062 4.82254C12.6797 4.54905 12.8333 4.17812 12.8333 3.79134C12.8333 3.40457 12.6797 3.03363 12.4062 2.76014C12.1327 2.48665 11.7618 2.33301 11.375 2.33301H10.5" stroke="#FDC700" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M2.33325 12.833H11.6666" stroke="#FDC700" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M5.83325 8.55176V9.91676C5.83325 10.2376 5.55909 10.4884 5.26742 10.6226C4.57909 10.9376 4.08325 11.8068 4.08325 12.8334" stroke="#FDC700" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8.16675 8.55176V9.91676C8.16675 10.2376 8.44091 10.4884 8.73258 10.6226C9.42091 10.9376 9.91675 11.8068 9.91675 12.8334" stroke="#FDC700" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10.5 1.16699H3.5V5.25033C3.5 6.17858 3.86875 7.06882 4.52513 7.7252C5.1815 8.38158 6.07174 8.75033 7 8.75033C7.92826 8.75033 8.8185 8.38158 9.47487 7.7252C10.1313 7.06882 10.5 6.17858 10.5 5.25033V1.16699Z" stroke="#FDC700" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<clipPath id="clip0_396_772">
+<rect width="14" height="14" fill="white"/>
+</clipPath>
+</defs>
+</svg>
+>>>>>>> main

@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../db/connection.js";
+import User from "./User.js";
 
 const Film = sequelize.define(
   "Film", 
@@ -94,5 +95,8 @@ const Film = sequelize.define(
     }
 
 );
+
+
+Film.belongsTo(User, { foreignKey: "user_id", as: "user" });
 
 export default Film;

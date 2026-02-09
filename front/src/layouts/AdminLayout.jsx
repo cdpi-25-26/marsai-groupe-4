@@ -12,9 +12,11 @@ export default function AdminLayout({ children }) {
       <SidebarInset>
         
         <main className="flex-1 p-4 md:p-6 " >{children}
-			<Outlet />
-		</main>
+			    <Outlet />
+		    </main>
+        
       </SidebarInset>
+
     </SidebarProvider>
 	</>
   )

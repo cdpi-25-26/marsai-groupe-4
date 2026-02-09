@@ -45,8 +45,8 @@ export default function FilmCard({ film }) {
               <span className="font-black text-white">{film.rank}</span>
             </span>
           </div>
-
-          <div className="aspect-[3/4] w-full" />
+{/* Placeholder pour l'image du film */}
+          <div className="aspect-3/4 w-full" />
         </article>
 
         <div className="mt-6">

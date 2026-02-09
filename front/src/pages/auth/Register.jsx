@@ -60,11 +60,11 @@ export function Register() {
   };
 
   // Si déjà connecté
-  if (localStorage.getItem("username")) {
+  if (localStorage.getItem("first_name")) {
     return (
       <>
         <h1 className="text-2xl">
-          You are already logged in as {localStorage.getItem("username")}
+          You are already logged in as {localStorage.getItem("first_name")}
         </h1>
         <Link to="/">Go to Home</Link>
       </>
@@ -100,28 +100,35 @@ export function Register() {
 
       <Link to="/auth/login">Already have an account? Login</Link> */}
 
-      <section className="bg-black text-white py-[90px]">
+      <form onSubmit={handleSubmit(onSubmit)} className="bg-black text-white py-[90px]">
         <div className="flex flex-col w-fit my-0 mx-auto p-[56px] items-center uppercase bg-black/70 border border-white/10 rounded-[24px] shadow-[0_0_30px_rgba(173,70,255,0.1)]">
 
-            <img className="bg-white/5 mb-[24px] border border-white/10 p-6 w-fit w-[96px] h-[96px] rounded-[32px] " src="/src/assets/login_svg/Icon.svg" alt="" />
+            <img className="bg-white/5 mb-[24px] border border-white/10 p-6 w-[96px] h-[96px] rounded-[32px]" src="/src/assets/login_svg/Icon.svg" alt="" />
         
         
 
-          <h2 className="text-center text-[48px] mb-[11px] font-bold inline-block inline-block bg-[linear-gradient(to_top,rgba(152,16,250,0.6)_35%,rgba(43,127,255,1)_60%)] bg-clip-text text-transparent tracking-[-2.4px]">INSCRIPTION</h2>
+          <h2 className="text-center text-[48px] mb-[11px] font-bold inline-block bg-[linear-gradient(to_top,rgba(152,16,250,0.6)_35%,rgba(43,127,255,1)_60%)] bg-clip-text text-transparent tracking-[-2.4px]">INSCRIPTION</h2>
           <h2 className="text-center text-[10px] mb-[44px] tracking-[3px] text-white/50 font-bold">Nouveau profil cyber-premium</h2>
 
-          <h2 className="w-full text-[10px] mb-[12px] tracking-[2px]">Alias Citoyen</h2>
-         
+          <h2 className="w-full text-[10px] mb-[12px] tracking-[2px]">Prénom</h2>
 
           <div className="flex bg-black/40 border border-white/10 rounded-[28px] w-full mb-[24px]">
           <img className="flex items-center px-[15px]" src="/src/assets/login_svg/Icon (2).svg" alt="" />
-               <input placeholder="John Doe" className="w-full h-[76px] outline-none  placeholder-white/10" type="email " />
+               <input placeholder="John" {...register("first_name")} className="w-full h-[76px] outline-none  placeholder-white/10" type="text" required />
           </div>
+          
+          <h2 className="w-full text-[10px] mb-[12px] tracking-[2px]">Nom</h2>
+
+          <div className="flex bg-black/40 border border-white/10 rounded-[28px] w-full mb-[24px]">
+          <img className="flex items-center px-[15px]" src="/src/assets/login_svg/Icon (2).svg" alt="" />
+               <input placeholder="Doe" {...register("last_name")} className="w-full h-[76px] outline-none  placeholder-white/10" type="text" required />
+          </div>
+          
           <h2 className="w-full text-[10px] mb-[12px] tracking-[2px]">Canal de Communication</h2>
 
           <div className="flex bg-black/40 border border-white/10 rounded-[28px] w-full mb-[24px]">
           <img className="flex items-center px-[15px]" src="/src/assets/login_svg/Icon (2).svg" alt="" />
-               <input placeholder="nom@exemple.com" className="w-full h-[76px] outline-none  placeholder-white/10" type="email " />
+               <input placeholder="nom@exemple.com" {...register("email")} className="w-full h-[76px] outline-none  placeholder-white/10" type="email" required />
           </div>
 
           
@@ -132,7 +139,7 @@ export function Register() {
               <h2 className=" tracking-[2px] text-[10px] mb-[12px]">Clé d'Accès</h2>
               <div className="flex bg-black/40 border border-white/10 rounded-[28px] w-[200px] ">
           
-               <input placeholder="●●●●●●" className="w-full h-[76px] pl-[15px] outline-none  placeholder-white/10" type="email " />
+               <input placeholder="●●●●●●" {...register("password")} className="w-full h-[76px] pl-[15px] outline-none  placeholder-white/10" type="password" required />
           <img className="flex items-center px-[15px]" src="/src/assets/login_svg/Icon (2).svg" alt="" />
           </div>
             </div>
@@ -142,7 +149,7 @@ export function Register() {
               <h2 className="tracking-[2px] text-[10px] mb-[12px]">Vérification</h2>
               <div className="flex bg-black/40 border border-white/10 rounded-[28px] w-[200px]">
          
-               <input placeholder="●●●●●●" className=" pl-[15px] w-full h-[76px] outline-none  placeholder-white/10" type="email " />
+               <input placeholder="●●●●●●" {...register("confirmpassword")} className=" pl-[15px] w-full h-[76px] outline-none  placeholder-white/10" type="password" required />
                 <img className="flex items-center px-[15px]" src="/src/assets/login_svg/Icon (2).svg" alt="" />
           </div>
             </div>
@@ -164,7 +171,7 @@ export function Register() {
             
           </div>
 
-          <button className="flex justify-center items-center gap-[17px] font-bold w-full bg-white text-black rounded-[28px] tracking-[2.75px] uppercase text-[11px] h-[76px] trackincg-[2.75px] mb-[75px]"> <img src="/src/assets/login_svg/Icon (3).svg" alt="" /> <h2>Initialiser Flux</h2></button>
+          <button type="submit" disabled={registerMutation.isPending} className="flex justify-center items-center gap-[17px] font-bold w-full bg-white text-black rounded-[28px] tracking-[2.75px] uppercase text-[11px] h-[76px] trackincg-[2.75px] mb-[75px]"> <img src="/src/assets/login_svg/Icon (3).svg" alt="" /> <h2>{registerMutation.isPending ? "Loading..." : "Initialiser Flux"}</h2></button>
 
           <div className="flex items-end  w-full gap-[15px] justify-center">
               <h2 className="text-[11px] white-[80px] tracking-[2.2px]">Déjà Enregistré ?</h2>
@@ -172,7 +179,7 @@ export function Register() {
             </div>
         </div>
         
-      </section>
+      </form>
     </>
   );
 }

@@ -1,10 +1,10 @@
-import Users from "./Users.jsx";
-import Videos from "./Videos.jsx";
+import Overview from "./Overview.jsx";
+
 
 function Dashboard() {
   return (
     <>
-      <Users />
+      <Overview />
     </>
   );
 }

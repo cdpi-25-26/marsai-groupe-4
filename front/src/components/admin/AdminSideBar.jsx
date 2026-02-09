@@ -7,7 +7,7 @@ import {
   BarChart3,
   Package,
   Clapperboard,
-  HatGlasses,
+  Glasses,
   CalendarCheck,
   ArrowLeftFromLine,
   LogOut,
@@ -28,17 +28,20 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import handleLogout from "@/utils/helpers";
+import { ThemeToggle } from "../ThemeToggle";
 
 const navItems = [
   { title: "Overview", url: "/admin", icon: LayoutDashboard },
   { title: "Gestion Users", url: "/admin/users", icon: Users },
-  { title: "Jury", url: "/admin/jurys", icon: HatGlasses },
+  { title: "Jury", url: "/admin/jurys", icon: Glasses },
   { title: "Gestion Films", url: "/admin/videos", icon: Clapperboard },
   { title: "Evenements", url: "/admin/events", icon: CalendarCheck },
 ]
 
 export default function AdminSidebar() {
   const { pathname } = useLocation()
+
+
 
   return (
     <Sidebar collapsible="icon">
@@ -51,7 +54,7 @@ export default function AdminSidebar() {
                   <LayoutDashboard className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">Admin Panel</span>
+                  <span className="truncate font-semibold">Greetings, {localStorage.getItem("first_name")}</span>
                   <span className="truncate text-xs text-muted-foreground">
                     Dashboard
                   </span>
@@ -87,6 +90,13 @@ export default function AdminSidebar() {
       </SidebarContent>
 
       <SidebarFooter>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild tooltip="Toggle Theme">
+            <div className="flex items-center w-full">
+              <ThemeToggle />
+            </div>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip="Back Home">
