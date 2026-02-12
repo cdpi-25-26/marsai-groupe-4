@@ -21,8 +21,6 @@ import Evennements from "./pages/Evennements.jsx";
 import Upload from "./pages/public/Upload.jsx";
 import Palmares from "./pages/public/Palmares.jsx";
 import Agenda from "./pages/public/Agenda.jsx";
-import Reservation from "./pages/public/Reservation.jsx";
-
 
 
 const queryClient = new QueryClient({
@@ -50,9 +48,6 @@ createRoot(document.getElementById("root")).render(
             <Route path="/upload" element={<Upload />} />
             <Route path="/palmares" element={<Palmares />} />
             <Route path="/agenda" element={<Agenda />} />
-            <Route path="/reservation" element={<Reservation />} />
-
-            
           </Route>
 
           {/* Routes privées */}
