@@ -20,12 +20,13 @@ const oauth2Client = new google.auth.OAuth2(
   GOOGLE_REDIRECT_URI
 );
 
-let lastOAuthState = null;
-
+// Store OAuth states with expiration (5 min) to support concurrent users
+const pendingOAuthStates = new Map();
+const OAUTH_STATE_TTL = 5 * 60 * 1000;
 
 async function loadTokens() {
   try {
-    const tokenRecord = await YoutubeToken.findOne(); 
+    const tokenRecord = await YoutubeToken.findOne();
     if (!tokenRecord) return null;
 
     return {
@@ -41,13 +42,15 @@ async function loadTokens() {
   }
 }
 
-
 async function saveTokens(tokens) {
   try {
+    const existing = await YoutubeToken.findOne();
+    const refreshToken = tokens.refresh_token || existing?.refresh_token || null;
+
     await YoutubeToken.upsert({
-      id: 1, 
+      id: 1,
       access_token: tokens.access_token,
-      refresh_token: tokens.refresh_token || null,
+      refresh_token: refreshToken,
       scope: tokens.scope || null,
       token_type: tokens.token_type || null,
       expiry_date: tokens.expiry_date || null,
@@ -60,7 +63,14 @@ async function saveTokens(tokens) {
 
 async function googleAuth(req, res) {
   const state = crypto.randomBytes(16).toString("hex");
-  lastOAuthState = state;
+  pendingOAuthStates.set(state, Date.now());
+
+  // Clean up expired states
+  for (const [key, timestamp] of pendingOAuthStates) {
+    if (Date.now() - timestamp > OAUTH_STATE_TTL) {
+      pendingOAuthStates.delete(key);
+    }
+  }
 
   const url = oauth2Client.generateAuthUrl({
     access_type: "offline",
@@ -75,23 +85,25 @@ async function googleAuth(req, res) {
 async function googleAuthCallback(req, res) {
   const { code, state } = req.query;
 
-  if (!state || state !== lastOAuthState) {
-    return res.status(400).json({ error: "Invalid state parameter" });
+  if (!state || !pendingOAuthStates.has(state)) {
+    return res.status(400).json({ error: "Invalid or expired state parameter" });
   }
+
+  pendingOAuthStates.delete(state);
 
   if (!code) {
     return res.status(400).json({ error: "Missing code parameter" });
   }
 
+  const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+
   try {
     const { tokens } = await oauth2Client.getToken(code);
-
     await saveTokens(tokens);
-
-    res.redirect("/admin"); 
+    res.redirect(`${frontendUrl}/admin`);
   } catch (error) {
     console.error("Erreur auth callback:", error);
-    res.status(500).send("Erreur lors de l'authentification");
+    res.redirect(`${frontendUrl}/admin?youtube_error=auth_failed`);
   }
 }
 
@@ -133,18 +145,24 @@ async function uploadVideoToYoutube(req, res) {
       media: { body: fs.createReadStream(filePath) },
     });
 
-
+    // Clean up local file after successful upload
+    fs.unlink(filePath, (err) => {
+      if (err) console.error("Erreur suppression fichier local:", err);
+    });
 
     res.json({
       success: true,
       videoId: response.data.id,
-      license: response.data.contentDetails?.licensedContent,
     });
   } catch (error) {
     console.error("Erreur upload YouTube:", error);
+
+    // Clean up local file on error too
+    fs.unlink(filePath, () => {});
+
     res.status(500).json({
       error: "Échec upload YouTube",
-      details: error.message || error.response?.data || "Erreur inconnue",
+      details: error.message || "Erreur inconnue",
     });
   }
 }
