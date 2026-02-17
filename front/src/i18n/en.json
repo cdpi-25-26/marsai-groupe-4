@@ -1,0 +1,15 @@
+{
+  "home": {
+    "welcome": "Welcome to the Film Festival",
+    "description": "Discover our amazing program."
+  },
+  "menu": {
+    "home": "Home",
+    "gallerie": "Gallery",
+    "evennements": "Events",
+    "contact": "Contact",
+    "agenda": "Agenda",
+    "reservation": "Reservation",
+    "palmares": "Awards"
+  }
+}

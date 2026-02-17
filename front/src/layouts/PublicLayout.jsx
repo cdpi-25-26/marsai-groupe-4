@@ -1,5 +1,7 @@
 import { Outlet } from "react-router";
 import Navbar from "../components/Navbar";
+import LanguageSwitcher from "../components/LanguageSwitcher";
+
 import {Facebook} from "lucide-react"
 import {Instagram} from "lucide-react"
 import {Youtube} from "lucide-react"
@@ -11,7 +13,11 @@ export default function PublicLayout() {
 
   
   return (
+    
     <div className="min-h-screen flex flex-col">
+        <div className="flex justify-end px-[20px] py-[10px] bg-black">
+    <LanguageSwitcher />
+  </div>
       <Navbar />
 
       <main className="flex-1">
