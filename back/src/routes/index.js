@@ -5,6 +5,7 @@ import authRouter from "./Auth.route.js";
 import uploadRouter from "./Upload.route.js";
 import overviewRouter from "./admin/Overview.route.js";
 import youtubeRouter from "./Youtube.route.js";
+import evaluationRouter from "./admin/Evaluation.route.js";
 
 const router = express.Router();
 
@@ -14,5 +15,6 @@ router.use("/films", videoRouter);
 router.use("/uploads", uploadRouter);
 router.use("/overview", overviewRouter);
 router.use("/youtube", youtubeRouter);
+router.use("/admin/evaluations", evaluationRouter);
 
 export default router;
