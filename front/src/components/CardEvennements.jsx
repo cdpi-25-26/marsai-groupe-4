@@ -46,12 +46,14 @@ function CardEvennements({ data }) {
         <div className="flex flex-col gap-[12px]">
           <div className="flex items-center gap-[12px]">
             <Calendar size={16} className="mt-[-3px] text-white/50" />
-            <h2 className="text-[14px] text-white/50">20 juin</h2>
+            <h2 className="text-[14px] text-white/50">{data.event_date}</h2>
           </div>
 
           <div className="flex items-center gap-[12px]">
             <Clock size={16} className="mt-[-2px] text-white/50" />
-            <h2 className="text-[14px] text-white/50">{data.time}</h2>
+            <h2 className="text-[14px] text-white/50">{data.time_start?.slice(0,5)} - {data.time_end?.slice(0,5)}
+
+</h2>
           </div>
 
           <div className="flex items-center gap-[12px]">

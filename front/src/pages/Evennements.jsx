@@ -3,20 +3,51 @@ import CardEvennements from "../components/CardEvennements.jsx";
 import { Search } from "lucide-react";
 import { ChevronLeft } from "lucide-react";
 import { Plus } from "lucide-react";
+import { useEffect } from "react";
+import { useState } from "react";
 
-const DataEvennements = {
-  id: 1,
-  type: "MASTERCLASS",
-  title: "MASTERCLASS SORA : L'AVENIR DU CINÉMA",
-  date: "2026-06-20",
-  time: "10:30 — 12:30",
-  location: "Auditorium J4",
-  capacity: 200,
-  enrolled: 185,
-  status: "UPCOMING",
-};
+// const DataEvennements = {
+//   id: 1,
+//   type: "MASTERCLASS",
+//   title: "MASTERCLASS SORA : L'AVENIR DU CINÉMA",
+//   date: "2026-06-20",
+//   time: "10:30 — 12:30",
+//   location: "Auditorium J4",
+//   capacity: 200,
+//   enrolled: 185,
+//   status: "UPCOMING",
+// };
+
+
+
 
 function Evennements() {
+
+  const [events, setEvents] = useState([]);
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState(null);
+
+useEffect(() => {
+  fetch('http://localhost:3000/events')
+  .then(res => {
+    if(!res.ok){
+      throw new Error('laoding error')
+    }
+    return res.json();
+  })
+  .then(data => {
+    setEvents(data);
+    setLoading(false);
+  })
+  .catch(err => {
+    setError(err.message);
+    setLoading(false);
+  })
+}, [])
+
+ if (loading) return <div className="text-white p-6">loading...</div>;
+ if (error) return <div className="text-white p-6">error: {error}</div>;
+
   return (
     <section className="bg-black text-white py-[154px]">
       <div className="flex flex-col sm:fmex-row items-start sm:items-end justify-between p-6 gap-4">
@@ -76,12 +107,9 @@ function Evennements() {
       </div>
 
       <div className="bg-black grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 p-[24px] gap-[24px]">
-        <CardEvennements data={DataEvennements} />
-        <CardEvennements data={DataEvennements} />
-        <CardEvennements data={DataEvennements} />
-        <CardEvennements data={DataEvennements} />
-        <CardEvennements data={DataEvennements} />
-        <CardEvennements data={DataEvennements} />
+        {events.map(event => {
+          return <CardEvennements key={event.id} data={event} />
+        })}
       </div>
     </section>
   );
