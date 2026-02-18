@@ -9,7 +9,7 @@ async function getFilmsToEvaluate() {
 }
 
 async function getEvaluationsByFilm(filmId) {
-  return await instance.get(`gallery/films/${filmId}/evaluations`);
+  return await instance.get(`admin/evaluations/film/${filmId}`);
 }
 
 async function createEvaluation(data) {
