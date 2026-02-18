@@ -25,7 +25,6 @@ import Reservation from "./pages/public/Reservation.jsx";
 import Cms from "./pages/admin/Cms.jsx";
 
 
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -51,9 +50,6 @@ createRoot(document.getElementById("root")).render(
             <Route path="/upload" element={<Upload />} />
             <Route path="/palmares" element={<Palmares />} />
             <Route path="/agenda" element={<Agenda />} />
-            <Route path="/reservation" element={<Reservation />} />
-
-            
           </Route>
 
           {/* Routes privées */}
