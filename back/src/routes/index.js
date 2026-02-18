@@ -4,6 +4,7 @@ import videoRouter from "./admin/Video.route.js";
 import authRouter from "./Auth.route.js";
 import uploadRouter from "./Upload.route.js";
 import overviewRouter from "./admin/Overview.route.js";
+import EventRoute from "./Event.route.js"
 
 const router = express.Router();
 
@@ -12,5 +13,6 @@ router.use("/users", userRouter);
 router.use("/films", videoRouter);
 router.use("/uploads", uploadRouter);
 router.use("/overview", overviewRouter);
+router.use("/events", EventRoute);
 
 export default router;
