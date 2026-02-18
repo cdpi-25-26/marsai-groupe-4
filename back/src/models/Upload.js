@@ -83,6 +83,15 @@ const Upload = sequelize.define("Upload", {
   type: DataTypes.STRING(255),
   allowNull: false,
 },
+youtube_video_id: {
+  type: DataTypes.STRING(50),   
+  allowNull: true,
+},
+youtube_status: {
+  type: DataTypes.STRING(30),
+  defaultValue: "pending",
+  allowNull: false,
+},
 }, {
   timestamps: true,
   tableName: "films",

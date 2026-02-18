@@ -3,7 +3,7 @@ import multer from "multer";
 import crypto from "crypto";
 import path from "path";
 import fs from "fs";
-import { googleAuth, googleAuthCallback, uploadVideoToYoutube, loadTokens } from "../controllers/YoutubeController.js";
+import { googleAuth, googleAuthCallback, uploadVideoToYoutubeInternal, loadTokens } from "../controllers/YoutubeController.js";
 import AuthMiddleware from "../middlewares/AuthMiddleware.js";
 
 const youtubeRouter = express.Router();
@@ -37,9 +37,9 @@ const upload = multer({
 // OAuth routes — auth endpoint is public (redirects to Google), callback is called by Google
 youtubeRouter.get("/auth", (req, res, next) => AuthMiddleware(req, res, next, ["ADMIN"]), googleAuth);
 youtubeRouter.get("/auth/callback", googleAuthCallback);
+youtubeRouter.post("/upload", upload.single("video"), uploadVideoToYoutubeInternal);
 
 // Protected routes — ADMIN only
-youtubeRouter.post("/upload", (req, res, next) => AuthMiddleware(req, res, next, ["ADMIN"]), upload.single("video"), uploadVideoToYoutube);
 youtubeRouter.get("/check-auth", (req, res, next) => AuthMiddleware(req, res, next, ["ADMIN"]), async (req, res) => {
   try {
     const tokens = await loadTokens();

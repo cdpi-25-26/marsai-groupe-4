@@ -67,6 +67,15 @@ export function Login() {
   if (isLoggedIn) {
     return (
       <>
+       <h1 className="text-2xl">
+          You are already logged in as {localStorage.getItem("first_name")}
+        </h1>
+         <h1 className="text-2xl">
+          You are already logged in as {localStorage.getItem("first_name")}
+        </h1>
+         <h1 className="text-2xl">
+          You are already logged in as {localStorage.getItem("first_name")}
+        </h1>
         <h1 className="text-2xl">
           You are already logged in as {localStorage.getItem("first_name")}
         </h1>

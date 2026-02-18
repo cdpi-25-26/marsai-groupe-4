@@ -2,7 +2,12 @@ import fs from "fs";
 import crypto from "crypto";
 import dotenv from "dotenv";
 import { google } from "googleapis";
+import {
+  S3Client,
+  PutObjectCommand,
+} from "@aws-sdk/client-s3";
 import YoutubeToken from "../models/YoutubeTokens.js";
+import path from "path"
 
 dotenv.config();
 
@@ -107,64 +112,117 @@ async function googleAuthCallback(req, res) {
   }
 }
 
-async function uploadVideoToYoutube(req, res) {
-  const tokens = await loadTokens();
-  if (!tokens) {
-    return res.status(401).json({ error: "Authentification Google requise" });
-  }
-
-  if (!req.file?.path) {
-    return res.status(400).json({ error: "Aucune vidéo uploadée" });
-  }
-
-  const filePath = req.file.path;
-
+async function uploadVideoToYoutubeInternal(filePath, metadata = {}) {
   try {
+    const tokens = await loadTokens(); 
+    if (!tokens) throw new Error("Aucun token YouTube trouvé. Connectez la chaîne d'abord.");
+
     oauth2Client.setCredentials(tokens);
-    await oauth2Client.getAccessToken();
+    await oauth2Client.getAccessToken(); 
 
     const youtube = google.youtube({ version: "v3", auth: oauth2Client });
-
-    const tags = req.body.tags
-      ? req.body.tags.split(",").map(t => t.trim()).filter(Boolean)
-      : undefined;
 
     const response = await youtube.videos.insert({
       part: "snippet,status",
       requestBody: {
         snippet: {
-          title: req.body.title || "Vidéo sans titre",
-          description: req.body.description || "",
-          tags,
-          categoryId: "22",
+          title: metadata.title || "Vidéo sans titre",
+          description: metadata.description || "",
+          tags: metadata.tags || [],
+          categoryId: "22", // People & Blogs
         },
         status: {
-          privacyStatus: req.body.privacyStatus || "private",
+          privacyStatus: "private", // ou "public" / "unlisted" si tu veux
         },
       },
-      media: { body: fs.createReadStream(filePath) },
+      media: {
+        body: fs.createReadStream(filePath),
+      },
     });
 
-    // Clean up local file after successful upload
-    fs.unlink(filePath, (err) => {
-      if (err) console.error("Erreur suppression fichier local:", err);
-    });
-
-    res.json({
+    return {
       success: true,
       videoId: response.data.id,
-    });
+    };
   } catch (error) {
-    console.error("Erreur upload YouTube:", error);
-
-    // Clean up local file on error too
-    fs.unlink(filePath, () => {});
-
-    res.status(500).json({
-      error: "Échec upload YouTube",
-      details: error.message || "Erreur inconnue",
-    });
+    console.error("Erreur upload interne YouTube:", error);
+    throw error; // laisse l'erreur remonter pour gestion dans createUpload
   }
 }
 
-export { googleAuth, googleAuthCallback, uploadVideoToYoutube, loadTokens };
+// Configuration du client S3 pour Scaleway
+const s3Client = new S3Client({
+  region: "fr-par",
+  endpoint: "https://s3.fr-par.scw.cloud",
+  credentials: {
+    accessKeyId: process.env.SCW_ACCESS_KEY || "SCW3MFQBR803FXZS4N33",
+    secretAccessKey: process.env.SCW_SECRET_KEY || "c64db8bf-f541-478d-aa6a-cbcb8c7be2ae",
+  },
+});
+
+const BUCKET_NAME = "can";
+const BASE_FOLDER = "grp4";
+
+// Fonction qui upload un fichier local vers S3
+ async function uploadToS3(localFilePath, subFolder = "videos") {
+  try {
+    const fileContent = fs.readFileSync(localFilePath);
+    const fileName = path.basename(localFilePath);
+
+    // Clé S3 : on garde la même structure que local + prefix grp4
+const s3Key = `${BASE_FOLDER}/${subFolder}/${fileName}`;
+
+    const command = new PutObjectCommand({
+      Bucket: BUCKET_NAME,
+      Key: s3Key,
+      Body: fileContent,
+      ContentType: getContentType(fileName),
+    });
+
+    await s3Client.send(command);
+
+    console.log(`[S3] Upload OK : ${s3Key}`);
+    return s3Key; // retourne "grp4/videos/nom-du-fichier"
+  } catch (err) {
+    console.error("[S3] Échec :", err);
+    throw err;
+  }
+}
+
+
+
+// Détection mime-type basique 
+function getContentType(filename) {
+  const ext = path.extname(filename).toLowerCase();
+  const types = {
+    '.mp4': 'video/mp4',
+    '.webm': 'video/webm',
+    '.mov': 'video/quicktime',
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.png': 'image/png',
+    '.webp': 'image/webp',
+    '.gif': 'image/gif',
+    '.srt': 'text/plain',
+  };
+  return types[ext] || 'application/octet-stream';
+}
+
+async function deleteFileFromS3(s3Key) {
+  try {
+    const command = new DeleteObjectCommand({
+      Bucket: BUCKET_NAME,  
+      Key: s3Key,
+    });
+
+    await s3Client.send(command);
+    
+    console.log(`[S3] Suppression réussie : ${s3Key}`);
+    return true;
+  } catch (err) {
+    console.error(`[S3] Échec suppression de ${s3Key} :`, err.message);
+    return false;
+  }
+} 
+
+export { googleAuth, googleAuthCallback, uploadVideoToYoutubeInternal, loadTokens,uploadToS3,getContentType,deleteFileFromS3 };
