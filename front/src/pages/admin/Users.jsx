@@ -37,23 +37,23 @@ const registerSchema = z.object({
   first_name: z.string(),
   last_name: z.string(),
   password: z.string(),
-  mobile: z.string(),
+  mobile: z.string().optional(),
   email: z.string(),
-  phone: z.string(),
-  birth_date: z.string(),
-  street: z.string(),
-  postal_code: z.string(),
-  city: z.string(),
-  country: z.string(),
-  biography: z.string(),
-  current_job: z.string(),
-  portfolio_url: z.string(),
-  youtube_url: z.string(),
-  instagram_url: z.string(),
-  linkedin_url: z.string(),
-  facebook_url: z.string(),
-  tiktok_ur: z.string(),
-  discovery_source: z.string(),
+  phone: z.string().optional(),
+  birth_date: z.string().optional(),
+  street: z.string().optional(),
+  postal_code: z.string().optional(),
+  city: z.string().optional(),
+  country: z.string().optional(),
+  biography: z.string().optional(),
+  current_job: z.string().optional(),
+  portfolio_url: z.string().optional(),
+  youtube_url: z.string().optional(),
+  instagram_url: z.string().optional(),
+  linkedin_url: z.string().optional(),
+  facebook_url: z.string().optional(),
+  tiktok_ur: z.string().optional(),
+  discovery_source: z.string().optional(),
   role: z.string(),
 });
 
@@ -70,7 +70,7 @@ function Users() {
     });
     
     getRoles().then((data) => {
-      setRoles(data.data);
+      setRoles(data.data.roles);
     });
   }, []);
 
@@ -119,7 +119,7 @@ function Users() {
       setValue("id", user.id);
       setValue("first_name", user.first_name);
       setValue("last_name", user.last_name);
-      setValue("password", user.password);
+      setValue("password", "");
       setValue("mobile", user.mobile || "0606060606");
       setValue("email", user.email);
       setValue("phone", user.phone || "0606060606");
@@ -137,8 +137,8 @@ function Users() {
       setValue("facebook_url", user.facebook_url || "https://google.com");
       setValue("tiktok_ur", user.tiktok_ur || "https://google.com");
       setValue("discovery_source", user.discovery_source || "https://google.com");
-      setIsDialogOpen(true);
       setValue("role", user.role);
+      setIsDialogOpen(true);
       setModeEdit(true);
   }
 
@@ -317,23 +317,23 @@ function Users() {
                 ))}
               </TableHeader>
               <TableBody>
-                {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow key={row.id}>
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </TableCell>
-                      ))}
+                  {table.getRowModel().rows?.length ? (
+                    table.getRowModel().rows.map((row) => (
+                      <TableRow key={row.id}>
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell key={cell.id}>
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={columns.length} className="h-24 text-center">
+                        Aucun utilisateur trouvé.
+                      </TableCell>
                     </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={columns.length} className="h-24 text-center">
-                      Aucun utilisateur trouvé.
-                    </TableCell>
-                  </TableRow>
-                )}
+                  )}
               </TableBody>
             </Table>
           </div>
@@ -361,7 +361,7 @@ function Users() {
               <FormField label="Prénom" id="first_name" register={register} required />
               <FormField label="Nom" id="last_name" register={register} required />
               <FormField label="Email" id="email" type="email" register={register} required />
-              <FormField label="Mot de passe" id="password" type="password" register={register} required />
+              <FormField label="Mot de passe" id="password" type="password" register={register} placeholder="Laisser vide pour ne pas changer" />
               <FormField label="Mobile" id="mobile" register={register} />
               <FormField label="Téléphone" id="phone" register={register} />
               <FormField label="Date de naissance" id="birth_date" type="date" register={register} />

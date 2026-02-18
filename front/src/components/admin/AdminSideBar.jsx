@@ -11,6 +11,7 @@ import {
   CalendarCheck,
   ArrowLeftFromLine,
   LogOut,
+  SquareCode,
 } from "lucide-react";
 import { Form, NavLink, useLocation } from "react-router";
 
@@ -37,6 +38,7 @@ const navItems = [
   { title: "Jury", url: "/admin/jurys", icon: Glasses },
   { title: "Gestion Films", url: "/admin/videos", icon: Clapperboard },
   { title: "Evenements", url: "/admin/events", icon: CalendarCheck },
+  { title: "CMS", url: "/admin/cms", icon: SquareCode },
 ]
 
 export default function AdminSidebar() {

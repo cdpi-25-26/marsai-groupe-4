@@ -41,7 +41,7 @@ export default function FormField({
           className={baseInputClass}
         >
           <option value="">Sélectionner {label.toLowerCase()}</option>
-          {options.map((option) => (
+          {Array.isArray(options) && options.map((option) => (
             <option key={option} value={option}>
               {option}
             </option>

@@ -6,15 +6,19 @@ import uploadRouter from "./Upload.route.js";
 import overviewRouter from "./admin/Overview.route.js";
 import youtubeRouter from "./Youtube.route.js";
 import evaluationRouter from "./admin/Evaluation.route.js";
+import eventRouter from "./admin/Event.route.js";
+import filmRouter from "./Film.route.js";
 
 const router = express.Router();
 
 router.use("/auth", authRouter);
 router.use("/users", userRouter);
-router.use("/films", videoRouter);
 router.use("/uploads", uploadRouter);
 router.use("/overview", overviewRouter);
 router.use("/youtube", youtubeRouter);
 router.use("/admin/evaluations", evaluationRouter);
+router.use("/events", eventRouter);
+router.use("/films", videoRouter);
+router.use("/gallerie", filmRouter);
 
 export default router;
