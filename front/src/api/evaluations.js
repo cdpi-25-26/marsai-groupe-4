@@ -24,4 +24,12 @@ async function deleteEvaluation(id) {
   return await instance.delete(`admin/evaluations/${id}`);
 }
 
-export { getEvaluations, getFilmsToEvaluate, getEvaluationsByFilm, createEvaluation, updateEvaluation, deleteEvaluation };
+async function undoLastEvaluation() {
+  return await instance.post("admin/evaluations/undo");
+}
+
+async function getFilmStats(filmId) {
+  return await instance.get(`admin/evaluations/stats/${filmId}`);
+}
+
+export { getEvaluations, getFilmsToEvaluate, getEvaluationsByFilm, createEvaluation, updateEvaluation, deleteEvaluation, undoLastEvaluation, getFilmStats };

@@ -1,29 +1,52 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import {
   getEvaluations,
   getFilmsToEvaluate,
   createEvaluation,
+  undoLastEvaluation,
+  getFilmStats,
 } from "../api/evaluations.js";
 import handleLogout from "../utils/helpers.js";
 
 function JuryVote() {
   const [films, setFilms] = useState([]);
+  const [allFilms, setAllFilms] = useState([]);
   const [evaluations, setEvaluations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
+
+  // Undo
+  const [canUndo, setCanUndo] = useState(false);
+  const [lastVotedFilm, setLastVotedFilm] = useState(null);
+
+  // Stats popup
+  const [stats, setStats] = useState(null);
+  const [showStats, setShowStats] = useState(false);
+
+  // Filters
+  const [filterType, setFilterType] = useState("all");
+  const [filterLang, setFilterLang] = useState("all");
 
   // Swipe state
   const [dragX, setDragX] = useState(0);
   const [dragging, setDragging] = useState(false);
-  const [exitDirection, setExitDirection] = useState(null); // "left" | "right"
+  const [exitDirection, setExitDirection] = useState(null);
   const startX = useRef(0);
-  const cardRef = useRef(null);
 
   useEffect(() => {
     loadData();
   }, []);
+
+  // Apply filters
+  useEffect(() => {
+    let filtered = [...allFilms];
+    if (filterType !== "all") filtered = filtered.filter((f) => f.type === filterType);
+    if (filterLang !== "all") filtered = filtered.filter((f) => f.language === filterLang);
+    setFilms(filtered);
+  }, [allFilms, filterType, filterLang]);
 
   function loadData() {
     setLoading(true);
@@ -32,7 +55,7 @@ function JuryVote() {
       getEvaluations().then((res) => res.data),
     ])
       .then(([filmsData, evalsData]) => {
-        setFilms(filmsData);
+        setAllFilms(filmsData);
         setEvaluations(evalsData);
         setError(null);
       })
@@ -41,6 +64,10 @@ function JuryVote() {
   }
 
   const currentFilm = films[0];
+
+  // Get unique languages and types for filters
+  const languages = [...new Set(allFilms.map((f) => f.language).filter(Boolean))];
+  const types = [...new Set(allFilms.map((f) => f.type).filter(Boolean))];
 
   function handleVote(decision) {
     if (!currentFilm || submitting) return;
@@ -54,9 +81,22 @@ function JuryVote() {
         comment: comment || "",
       })
         .then(() => {
+          setLastVotedFilm(currentFilm);
+          setCanUndo(true);
           setComment("");
           setDragX(0);
           setExitDirection(null);
+          setShowVideo(false);
+
+          // Fetch stats for the voted film
+          getFilmStats(currentFilm.id)
+            .then((res) => {
+              setStats({ ...res.data, filmTitle: currentFilm.title, decision });
+              setShowStats(true);
+              setTimeout(() => setShowStats(false), 3000);
+            })
+            .catch(() => {});
+
           loadData();
         })
         .catch((err) => {
@@ -67,39 +107,56 @@ function JuryVote() {
     }, 400);
   }
 
-  // Touch / Mouse drag handlers
+  function handleUndo() {
+    if (!canUndo || submitting) return;
+    setSubmitting(true);
+    undoLastEvaluation()
+      .then(() => {
+        setCanUndo(false);
+        setLastVotedFilm(null);
+        setShowStats(false);
+        loadData();
+      })
+      .catch((err) => alert("Erreur: " + err.message))
+      .finally(() => setSubmitting(false));
+  }
+
+  // Drag handlers
   function onDragStart(clientX) {
     if (submitting) return;
     setDragging(true);
     startX.current = clientX;
   }
-
   function onDragMove(clientX) {
     if (!dragging) return;
     setDragX(clientX - startX.current);
   }
-
   function onDragEnd() {
     if (!dragging) return;
     setDragging(false);
-    if (dragX > 120) {
-      handleVote("YES");
-    } else if (dragX < -120) {
-      handleVote("NO");
-    } else {
-      setDragX(0);
-    }
+    if (dragX > 120) handleVote("YES");
+    else if (dragX < -120) handleVote("NO");
+    else setDragX(0);
   }
 
-  // Keyboard support
+  // Keyboard
+  const onKey = useCallback((e) => {
+    if (e.target.tagName === "TEXTAREA") return;
+    if (e.key === "ArrowRight") handleVote("YES");
+    if (e.key === "ArrowLeft") handleVote("NO");
+    if (e.key === "z" && (e.ctrlKey || e.metaKey)) handleUndo();
+  });
   useEffect(() => {
-    function onKey(e) {
-      if (e.key === "ArrowRight") handleVote("YES");
-      if (e.key === "ArrowLeft") handleVote("NO");
-    }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   });
+
+  // YouTube embed helper
+  function getYoutubeId(url) {
+    if (!url) return null;
+    const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([^&?/]+)/);
+    return m ? m[1] : null;
+  }
 
   if (loading) {
     return (
@@ -117,7 +174,6 @@ function JuryVote() {
     );
   }
 
-  // Compute card transform
   const rotation = dragging ? dragX * 0.08 : 0;
   const cardTransform = exitDirection
     ? `translateX(${exitDirection === "right" ? 120 : -120}vw) rotate(${exitDirection === "right" ? 30 : -30}deg)`
@@ -126,17 +182,46 @@ function JuryVote() {
   const overlayColor = dragX > 0 ? "rgba(74,222,128,0.35)" : "rgba(248,113,113,0.35)";
   const overlayText = dragX > 30 ? "YES" : dragX < -30 ? "NO" : "";
 
+  const ytId = currentFilm ? getYoutubeId(currentFilm.youtube_link) : null;
+  const totalFilms = evaluations.length + allFilms.length;
+
   return (
     <div style={{ minHeight: "100vh", background: "#0a0a0a", padding: "20px 20px 40px", overflow: "hidden" }}>
       {/* Top bar */}
       <div style={{ maxWidth: 500, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-        <h1 style={{ fontSize: 22, fontWeight: "bold", color: "white" }}>
-          Espace Jury
-        </h1>
-        <button onClick={handleLogout} style={styles.logoutBtn}>
-          Déconnexion
-        </button>
+        <h1 style={{ fontSize: 22, fontWeight: "bold", color: "white" }}>Espace Jury</h1>
+        <button onClick={handleLogout} style={styles.logoutBtn}>Déconnexion</button>
       </div>
+
+      {/* Filters */}
+      {(types.length > 0 || languages.length > 1) && (
+        <div style={{ maxWidth: 500, margin: "0 auto 16px", display: "flex", gap: 8, flexWrap: "wrap" }}>
+          {types.length > 0 && (
+            <select
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value)}
+              style={styles.filterSelect}
+            >
+              <option value="all">Tous les types</option>
+              {types.map((t) => (
+                <option key={t} value={t}>{t === "hybride" ? "Hybride" : "100% IA"}</option>
+              ))}
+            </select>
+          )}
+          {languages.length > 1 && (
+            <select
+              value={filterLang}
+              onChange={(e) => setFilterLang(e.target.value)}
+              style={styles.filterSelect}
+            >
+              <option value="all">Toutes les langues</option>
+              {languages.map((l) => (
+                <option key={l} value={l}>{l}</option>
+              ))}
+            </select>
+          )}
+        </div>
+      )}
 
       {/* Progress */}
       <div style={{ maxWidth: 500, margin: "0 auto 24px" }}>
@@ -145,17 +230,35 @@ function JuryVote() {
           <span>{films.length} restant{films.length > 1 ? "s" : ""}</span>
         </div>
         <div style={{ height: 4, background: "#1f2937", borderRadius: 2, overflow: "hidden" }}>
-          <div
-            style={{
-              height: "100%",
-              width: `${evaluations.length / Math.max(evaluations.length + films.length, 1) * 100}%`,
-              background: "linear-gradient(90deg, #3b82f6, #8b5cf6)",
-              borderRadius: 2,
-              transition: "width 0.5s ease",
-            }}
-          />
+          <div style={{
+            height: "100%",
+            width: `${evaluations.length / Math.max(totalFilms, 1) * 100}%`,
+            background: "linear-gradient(90deg, #3b82f6, #8b5cf6)",
+            borderRadius: 2,
+            transition: "width 0.5s ease",
+          }} />
         </div>
       </div>
+
+      {/* Stats toast */}
+      {showStats && stats && (
+        <div style={{
+          position: "fixed", top: 20, left: "50%", transform: "translateX(-50%)", zIndex: 100,
+          background: stats.decision === "YES" ? "rgba(22,101,52,0.95)" : "rgba(127,29,29,0.95)",
+          padding: "14px 24px", borderRadius: 14, color: "white",
+          boxShadow: "0 10px 40px rgba(0,0,0,0.5)", animation: "fadeIn 0.3s ease",
+          textAlign: "center", minWidth: 220,
+        }}>
+          <div style={{ fontSize: 14, fontWeight: "bold", marginBottom: 6 }}>{stats.filmTitle}</div>
+          <div style={{ display: "flex", justifyContent: "center", gap: 16, fontSize: 13 }}>
+            <span>👍 {stats.yesPercent}% ({stats.yes})</span>
+            <span>👎 {stats.noPercent}% ({stats.no})</span>
+          </div>
+          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.6)", marginTop: 4 }}>
+            {stats.total} vote{stats.total > 1 ? "s" : ""} au total
+          </div>
+        </div>
+      )}
 
       {/* Card area */}
       <div style={{ maxWidth: 500, margin: "0 auto", position: "relative", minHeight: 420 }}>
@@ -163,7 +266,6 @@ function JuryVote() {
           <>
             {/* Swipe card */}
             <div
-              ref={cardRef}
               onMouseDown={(e) => onDragStart(e.clientX)}
               onMouseMove={(e) => onDragMove(e.clientX)}
               onMouseUp={onDragEnd}
@@ -197,16 +299,25 @@ function JuryVote() {
                 </div>
               )}
 
-              {/* Film content */}
               <div style={{ position: "relative", zIndex: 1, padding: 28 }}>
-                {/* Film number badge */}
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+                {/* Badge + type */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, flexWrap: "wrap", gap: 8 }}>
                   <div style={{
                     padding: "4px 12px", borderRadius: 20, fontSize: 12, fontWeight: 600,
                     background: "rgba(139,92,246,0.2)", color: "#a78bfa", border: "1px solid rgba(139,92,246,0.3)",
                   }}>
-                    Film {evaluations.length + 1} / {evaluations.length + films.length}
+                    Film {evaluations.length + 1} / {totalFilms}
                   </div>
+                  {currentFilm.type && (
+                    <div style={{
+                      padding: "4px 10px", borderRadius: 20, fontSize: 11, fontWeight: 600,
+                      background: currentFilm.type === "total_ia" ? "rgba(236,72,153,0.2)" : "rgba(59,130,246,0.2)",
+                      color: currentFilm.type === "total_ia" ? "#f472b6" : "#60a5fa",
+                      border: `1px solid ${currentFilm.type === "total_ia" ? "rgba(236,72,153,0.3)" : "rgba(59,130,246,0.3)"}`,
+                    }}>
+                      {currentFilm.type === "total_ia" ? "100% IA" : "Hybride"}
+                    </div>
+                  )}
                 </div>
 
                 <h2 style={{ fontSize: 26, fontWeight: "bold", color: "white", marginBottom: 8, lineHeight: 1.2 }}>
@@ -220,15 +331,9 @@ function JuryVote() {
                 )}
 
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
-                  {currentFilm.language && (
-                    <span style={styles.tag}>{currentFilm.language}</span>
-                  )}
-                  {currentFilm.duration && (
-                    <span style={styles.tag}>{currentFilm.duration}s</span>
-                  )}
-                  {currentFilm.user && (
-                    <span style={styles.tag}>{currentFilm.user.first_name} {currentFilm.user.last_name}</span>
-                  )}
+                  {currentFilm.language && <span style={styles.tag}>{currentFilm.language}</span>}
+                  {currentFilm.duration && <span style={styles.tag}>{currentFilm.duration}s</span>}
+                  {currentFilm.user && <span style={styles.tag}>{currentFilm.user.first_name} {currentFilm.user.last_name}</span>}
                 </div>
 
                 {currentFilm.synopsis && (
@@ -237,7 +342,59 @@ function JuryVote() {
                   </p>
                 )}
 
-                {/* Comment input */}
+                {/* Video preview */}
+                {(ytId || currentFilm.video_file) && (
+                  <div style={{ marginBottom: 16 }}>
+                    {!showVideo ? (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setShowVideo(true); }}
+                        onMouseDown={(e) => e.stopPropagation()}
+                        onTouchStart={(e) => e.stopPropagation()}
+                        style={{
+                          width: "100%", padding: "14px", borderRadius: 10,
+                          background: "rgba(139,92,246,0.15)", border: "1px solid rgba(139,92,246,0.3)",
+                          color: "#a78bfa", cursor: "pointer", fontSize: 14, fontWeight: 600,
+                          display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                        }}
+                      >
+                        <span style={{ fontSize: 20 }}>▶</span> Regarder le film
+                      </button>
+                    ) : (
+                      <div
+                        onMouseDown={(e) => e.stopPropagation()}
+                        onTouchStart={(e) => e.stopPropagation()}
+                        style={{ position: "relative", borderRadius: 10, overflow: "hidden" }}
+                      >
+                        {ytId ? (
+                          <iframe
+                            src={`https://www.youtube.com/embed/${ytId}`}
+                            style={{ width: "100%", aspectRatio: "16/9", border: "none", borderRadius: 10 }}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          />
+                        ) : (
+                          <video
+                            src={`http://localhost:3000/uploads/${currentFilm.video_file}`}
+                            controls
+                            style={{ width: "100%", borderRadius: 10 }}
+                          />
+                        )}
+                        <button
+                          onClick={() => setShowVideo(false)}
+                          style={{
+                            position: "absolute", top: 8, right: 8,
+                            background: "rgba(0,0,0,0.7)", border: "none", color: "white",
+                            width: 28, height: 28, borderRadius: "50%", cursor: "pointer", fontSize: 14,
+                          }}
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Comment */}
                 <textarea
                   placeholder="Commentaire (optionnel)..."
                   value={comment}
@@ -251,43 +408,56 @@ function JuryVote() {
             </div>
 
             {/* Buttons */}
-            <div style={{ display: "flex", justifyContent: "center", gap: 24, marginTop: 24 }}>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 20, marginTop: 24 }}>
               <button
                 onClick={() => handleVote("NO")}
                 disabled={submitting}
                 style={styles.noBtn}
-                onMouseEnter={(e) => { e.target.style.transform = "scale(1.1)"; e.target.style.boxShadow = "0 0 30px rgba(239,68,68,0.4)"; }}
-                onMouseLeave={(e) => { e.target.style.transform = "scale(1)"; e.target.style.boxShadow = "none"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.1)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(239,68,68,0.4)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "none"; }}
               >
-                <span style={{ fontSize: 32 }}>✕</span>
-                <span style={{ fontSize: 11, letterSpacing: 2 }}>NO</span>
+                <span style={{ fontSize: 28 }}>✕</span>
+              </button>
+
+              {/* Undo button */}
+              <button
+                onClick={handleUndo}
+                disabled={!canUndo || submitting}
+                style={{
+                  ...styles.undoBtn,
+                  opacity: canUndo ? 1 : 0.25,
+                  cursor: canUndo ? "pointer" : "default",
+                }}
+                title="Annuler le dernier vote (Ctrl+Z)"
+              >
+                <span style={{ fontSize: 18 }}>↩</span>
               </button>
 
               <button
                 onClick={() => handleVote("YES")}
                 disabled={submitting}
                 style={styles.yesBtn}
-                onMouseEnter={(e) => { e.target.style.transform = "scale(1.1)"; e.target.style.boxShadow = "0 0 30px rgba(34,197,94,0.4)"; }}
-                onMouseLeave={(e) => { e.target.style.transform = "scale(1)"; e.target.style.boxShadow = "none"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.1)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(34,197,94,0.4)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "none"; }}
               >
-                <span style={{ fontSize: 32 }}>♥</span>
-                <span style={{ fontSize: 11, letterSpacing: 2 }}>YES</span>
+                <span style={{ fontSize: 28 }}>♥</span>
               </button>
             </div>
 
-            {/* Hint */}
             <p style={{ textAlign: "center", color: "#4b5563", fontSize: 12, marginTop: 16 }}>
-              Glissez la carte ou utilisez ← →
+              Glissez la carte · ← → · Ctrl+Z pour annuler
             </p>
           </>
         ) : (
           <div style={{ textAlign: "center", padding: 60, border: "1px solid #1f2937", borderRadius: 20, background: "#111" }}>
             <p style={{ fontSize: 48, marginBottom: 16 }}>🎬</p>
             <p style={{ color: "white", fontSize: 20, fontWeight: "bold", marginBottom: 8 }}>
-              Tous les films ont été évalués !
+              {allFilms.length === 0 ? "Tous les films ont été évalués !" : "Aucun film ne correspond aux filtres"}
             </p>
             <p style={{ color: "#6b7280", fontSize: 15 }}>
-              Merci pour vos {evaluations.length} vote{evaluations.length > 1 ? "s" : ""}.
+              {allFilms.length === 0
+                ? `Merci pour vos ${evaluations.length} vote${evaluations.length > 1 ? "s" : ""}.`
+                : "Essayez de changer les filtres ci-dessus."}
             </p>
           </div>
         )}
@@ -300,13 +470,11 @@ function JuryVote() {
             Vos votes récents
           </h3>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-            {evaluations.slice(-10).reverse().map((ev) => (
+            {evaluations.slice(0, 10).map((ev) => (
               <div
                 key={ev.id}
                 style={{
-                  padding: "6px 14px",
-                  borderRadius: 20,
-                  fontSize: 13,
+                  padding: "6px 14px", borderRadius: 20, fontSize: 13,
                   border: "1px solid",
                   borderColor: ev.decision === "YES" ? "#166534" : "#7f1d1d",
                   color: ev.decision === "YES" ? "#4ade80" : "#f87171",
@@ -325,78 +493,56 @@ function JuryVote() {
 
 const styles = {
   screen: {
-    minHeight: "100vh",
-    background: "#0a0a0a",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    minHeight: "100vh", background: "#0a0a0a",
+    display: "flex", justifyContent: "center", alignItems: "center",
   },
   logoutBtn: {
-    padding: "6px 14px",
-    background: "transparent",
-    border: "1px solid #374151",
-    borderRadius: 8,
-    color: "#6b7280",
+    padding: "6px 14px", background: "transparent",
+    border: "1px solid #374151", borderRadius: 8,
+    color: "#6b7280", cursor: "pointer", fontSize: 13,
+  },
+  filterSelect: {
+    padding: "6px 12px", background: "#111", border: "1px solid #374151",
+    borderRadius: 8, color: "#9ca3af", fontSize: 13, outline: "none",
     cursor: "pointer",
-    fontSize: 13,
   },
   card: {
-    position: "relative",
-    borderRadius: 20,
+    position: "relative", borderRadius: 20,
     background: "linear-gradient(145deg, #111 0%, #1a1a2e 100%)",
-    border: "1px solid #2d2d44",
-    overflow: "hidden",
+    border: "1px solid #2d2d44", overflow: "hidden",
     boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
   },
   tag: {
-    padding: "4px 10px",
-    borderRadius: 6,
-    fontSize: 12,
-    background: "rgba(255,255,255,0.06)",
-    color: "#9ca3af",
+    padding: "4px 10px", borderRadius: 6, fontSize: 12,
+    background: "rgba(255,255,255,0.06)", color: "#9ca3af",
     border: "1px solid rgba(255,255,255,0.08)",
   },
   textarea: {
-    width: "100%",
-    padding: 12,
-    background: "rgba(0,0,0,0.3)",
-    border: "1px solid #374151",
-    borderRadius: 10,
-    color: "white",
-    fontSize: 14,
-    resize: "none",
-    outline: "none",
-    boxSizing: "border-box",
+    width: "100%", padding: 12,
+    background: "rgba(0,0,0,0.3)", border: "1px solid #374151",
+    borderRadius: 10, color: "white", fontSize: 14,
+    resize: "none", outline: "none", boxSizing: "border-box",
   },
   noBtn: {
-    width: 72,
-    height: 72,
-    borderRadius: "50%",
-    border: "2px solid #ef4444",
-    background: "rgba(239,68,68,0.1)",
-    color: "#ef4444",
-    cursor: "pointer",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
+    width: 64, height: 64, borderRadius: "50%",
+    border: "2px solid #ef4444", background: "rgba(239,68,68,0.1)",
+    color: "#ef4444", cursor: "pointer",
+    display: "flex", alignItems: "center", justifyContent: "center",
     transition: "all 0.2s",
-    gap: 2,
   },
   yesBtn: {
-    width: 72,
-    height: 72,
-    borderRadius: "50%",
-    border: "2px solid #22c55e",
-    background: "rgba(34,197,94,0.1)",
-    color: "#22c55e",
-    cursor: "pointer",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
+    width: 64, height: 64, borderRadius: "50%",
+    border: "2px solid #22c55e", background: "rgba(34,197,94,0.1)",
+    color: "#22c55e", cursor: "pointer",
+    display: "flex", alignItems: "center", justifyContent: "center",
     transition: "all 0.2s",
-    gap: 2,
+  },
+  undoBtn: {
+    width: 48, height: 48, borderRadius: "50%",
+    border: "2px solid #f59e0b", background: "rgba(245,158,11,0.1)",
+    color: "#f59e0b",
+    display: "flex", alignItems: "center", justifyContent: "center",
+    transition: "all 0.2s",
   },
 };
 

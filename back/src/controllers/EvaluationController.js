@@ -98,4 +98,38 @@ async function getFilmsToEvaluate(req, res) {
   }
 }
 
-export default { getEvaluations, getEvaluationsByFilm, getFilmsToEvaluate, createEvaluation, updateEvaluation, deleteEvaluation };
+async function undoLastEvaluation(req, res) {
+  try {
+    const user_id = req.user.id;
+    const last = await Evaluation.findOne({
+      where: { user_id },
+      order: [["created_at", "DESC"]],
+    });
+    if (!last) return res.status(404).json({ error: "No evaluation to undo" });
+    await last.destroy();
+    res.json({ message: "Last evaluation undone", film_id: last.film_id });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to undo evaluation" });
+  }
+}
+
+async function getFilmStats(req, res) {
+  try {
+    const { filmId } = req.params;
+    const evaluations = await Evaluation.findAll({ where: { film_id: filmId } });
+    const total = evaluations.length;
+    const yes = evaluations.filter((e) => e.decision === "YES").length;
+    const no = evaluations.filter((e) => e.decision === "NO").length;
+    res.json({
+      total,
+      yes,
+      no,
+      yesPercent: total > 0 ? Math.round((yes / total) * 100) : 0,
+      noPercent: total > 0 ? Math.round((no / total) * 100) : 0,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch stats" });
+  }
+}
+
+export default { getEvaluations, getEvaluationsByFilm, getFilmsToEvaluate, createEvaluation, updateEvaluation, deleteEvaluation, undoLastEvaluation, getFilmStats };

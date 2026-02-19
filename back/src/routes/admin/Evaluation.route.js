@@ -10,6 +10,8 @@ evaluationRouter.get("/", EvaluationController.getEvaluations);
 evaluationRouter.get("/films", EvaluationController.getFilmsToEvaluate);
 evaluationRouter.get("/film/:filmId", EvaluationController.getEvaluationsByFilm);
 evaluationRouter.post("/", EvaluationController.createEvaluation);
+evaluationRouter.post("/undo", EvaluationController.undoLastEvaluation);
+evaluationRouter.get("/stats/:filmId", EvaluationController.getFilmStats);
 evaluationRouter.put("/:id", EvaluationController.updateEvaluation);
 evaluationRouter.delete("/:id", EvaluationController.deleteEvaluation);
 
