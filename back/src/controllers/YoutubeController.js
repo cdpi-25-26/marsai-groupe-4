@@ -13,17 +13,18 @@ dotenv.config();
 
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI } = process.env;
 
-if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET || !GOOGLE_REDIRECT_URI) {
-  throw new Error("Missing Google API credentials in environment variables");
-}
-
+let oauth2Client = null;
 const SCOPES = ["https://www.googleapis.com/auth/youtube.upload"];
 
-const oauth2Client = new google.auth.OAuth2(
-  GOOGLE_CLIENT_ID,
-  GOOGLE_CLIENT_SECRET,
-  GOOGLE_REDIRECT_URI
-);
+if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET || !GOOGLE_REDIRECT_URI) {
+  console.warn("⚠️  Missing Google API credentials — YouTube features disabled");
+} else {
+  oauth2Client = new google.auth.OAuth2(
+    GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET,
+    GOOGLE_REDIRECT_URI
+  );
+}
 
 // Store OAuth states with expiration (5 min) to support concurrent users
 const pendingOAuthStates = new Map();
@@ -67,6 +68,7 @@ async function saveTokens(tokens) {
 }
 
 async function googleAuth(req, res) {
+  if (!oauth2Client) return res.status(503).json({ error: "YouTube not configured" });
   const state = crypto.randomBytes(16).toString("hex");
   pendingOAuthStates.set(state, Date.now());
 
@@ -88,6 +90,7 @@ async function googleAuth(req, res) {
 }
 
 async function googleAuthCallback(req, res) {
+  if (!oauth2Client) return res.status(503).json({ error: "YouTube not configured" });
   const { code, state } = req.query;
 
   if (!state || !pendingOAuthStates.has(state)) {
@@ -113,8 +116,9 @@ async function googleAuthCallback(req, res) {
 }
 
 async function uploadVideoToYoutubeInternal(filePath, metadata = {}) {
+  if (!oauth2Client) throw new Error("YouTube not configured — missing API credentials");
   try {
-    const tokens = await loadTokens(); 
+    const tokens = await loadTokens();
     if (!tokens) throw new Error("Aucun token YouTube trouvé. Connectez la chaîne d'abord.");
 
     oauth2Client.setCredentials(tokens);

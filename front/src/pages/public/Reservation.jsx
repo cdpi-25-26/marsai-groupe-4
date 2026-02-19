@@ -1,15 +1,10 @@
-import ClockIcon from "../../assets/reservation_svg/Clock.svg";
-import LocationIcon from "../../assets/reservation_svg/Location.svg";
-import UserIcon from "../../assets/reservation_svg/User.svg";
+import { Clock, MapPin, User } from "lucide-react";
 
-
-
-   
  export default function EventReservation() {
       const eventDetails = [
-    { title: "Lieu", value: "STUDIO 1 - LA PLATEFORME_", icon: LocationIcon },
-    { title: "Horaires", value: "14H30 — 13 JUIN", icon: ClockIcon },
-    { title: "Coach expert", value: "THOMAS AUBERT", icon: UserIcon },
+    { title: "Lieu", value: "STUDIO 1 - LA PLATEFORME_", icon: MapPin },
+    { title: "Horaires", value: "14H30 — 13 JUIN", icon: Clock },
+    { title: "Coach expert", value: "THOMAS AUBERT", icon: User },
   ];
 
   return (
@@ -34,7 +29,7 @@ import UserIcon from "../../assets/reservation_svg/User.svg";
     
     <div key={index} className="flex items-center gap-4">
       
-     <img src={detail.icon} alt={detail.title} className="w-6 h-6 sm:w-7 sm:h-7 object-contain"/>
+     <detail.icon className="w-6 h-6 sm:w-7 sm:h-7 text-gray-300" />
       
       <div className="flex flex-col">
         <h3 className="text-sm sm:text-base">{detail.value}</h3>

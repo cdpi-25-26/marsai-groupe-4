@@ -23,7 +23,13 @@ import Palmares from "./pages/public/Palmares.jsx";
 import Agenda from "./pages/public/Agenda.jsx";
 import Reservation from "./pages/public/Reservation.jsx";
 import Cms from "./pages/admin/Cms.jsx";
+import JuryVote from "./pages/JuryVote.jsx";
+import handleLogout from "./utils/helpers.js";
 
+function Logout() {
+  handleLogout();
+  return null;
+}
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -46,11 +52,19 @@ createRoot(document.getElementById("root")).render(
             <Route path="/contact" element={<Contact />} />
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/register" element={<Register />} />
+            <Route path="/logout" element={<Logout />} />
             <Route path="/films/:id" element={<Film />} />
             <Route path="/upload" element={<Upload />} />
             <Route path="/palmares" element={<Palmares />} />
             <Route path="/agenda" element={<Agenda />} />
           </Route>
+
+          {/* Espace Jury */}
+          <Route path="jury" element={
+            <RoleGuard allowedRoles={["JURY", "ADMIN"]}>
+              <JuryVote />
+            </RoleGuard>
+          } />
 
           {/* Routes privées */}
           <Route path="admin" element={ <RoleGuard allowedRoles={["ADMIN"]}>

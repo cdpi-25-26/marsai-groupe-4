@@ -1,7 +1,8 @@
 import { NavLink } from "react-router";
 import { ThemeToggle } from "./ThemeToggle";
 import { useState, useEffect } from "react";
-import { Trophy, House, Search, Calendar, User } from "lucide-react";
+import { Trophy, House, Search, Calendar, User, LogOut, LogIn } from "lucide-react";
+import handleLogout from "../utils/helpers.js";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -61,9 +62,15 @@ export default function Navbar() {
           <NavLink to="/agenda" className={iconLinkClass}>
             <Calendar size={20} />
           </NavLink>
-          <NavLink to={userPath} end className={iconLinkClass}>
-            <User size={20} />
-          </NavLink>
+          {isLoggedIn ? (
+            <button onClick={handleLogout} className="flex items-center justify-center opacity-60 hover:opacity-100 transition-all duration-300 cursor-pointer">
+              <LogOut size={20} />
+            </button>
+          ) : (
+            <NavLink to="/auth/login" end className={iconLinkClass}>
+              <LogIn size={20} />
+            </NavLink>
+          )}
         </div>
 
         {/* RIGHT SIDE */}
@@ -129,9 +136,15 @@ export default function Navbar() {
         <NavLink to="/agenda" onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition">
           Agenda
         </NavLink>
-        <NavLink to={userPath} onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition">
-          Profile
-        </NavLink>
+        {isLoggedIn ? (
+          <button onClick={() => { setOpen(false); handleLogout(); }} className="text-white/70 hover:text-white transition text-left cursor-pointer">
+            Déconnexion
+          </button>
+        ) : (
+          <NavLink to="/auth/login" onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition">
+            Connexion
+          </NavLink>
+        )}
       </div>
     </section>
   );
