@@ -7,7 +7,6 @@ import {
   BarChart3,
   Package,
   Clapperboard,
-  Glasses,
   CalendarCheck,
   ArrowLeftFromLine,
   LogOut,
@@ -35,7 +34,6 @@ import YoutubeConnectButton from './YoutubeConnectButton';
 const navItems = [
   { title: "Overview", url: "/admin", icon: LayoutDashboard },
   { title: "Gestion Users", url: "/admin/users", icon: Users },
-  { title: "Jury", url: "/admin/jurys", icon: Glasses },
   { title: "Gestion Films", url: "/admin/videos", icon: Clapperboard },
   { title: "Evenements", url: "/admin/events", icon: CalendarCheck },
   { title: "CMS", url: "/admin/cms", icon: SquareCode },
