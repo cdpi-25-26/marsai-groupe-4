@@ -8,6 +8,7 @@ videoRouter.use((req, res, next) => AuthMiddleware(req, res, next, ["ADMIN"]));
 
 videoRouter.get("/", VideoController.getVideos); // Admin
 videoRouter.post("/", VideoController.createVideo); // Admin
+videoRouter.put("/:id/status", VideoController.updateVideoStatus); // Admin
 
 
 export default videoRouter;

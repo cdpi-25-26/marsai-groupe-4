@@ -62,4 +62,31 @@ function createVideo(req, res) {
   });
 }
 
-export default { getVideos, createVideo };
+// Update status
+const VALID_STATUSES = ["submitted", "under_review", "rejected", "selected", "finalist"];
+
+async function updateVideoStatus(req, res) {
+  try {
+    const { status } = req.body;
+
+    if (!status || !VALID_STATUSES.includes(status)) {
+      return res.status(400).json({
+        error: `Invalid status. Must be one of: ${VALID_STATUSES.join(", ")}`,
+      });
+    }
+
+    const video = await Video.findByPk(req.params.id);
+    if (!video) {
+      return res.status(404).json({ error: "Video not found" });
+    }
+
+    video.status = status;
+    await video.save();
+
+    res.json(video);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update video status" });
+  }
+}
+
+export default { getVideos, createVideo, updateVideoStatus };
