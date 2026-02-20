@@ -69,6 +69,11 @@ const Film = sequelize.define(
       allowNull: true,
     },
 
+    video_file: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
+
     duration: {
       type: DataTypes.STRING(20),
       allowNull: true,

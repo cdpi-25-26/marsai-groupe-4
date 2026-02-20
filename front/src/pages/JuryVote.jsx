@@ -16,7 +16,8 @@ function JuryVote() {
   const [error, setError] = useState(null);
   const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [showVideo, setShowVideo] = useState(false);
+  const [videoWatched, setVideoWatched] = useState(false);
+  const videoRef = useRef(null);
 
   // Undo
   const [canUndo, setCanUndo] = useState(false);
@@ -69,8 +70,11 @@ function JuryVote() {
   const languages = [...new Set(allFilms.map((f) => f.language).filter(Boolean))];
   const types = [...new Set(allFilms.map((f) => f.type).filter(Boolean))];
 
+  const hasVideo = currentFilm?.video_file;
+  const votingDisabled = submitting || (hasVideo && !videoWatched);
+
   function handleVote(decision) {
-    if (!currentFilm || submitting) return;
+    if (!currentFilm || votingDisabled) return;
     setSubmitting(true);
     setExitDirection(decision === "YES" ? "right" : "left");
 
@@ -86,7 +90,7 @@ function JuryVote() {
           setComment("");
           setDragX(0);
           setExitDirection(null);
-          setShowVideo(false);
+          setVideoWatched(false);
 
           // Fetch stats for the voted film
           getFilmStats(currentFilm.id)
@@ -115,6 +119,7 @@ function JuryVote() {
         setCanUndo(false);
         setLastVotedFilm(null);
         setShowStats(false);
+        setVideoWatched(false);
         loadData();
       })
       .catch((err) => alert("Erreur: " + err.message))
@@ -151,11 +156,17 @@ function JuryVote() {
     return () => window.removeEventListener("keydown", onKey);
   });
 
-  // YouTube embed helper
-  function getYoutubeId(url) {
-    if (!url) return null;
-    const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([^&?/]+)/);
-    return m ? m[1] : null;
+  // Handle video ended — unlock voting
+  function handleVideoEnded() {
+    setVideoWatched(true);
+  }
+
+  // Handle video timeupdate — unlock at 80% watched
+  function handleTimeUpdate(e) {
+    const video = e.target;
+    if (video.duration && video.currentTime / video.duration >= 0.8) {
+      setVideoWatched(true);
+    }
   }
 
   if (loading) {
@@ -182,7 +193,6 @@ function JuryVote() {
   const overlayColor = dragX > 0 ? "rgba(74,222,128,0.35)" : "rgba(248,113,113,0.35)";
   const overlayText = dragX > 30 ? "YES" : dragX < -30 ? "NO" : "";
 
-  const ytId = currentFilm ? getYoutubeId(currentFilm.youtube_link) : null;
   const totalFilms = evaluations.length + allFilms.length;
 
   return (
@@ -342,53 +352,29 @@ function JuryVote() {
                   </p>
                 )}
 
-                {/* Video preview */}
-                {(ytId || currentFilm.video_file) && (
-                  <div style={{ marginBottom: 16 }}>
-                    {!showVideo ? (
-                      <button
-                        onClick={(e) => { e.stopPropagation(); setShowVideo(true); }}
-                        onMouseDown={(e) => e.stopPropagation()}
-                        onTouchStart={(e) => e.stopPropagation()}
-                        style={{
-                          width: "100%", padding: "14px", borderRadius: 10,
-                          background: "rgba(139,92,246,0.15)", border: "1px solid rgba(139,92,246,0.3)",
-                          color: "#a78bfa", cursor: "pointer", fontSize: 14, fontWeight: 600,
-                          display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                        }}
-                      >
-                        <span style={{ fontSize: 20 }}>▶</span> Regarder le film
-                      </button>
-                    ) : (
-                      <div
-                        onMouseDown={(e) => e.stopPropagation()}
-                        onTouchStart={(e) => e.stopPropagation()}
-                        style={{ position: "relative", borderRadius: 10, overflow: "hidden" }}
-                      >
-                        {ytId ? (
-                          <iframe
-                            src={`https://www.youtube.com/embed/${ytId}`}
-                            style={{ width: "100%", aspectRatio: "16/9", border: "none", borderRadius: 10 }}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                          />
-                        ) : (
-                          <video
-                            src={`http://localhost:3000/uploads/${currentFilm.video_file}`}
-                            controls
-                            style={{ width: "100%", borderRadius: 10 }}
-                          />
-                        )}
-                        <button
-                          onClick={() => setShowVideo(false)}
-                          style={{
-                            position: "absolute", top: 8, right: 8,
-                            background: "rgba(0,0,0,0.7)", border: "none", color: "white",
-                            width: 28, height: 28, borderRadius: "50%", cursor: "pointer", fontSize: 14,
-                          }}
-                        >
-                          ✕
-                        </button>
+                {/* Video — mandatory viewing */}
+                {currentFilm.video_file && (
+                  <div
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onTouchStart={(e) => e.stopPropagation()}
+                    style={{ marginBottom: 16, borderRadius: 10, overflow: "hidden", position: "relative" }}
+                  >
+                    <video
+                      ref={videoRef}
+                      src={`http://localhost:3000/uploads/${currentFilm.video_file}`}
+                      controls
+                      onEnded={handleVideoEnded}
+                      onTimeUpdate={handleTimeUpdate}
+                      style={{ width: "100%", borderRadius: 10 }}
+                    />
+                    {!videoWatched && (
+                      <div style={{
+                        position: "absolute", bottom: 0, left: 0, right: 0,
+                        background: "linear-gradient(transparent, rgba(0,0,0,0.8))",
+                        padding: "12px", textAlign: "center",
+                        color: "#fbbf24", fontSize: 12, fontWeight: 600,
+                      }}>
+                        Regardez le film avant de voter
                       </div>
                     )}
                   </div>
@@ -408,12 +394,23 @@ function JuryVote() {
             </div>
 
             {/* Buttons */}
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 20, marginTop: 24 }}>
+            {/* Voting disabled message */}
+            {hasVideo && !videoWatched && (
+              <p style={{ textAlign: "center", color: "#fbbf24", fontSize: 13, marginTop: 16, fontWeight: 600 }}>
+                Regardez le film avant de voter
+              </p>
+            )}
+
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 20, marginTop: hasVideo && !videoWatched ? 8 : 24 }}>
               <button
                 onClick={() => handleVote("NO")}
-                disabled={submitting}
-                style={styles.noBtn}
-                onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.1)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(239,68,68,0.4)"; }}
+                disabled={votingDisabled}
+                style={{
+                  ...styles.noBtn,
+                  opacity: votingDisabled ? 0.3 : 1,
+                  cursor: votingDisabled ? "not-allowed" : "pointer",
+                }}
+                onMouseEnter={(e) => { if (!votingDisabled) { e.currentTarget.style.transform = "scale(1.1)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(239,68,68,0.4)"; }}}
                 onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "none"; }}
               >
                 <span style={{ fontSize: 28 }}>✕</span>
@@ -435,9 +432,13 @@ function JuryVote() {
 
               <button
                 onClick={() => handleVote("YES")}
-                disabled={submitting}
-                style={styles.yesBtn}
-                onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.1)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(34,197,94,0.4)"; }}
+                disabled={votingDisabled}
+                style={{
+                  ...styles.yesBtn,
+                  opacity: votingDisabled ? 0.3 : 1,
+                  cursor: votingDisabled ? "not-allowed" : "pointer",
+                }}
+                onMouseEnter={(e) => { if (!votingDisabled) { e.currentTarget.style.transform = "scale(1.1)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(34,197,94,0.4)"; }}}
                 onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "none"; }}
               >
                 <span style={{ fontSize: 28 }}>♥</span>

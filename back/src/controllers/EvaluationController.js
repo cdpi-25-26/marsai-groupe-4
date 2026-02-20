@@ -14,6 +14,7 @@ async function getEvaluations(req, res) {
     });
     res.json(evaluations);
   } catch (error) {
+    console.error("getEvaluations error:", error);
     res.status(500).json({ error: "Failed to fetch evaluations" });
   }
 }
@@ -86,7 +87,10 @@ async function getFilmsToEvaluate(req, res) {
     });
     const evaluatedIds = evaluated.map((e) => e.film_id);
 
-    const where = evaluatedIds.length > 0 ? { id: { [Op.notIn]: evaluatedIds } } : {};
+    const where = {
+      status: { [Op.in]: ["selected", "finalist"] },
+      ...(evaluatedIds.length > 0 ? { id: { [Op.notIn]: evaluatedIds } } : {}),
+    };
     const films = await Film.findAll({
       where,
       include: [{ model: User, as: "user", attributes: ["id", "first_name", "last_name"] }],
@@ -94,6 +98,7 @@ async function getFilmsToEvaluate(req, res) {
     });
     res.json(films);
   } catch (error) {
+    console.error("getFilmsToEvaluate error:", error);
     res.status(500).json({ error: "Failed to fetch films to evaluate" });
   }
 }
