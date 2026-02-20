@@ -19,14 +19,14 @@ const [maxLength, setMaxLength] = useState(40);
 useEffect(() => {
   const updateMaxLength = () => {
     const width = window.innerWidth;
-    if (width >= 1920) {
-      setMaxLength(30);
+    if (width >= 1700) {
+      setMaxLength(40);
     } else if (width >= 1200) {
-      setMaxLength(20);
-    } else if (width >= 768) {
+      setMaxLength(25);
+    } else if (width >= 868) {
       setMaxLength(15);
     } else {
-      setMaxLength(10);
+      setMaxLength(20);
     }
   };
 
