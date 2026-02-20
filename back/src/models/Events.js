@@ -10,7 +10,7 @@ const Event = sequelize.define(
       primaryKey: true,
     },
     type: {
-      type: DataTypes.ENUM('conference', 'screening', 'workshop', 'masterclass', 'concert', 'party'),
+      type: DataTypes.ENUM('conference', 'screening', 'workshop'),
       allowNull: false,
       defaultValue: 'conference'
     },
