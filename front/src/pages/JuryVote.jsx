@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   getEvaluations,
   getFilmsToEvaluate,
@@ -7,6 +7,8 @@ import {
   getFilmStats,
 } from "../api/evaluations.js";
 import handleLogout from "../utils/helpers.js";
+
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 function JuryVote() {
   const [films, setFilms] = useState([]);
@@ -145,13 +147,13 @@ function JuryVote() {
   }
 
   // Keyboard
-  const onKey = useCallback((e) => {
-    if (e.target.tagName === "TEXTAREA") return;
-    if (e.key === "ArrowRight") handleVote("YES");
-    if (e.key === "ArrowLeft") handleVote("NO");
-    if (e.key === "z" && (e.ctrlKey || e.metaKey)) handleUndo();
-  });
   useEffect(() => {
+    function onKey(e) {
+      if (e.target.tagName === "TEXTAREA") return;
+      if (e.key === "ArrowRight") handleVote("YES");
+      if (e.key === "ArrowLeft") handleVote("NO");
+      if (e.key === "z" && (e.ctrlKey || e.metaKey)) handleUndo();
+    }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   });
@@ -361,7 +363,7 @@ function JuryVote() {
                   >
                     <video
                       ref={videoRef}
-                      src={`http://localhost:3000/uploads/${currentFilm.video_file}`}
+                      src={`${API_BASE}/uploads/${currentFilm.video_file}`}
                       controls
                       onEnded={handleVideoEnded}
                       onTimeUpdate={handleTimeUpdate}
