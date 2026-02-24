@@ -23,6 +23,7 @@ import Palmares from "./pages/public/Palmares.jsx";
 import Agenda from "./pages/public/Agenda.jsx";
 import Cms from "./pages/admin/Cms.jsx";
 import Reservation from "./pages/public/Reservation.jsx";
+import JuryVote from "./pages/JuryVote.jsx";
 
 
 
@@ -55,6 +56,13 @@ createRoot(document.getElementById("root")).render(
 
             
           </Route>
+
+          {/* Route jury */}
+          <Route path="/jury" element={
+            <RoleGuard allowedRoles={["JURY", "ADMIN"]}>
+              <JuryVote />
+            </RoleGuard>
+          } />
 
           {/* Routes privées */}
           <Route path="admin" element={ <RoleGuard allowedRoles={["ADMIN"]}>
