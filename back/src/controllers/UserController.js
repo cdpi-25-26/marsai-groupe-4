@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import Evaluation from "../models/Evaluation.js";
 import { hashPassword } from "../utils/password.js";
 
 // Liste
@@ -38,8 +39,9 @@ User.findOne({ where: { email } }).then(async (existingEmail) => {
 }
 
 // Suppression
-function deleteUser(req, res) {
+async function deleteUser(req, res) {
   const { id } = req.params;
+  await Evaluation.destroy({ where: { user_id: id } });
   User.destroy({ where: { id } }).then(() => {
     res.status(204).json({ message: "Utilisateur supprimé" });
   });

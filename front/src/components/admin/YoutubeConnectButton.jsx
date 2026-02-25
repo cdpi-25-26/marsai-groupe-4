@@ -54,12 +54,7 @@ export default function YoutubeConnectButton() {
     <button
       onClick={handleConnect}
       disabled={isConnected}
-      className={`
-        
-        ${isConnected 
-        }
-      `}
-       className="hover:cursor-pointer"
+      className="hover:cursor-pointer"
     >
       {isConnected ? (
         <div>

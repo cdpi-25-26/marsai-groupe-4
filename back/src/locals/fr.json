@@ -1,0 +1,169 @@
+{
+  "home": {
+    "tagline": "",
+    "subtitles": "",
+    "selection_button": "",
+    "contact_button": "",
+    "immersion_text": "",
+    "immersion_title": "",
+    "adventure_button": "",
+    "objectif-title": "",
+    "first_objectif": "",
+    "first description": "",
+    "second_objectif": "",
+    "second_description": "",
+    "third_objectif": "",
+    "third_description": "",
+    "films_title": "",
+    "films_description": "",
+    "gallery_button": "",
+    "sponsor_line":"",
+    "sponsor_title":"",
+    "sponsor_subtitle":"",
+    "sponsor_placeholder":"",
+    "location_badge":"",
+    "location_access":""
+  },
+  "login": {
+    "protocole":"",
+    "session_identity":"",
+    "password":"",
+    "hold":"",
+    "login_button":"",
+    "register_text":"",
+    "register_button":""
+  },
+  "register": {
+    "register_title":"",
+    "subtitle_title":"",
+    "first_name":"",
+    "last_name":"",
+    "email":"",
+    "password":"",
+    "confirm_pasword":"",
+    "condition":"",
+    "register_button":"",
+    "login_text":"",
+    "login_button":""
+
+  },
+  "agenda": {
+
+  },
+  "event": {
+    "management": "",
+    "add_event": "",
+    "all_events": ""
+  },
+  "accessdenied": {
+    "sorry": "",
+    "access_denied": "",
+    "page":"",
+    "message_reason":"",
+    "button_home":"",
+    "back_button":""
+  },
+  "contact": {
+    "info":"",
+    "program":"",
+    "access":"",
+    "transport":"",
+    "tram":"",
+    "metro":"",
+    "cars":"",
+    "highway":"",
+    "parking":"",
+    "address":"",
+    "form_title":"",
+    "form_email":"",
+    "form_name":"",
+    "form_subject":"",
+    "form_message":"",
+    "publish":""
+  },
+  "gallery": {
+    "gallery_title":"",
+    "loading":"",
+    "no_video":"",
+    "discovery":"",
+    "type":"",
+    "status":"",
+    "publish":"",
+    "pending":""
+
+  },
+  "palmares": {
+    "edition_title":"",
+    "submitted_film":"",
+    "laureat":"",
+    "spectators":"",
+    "winners":"",
+    "honorable_mention":"",
+    "description":"",
+    "all_laureat":"",
+    "category":""
+  },
+  "reservation": {
+    "event_selected":"",
+    "generated_video":"",
+    "reservation_title":"",
+    "first_name":"",
+    "last_name":"",
+    "email":"",
+    "speciality":"",
+    "condition":"",
+    "publish":"",
+    "ceritificat_title":"",
+    "ceritificat_text":""
+  },
+  "upload": {
+    "upload_title":"",
+    "title":"",
+    "title_trad":"",
+    "language":"",
+    "synopsis_english":"",
+    "ai_type":"",
+    "subtitle":""
+    
+  },
+  "confirmmodal": {
+     "upload_title":"",
+    "title":"",
+    "title_trad":"",
+    "language":"",
+    "synopsis_english":"",
+    "ai_type":"",
+    "subtitle":"",
+    "cancel_button":"",
+    "publish_button":""
+  },
+  "footer": {
+    "subtitle":"",
+    "gallery":"",
+    "program":"",
+    "ticket":"",
+    "legal":"",
+    "partners":"",
+    "connected":"",
+    "year":"",
+    "legal_text":""
+  },
+  "formfield": {
+    "select":""
+  },
+  "navbar": {
+    "link_gallery":"",
+    "link_palmares":""
+  },
+  "publiclayout": {
+      "subtitle":"",
+    "gallery":"",
+    "program":"",
+    "ticket":"",
+    "legal":"",
+    "partners":"",
+    "connected":"",
+    "year":"",
+    "legal_text":""
+  }
+}
