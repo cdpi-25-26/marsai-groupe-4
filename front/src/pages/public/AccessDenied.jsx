@@ -2,10 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-
+import { useTranslation } from "react-i18next";
 
 export default function AccessDeniedPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
 <>
@@ -15,19 +16,19 @@ export default function AccessDeniedPage() {
       <main className="mx-auto max-w-[1180px] px-6 py-16">
         <section className="rounded-[28px] border border-white/10 bg-white/5 p-8 shadow-[0_24px_80px_rgba(0,0,0,0.55)] backdrop-blur-md md:p-12">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-4 py-2 text-[11px] font-black tracking-widest text-white/80">
-            ACCÈS REFUSÉ
+            {t("accessdenied.access_denied")}
           </div>
 
           <h1 className="m-0 text-[40px] leading-[1.05] font-black tracking-[-1px] md:text-[56px]">
-            Désolé, vous n’avez{" "}
+            {t("accessdenied.sorry")}{" "}
             <span className="bg-gradient-to-r from-[#ff4fd8] to-[#7b2cff] bg-clip-text text-transparent">
-              pas accès
+              {t("accessdenied.not_access")}
             </span>{" "}
-            à cette page.
+            {t("accessdenied.page")}
           </h1>
 
           <p className="mt-4 max-w-[75ch] text-white/70">
-            Cette page est réservée aux utilisateurs autorisés.  
+            {t("accessdenied.message_reason")}  
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <button
@@ -36,14 +37,14 @@ export default function AccessDeniedPage() {
                          bg-gradient-to-r from-[#7b2cff] to-[#FF2B7F]
                          shadow-[0_24px_80px_rgba(0,0,0,0.55)] transition hover:opacity-95"
             >
-              Revenir à l’accueil
+              {t("accessdenied.home_button")}
             </button>
 
             <button
               onClick={() => navigate(-1)}
               className="rounded-2xl px-6 py-4 text-sm font-black text-white/80 transition hover:bg-white/5"
             >
-              Retour
+              {t("accessdenied.back_button")}
             </button>
           </div>
         </section>

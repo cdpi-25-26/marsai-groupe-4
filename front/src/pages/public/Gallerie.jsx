@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { listFilms } from "../../api/films";
 import FilmCard from "../../components/FilmCard";
 import { useNavigate } from "react-router";
-
+import { useTranslation } from "react-i18next";
 import {
   Pagination,
   PaginationContent,
@@ -15,6 +15,7 @@ import {
 
 export default function Gallerie() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [typeIA, setTypeIA] = useState("");
   const [pays, setPays] = useState("");
   const [statut, setStatut] = useState("");
@@ -76,10 +77,10 @@ export default function Gallerie() {
       <Shell>
         <section className="mb-10">
           <h1 className="m-0 text-[44px] md:text-[56px] leading-[0.95] font-black tracking-[-1.5px]">
-            LA GALERIE <br />
-            DES{" "}
+            {t("gallery.title")} <br />
+            {t("gallery.title2")}{" "}
             <span className="bg-gradient-to-r from-[#ff4fd8] to-[#7b2cff] bg-clip-text text-transparent">
-              FILMS
+              {t("gallery.title3")}
             </span>
           </h1>
         </section>
@@ -95,7 +96,7 @@ export default function Gallerie() {
         </div>
 
         <div className="mt-10 text-center text-white/70">
-          Chargement en cours...
+          {t("gallery.loading")}
         </div>
       </Shell>
     );
@@ -105,7 +106,7 @@ export default function Gallerie() {
     return (
       <Shell>
         <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <div className="text-lg font-bold">Une erreur est survenue</div>
+          <div className="text-lg font-bold">{t("gallery.no_video")}</div>
           <div className="mt-2 text-white/70">{error?.message}</div>
         </div>
       </Shell>
@@ -120,16 +121,16 @@ export default function Gallerie() {
       <Shell>
         <section className="mb-10">
           <h1 className="m-0 text-[44px] md:text-[56px] leading-[0.95] font-black tracking-[-1.5px]">
-            LA GALERIE <br />
-            DES{" "}
+            {t("gallery.title")} <br />
+            {t("gallery.title2")}{" "}
             <span className="bg-gradient-to-r from-[#ff4fd8] to-[#7b2cff] bg-clip-text text-transparent">
-              FILMS
+              {t("gallery.title3")}
             </span>
           </h1>
         </section>
 
         <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-white/70">
-          Aucune vidéo à afficher.
+          {t("gallery.no_video")}
         </div>
       </Shell>
     );
@@ -140,15 +141,15 @@ export default function Gallerie() {
       {/* Title + subtitle */}
       <section className="mb-10">
         <h1 className="m-0 text-[44px] md:text-[56px] leading-[0.95] font-black tracking-[-1.5px]">
-          LA GALERIE <br />
-          DES{" "}
+          {t("gallery.title")} <br />
+          {t("gallery.title2")}{" "}
           <span className="bg-gradient-to-r from-[#ff4fd8] to-[#7b2cff] bg-clip-text text-transparent">
-            FILMS
+            {t("gallery.title3")}
           </span>
         </h1>
 
         <p className="mt-4 max-w-2xl text-white/60">
-          Découvrez une sélection de films générés avec des outils d’IA.
+        {t("gallery.no_display")}
         </p>
       </section>
 
@@ -163,10 +164,10 @@ export default function Gallerie() {
               value={typeIA}
               onChange={(e) => setTypeIA(e.target.value)}
             >
-              <option value="">Type d’IA</option>
-              <option value="CHATGPT">ChatGPT</option>
-              <option value="Midjourney">Midjourney</option>
-              <option value="Runway">Runway</option>
+              <option value="">{t("gallery.type")}</option>
+              <option value="CHATGPT">{t("gallery.AI_1")}</option>
+              <option value="Midjourney">{t("gallery.AI_2")}</option>
+              <option value="Runway">{t("gallery.AI_3")}</option>
             </select>
 
             <select
@@ -176,9 +177,9 @@ export default function Gallerie() {
               value={statut}
               onChange={(e) => setStatut(e.target.value)}
             >
-              <option value="">Statut</option>
-              <option value="published">Publié</option>
-              <option value="pending">En attente</option>
+              <option value="">{t("gallery.status")}</option>
+              <option value="published">{t("gallery.published")}</option>
+              <option value="pending">{t("gallery.pending")}</option>
             </select>
           </div>
 

@@ -7,6 +7,7 @@ import overviewRouter from "./admin/Overview.route.js";
 import eventRouter from "./admin/Event.route.js";
 import filmRouter from "./Film.route.js";
 import youtubeRouter from "./Youtube.route.js";
+import traductionRouter from "./traduction.route.js";
 import juryRouter from "./admin/Jury.route.js";
 import evaluationRouter from "./admin/Evaluation.route.js";
 
@@ -20,6 +21,7 @@ router.use("/events", eventRouter);
 router.use("/films", videoRouter);
 router.use("/gallerie", filmRouter);
 router.use("/youtube", youtubeRouter);
+router.use("/translations", traductionRouter);
 router.use("/jury", juryRouter);
 router.use("/admin/evaluations", evaluationRouter);
 

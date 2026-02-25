@@ -1,26 +1,10 @@
 import { Trophy, Sparkles } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function Palmares() {
-  const [topWinners, setTopWinners] = useState([]);
-  const [specialMentions, setSpecialMentions] = useState([]);
-  const [allWinners, setAllWinners] = useState([]);
+  const { t } = useTranslation();
 
-  // FETCH DATA
-  useEffect(() => {
-    fetch("/api/palmares/top")
-      .then((r) => r.json())
-      .then(setTopWinners);
-
-    fetch("/api/palmares/special")
-      .then((r) => r.json())
-      .then(setSpecialMentions);
-
-    fetch("/api/palmares/all")
-      .then((r) => r.json())
-      .then(setAllWinners);
-  }, []);
-
+  // 👉 DATE AUTOMATIQUE
   const today = new Date();
   const formattedDate = today
     .toLocaleDateString("fr-FR", {
@@ -29,6 +13,32 @@ export default function Palmares() {
       year: "numeric",
     })
     .toUpperCase();
+
+  const topWinners = [
+    { place: 2, title: "CODE QUANTIQUE", studio: "Dystopia", prize: "PRIX DES HACKERS" },
+    { place: 1, title: "LE DERNIER HUMAIN", studio: "Ethereal", prize: "GRAND PRIX" },
+    { place: 3, title: "MÉMOIRES VIRTUELLES", studio: "Dystopia", prize: "PRIX DE L'INNOVATION" },
+  ];
+
+  const specialMentions = [
+    t("palmares.special_1"),
+    t("palmares.special_2"),
+    t("palmares.special_3"),
+    t("palmares.special_4"),
+    t("palmares.special_5"),
+    t("palmares.special_6"),
+  ];
+
+  const allWinners = [
+    "LE DERNIER HUMAIN",
+    "CODE QUANTIQUE",
+    "MÉMOIRES VIRTUELLES",
+    "NEURAL ODYSSEY",
+    "PIXEL PERFECT",
+    "RÊVES SYNTHÉTIQUES",
+    "ALGORITHMES D'AMOUR",
+    "LEVEL NUMÉRIQUE",
+  ];
 
   return (
     <div className="bg-black text-white min-h-screen px-6">
@@ -41,19 +51,32 @@ export default function Palmares() {
           </div>
         </div>
 
-        <h1 className="text-5xl font-bold">PALMARÈS</h1>
-        <p className="text-gray-400 mt-3 text-sm">
-          FESTIVAL MARSAI — ÉDITION INAUGURALE
+        <h1 className="text-5xl font-bold tracking-wide">PALMARÈS</h1>
+        <p className="text-gray-400 mt-3 tracking-widest text-sm">
+          {t("palmares.edition_title")}
         </p>
 
-        <p className="text-yellow-400 mt-2 font-semibold">
-          {formattedDate}
-        </p>
+        <p className="text-yellow-400 mt-2 font-semibold">{formattedDate}</p>
+
+        <div className="flex justify-center gap-16 mt-10 text-center">
+          <div>
+            <p className="text-3xl font-bold">247</p>
+            <p className="text-gray-500 text-sm">{t("palmares.submitted_film")}</p>
+          </div>
+          <div>
+            <p className="text-3xl font-bold">23</p>
+            <p className="text-gray-500 text-sm">{t("palmares.laureat")}</p>
+          </div>
+          <div>
+            <p className="text-3xl font-bold">42K</p>
+            <p className="text-gray-500 text-sm">{t("palmares.spectators")}</p>
+          </div>
+        </div>
       </section>
 
       {/* TOP WINNERS */}
       <section className="max-w-6xl mx-auto mb-24">
-        <h2 className="text-xl mb-8 font-semibold">🏆 GAGNANTS</h2>
+        <h2 className="text-xl mb-8 font-semibold">🏆 {t("palmares.winners")}</h2>
 
         <div className="grid md:grid-cols-3 gap-8">
           {topWinners.map((film) => (
@@ -71,9 +94,11 @@ export default function Palmares() {
 
               <h3 className="text-lg font-bold">{film.title}</h3>
               <p className="text-gray-400 text-sm">{film.studio}</p>
-              <p className="text-pink-400 text-sm mt-2">
-                {film.prize}
-              </p>
+              <p className="text-pink-400 text-sm mt-2">{film.prize}</p>
+
+              <button className="mt-4 text-sm underline hover:text-pink-400">
+                {t("palmares.show")}
+              </button>
             </div>
           ))}
         </div>
@@ -82,20 +107,19 @@ export default function Palmares() {
       {/* SPECIAL */}
       <section className="max-w-6xl mx-auto mb-24">
         <h2 className="text-3xl font-bold text-center mb-12 text-purple-400 flex items-center justify-center gap-3">
-          <Sparkles className="text-pink-400" />
-          MENTIONS SPÉCIALES
+          <Sparkles className="text-pink-400" /> {t("palmares.honorable_mention")}
         </h2>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {specialMentions.map((item, i) => (
+          {specialMentions.map((title, i) => (
             <div
               key={i}
-              className="bg-white/5 p-6 rounded-3xl border border-white/10"
+              className="bg-white/5 p-6 rounded-3xl border border-white/10 hover:scale-105 transition"
             >
               <div className="h-36 bg-gradient-to-br from-pink-500 to-indigo-500 rounded-xl mb-4" />
               <h3 className="font-semibold">{item.title}</h3>
               <p className="text-gray-400 text-sm mt-2">
-                {item.description}
+                {t("palmares.description")}
               </p>
             </div>
           ))}
@@ -105,7 +129,7 @@ export default function Palmares() {
       {/* ALL */}
       <section className="max-w-6xl mx-auto mb-32">
         <h2 className="text-3xl font-bold text-center mb-12">
-          TOUS LES LAURÉATS
+          {t("palmares.all_laureat")}
         </h2>
 
         <div className="grid md:grid-cols-4 gap-6">
@@ -114,10 +138,10 @@ export default function Palmares() {
               key={i}
               className="bg-white/5 p-4 rounded-2xl border border-white/10"
             >
-              <div className="h-40 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl mb-3" />
-              <h3 className="font-semibold text-sm">{film.title}</h3>
+              <div className="h-40 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl mb-3"></div>
+              <h3 className="font-semibold text-sm">{film}</h3>
               <p className="text-gray-400 text-xs">
-                {film.category}
+                {t("palmares.category")}
               </p>
             </div>
           ))}

@@ -4,11 +4,12 @@ import {Facebook} from "lucide-react"
 import {Instagram} from "lucide-react"
 import {Youtube} from "lucide-react"
 import {Twitter} from "lucide-react"
+import { useTranslation } from "react-i18next";
 
 export default function PublicLayout() {
 
   
-
+    const { t } = useTranslation()
   
   return (
     <div className="min-h-screen flex flex-col">
@@ -37,8 +38,7 @@ export default function PublicLayout() {
               </h1>
 
               <p className="text-white/30 text-[16px] sm:text-[18px] italic max-w-[300px]">
-                "La plateforme mondiale de la narration générative, ancrée dans
-                la lumière de Marseille."
+                {t("footer.subtitle")}
               </p>
 
               <div className="grid grid-cols-4 max-w-[220px] gap-2">
@@ -55,17 +55,17 @@ export default function PublicLayout() {
                 <h2 className="text-[#AD46FF] uppercase text-[11px] tracking-[4.4px] mb-[12px]">
                   Navigation
                 </h2>
-                <span>Galerie</span>
-                <span>Programme</span>
+                <span>{t("footer.gallery")}</span>
+                <span>{t("footer.program")}</span>
                 <span>Top 50</span>
-                <span>Billetterie</span>
+                <span>{t("footer.ticket")}</span>
               </div>
 
               <div className="flex flex-col gap-[18px] text-white/40">
                 <h2 className="text-[#F6339A] uppercase text-[11px] tracking-[4.4px] mb-[12px]">
-                  Légal
+                  {t("footer.legal")}
                 </h2>
-                <span>Partenaires</span>
+                <span>{t("footer.legal")}</span>
                 <span>FAQ</span>
                 <span>Contact</span>
               </div>
@@ -84,7 +84,7 @@ export default function PublicLayout() {
                 "
               >
                 <h2 className="text-white font-bold text-[22px] sm:text-[24px] tracking-[-0.6px]">
-                  RESTEZ <br /> CONNECTÉ
+                 {t("footer.stay")} <br /> {t("footer.connected")}
                 </h2>
 
                 <div className="flex gap-[10px]">
@@ -131,8 +131,8 @@ export default function PublicLayout() {
               text-[10px] tracking-[3px] text-white/20
             "
           >
-            <div>© 2026 MARS.A.I ● PROTOCOL MARSEILLE HUB</div>
-            <div>DESIGN SYSTÈME CYBER-PREMIUM LÉGAL</div>
+            <div>{t("footer.year")}</div>
+            <div>{t("footer.legal_text")}</div>
           </div>
 
         </section>

@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import ConfirmModal from "@/components/ConfirmModal";
+import { useTranslation} from "react-i18next";
 
 const MAX_SECONDS = 60;
 const MAX_FILE_SIZE = 500 * 1024 * 1024;
@@ -153,31 +154,32 @@ export default function Upload() {
     setIsModalOpen(false);
   };
 
+  const { t } = useTranslation();
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white rounded-2xl shadow-2xl">
       <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
-        Upload Vidéo & Images
+        {t("upload.upload_title")}
       </h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Titre */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Titre *</label>
+          <label className="block text-sm font-medium text-gray-700">{t("upload.title")} *</label>
           <input
             {...register("title")}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            placeholder="Titre de la vidéo"
+            placeholder={t("upload.placeholder_title")}
           />
           {errors.title && <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>}
         </div>
 
         {/* Titre traduit */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Titre traduit (optionnel)</label>
+          <label className="block text-sm font-medium text-gray-700">{t("upload.title_trad")}</label>
           <input
             {...register("translated_title")}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            placeholder="Translated title"
+            placeholder={t("upload.placeholder_trad_title")}
           />
           {errors.translated_title && <p className="mt-1 text-sm text-red-600">{errors.translated_title.message}</p>}
         </div>
@@ -189,30 +191,30 @@ export default function Upload() {
             {...register("synopsis")}
             rows={4}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            placeholder="Description du film"
+            placeholder={t("upload.synopsis_placeholder")}
           />
           {errors.synopsis && <p className="mt-1 text-sm text-red-600">{errors.synopsis.message}</p>}
         </div>
 
         {/* Langue */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Langue (optionnel)</label>
+          <label className="block text-sm font-medium text-gray-700">{t("upload.language")} (optionnel)</label>
           <input
             {...register("language")}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            placeholder="Français, Anglais, etc."
+            placeholder={t("upload.language_placeholder")}
           />
           {errors.language && <p className="mt-1 text-sm text-red-600">{errors.language.message}</p>}
         </div>
 
         {/* Synopsis anglais */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Synopsis en anglais (optionnel)</label>
+          <label className="block text-sm font-medium text-gray-700">{t("upload.synopsis_english")} (optionnel)</label>
           <textarea
             {...register("synopsis_en")}
             rows={4}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            placeholder="English synopsis"
+            placeholder={t("upload.synopsis_placeholder")}
           />
           {errors.synopsis_en && <p className="mt-1 text-sm text-red-600">{errors.synopsis_en.message}</p>}
         </div>
@@ -220,12 +222,12 @@ export default function Upload() {
         
         {/* Outils IA */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Outils IA (optionnel)</label>
+          <label className="block text-sm font-medium text-gray-700">{t("upload.ai_type")} (optionnel)</label>
           <textarea
             {...register("ai_tools")}
             rows={3}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            placeholder="Midjourney, Runway, Luma, etc."
+            placeholder={t("upload.ai_type_placeholder")}
           />
           {errors.ai_tools && <p className="mt-1 text-sm text-red-600">{errors.ai_tools.message}</p>}
         </div>
@@ -233,7 +235,7 @@ export default function Upload() {
         {/* Sous-titres */}
        <div>
   <label className="block text-sm font-medium text-gray-700 mb-2">
-    Sous-titres (.srt) (optionnel)
+    {t("upload.subtitle")} 
   </label>
   <input
     type="file"
@@ -251,7 +253,7 @@ export default function Upload() {
   )}
   {watch("subtitles") && (
     <p className="mt-2 text-sm text-green-600">
-      Fichier sélectionné : {watch("subtitles").name}
+       {t("upload.selected_doc")} : {watch("subtitles").name}
     </p>
   )}
 </div>
@@ -326,7 +328,7 @@ export default function Upload() {
           className={`w-full py-4 px-8 rounded-xl text-white font-semibold text-lg transition-all
             ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg"}`}
         >
-          {loading ? "Envoi en cours..." : "Uploader"}
+          {loading ? t("upload.upload_progress") : t("upload.upload_button")}
         </button>
       </form>
 

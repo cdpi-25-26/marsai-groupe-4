@@ -2,8 +2,10 @@ import { NavLink } from "react-router";
 import { ThemeToggle } from "./ThemeToggle";
 import { useState, useEffect } from "react";
 import { Trophy, House, Search, Calendar, User, Gavel } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function Navbar() {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -125,7 +127,7 @@ export default function Navbar() {
 
         {/* Links */}
         <NavLink to="/gallerie" onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition">
-          Galerie
+          {t("navbar.gallery")}
         </NavLink>
         <NavLink to="/" onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition">
           Home

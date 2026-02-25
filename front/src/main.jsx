@@ -1,3 +1,5 @@
+import i18n from  "./utils/i18n.js";
+
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router";
@@ -24,8 +26,6 @@ import Agenda from "./pages/public/Agenda.jsx";
 import Cms from "./pages/admin/Cms.jsx";
 import Reservation from "./pages/public/Reservation.jsx";
 import JuryVote from "./pages/JuryVote.jsx";
-
-
 
 const queryClient = new QueryClient({
   defaultOptions: {

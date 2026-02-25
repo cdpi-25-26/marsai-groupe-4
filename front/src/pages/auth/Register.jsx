@@ -6,6 +6,7 @@ import * as z from "zod";
 import { signIn } from "../../api/auth.js";
 import { Send } from "lucide-react";
 import {UserPlus} from "lucide-react" 
+import { useTranslation } from "react-i18next";
 
 // Schéma de validation Zod
 const registerSchema = z
@@ -72,7 +73,7 @@ export function Register() {
       </>
     );
   }
-
+  const { t } = useTranslation();
   return (
     <>
       {/* <h1 className="text-2xl">Register</h1>
@@ -112,14 +113,14 @@ export function Register() {
           <UserPlus className="bg-white/5 mb-[24px] border border-white/10 p-6 w-[96px] h-[96px] rounded-[32px] "/>
 
           <h2 className="text-center text-[36px] sm:text-[48px] mb-[11px] font-bold inline-block bg-[linear-gradient(to_top,rgba(152,16,250,0.6)_35%,rgba(43,127,255,1)_60%)] bg-clip-text text-transparent tracking-[-2.4px]">
-            INSCRIPTION
+            {t("register.register_title")}
           </h2>
           <h2 className="text-center text-[10px] mb-[44px] tracking-[3px] text-white/50 font-bold">
-            Nouveau profil cyber-premium
+            {t("register.subtitle_title")}
           </h2>
 
           <h2 className="w-full text-[10px] mb-[12px] tracking-[2px]">
-            Prénom
+            {t("register.first_name")}
           </h2>
 
           <div className="flex bg-black/40 border border-white/10 rounded-[28px] w-full mb-[24px]">
@@ -137,7 +138,7 @@ export function Register() {
             />
           </div>
 
-          <h2 className="w-full text-[10px] mb-[12px] tracking-[2px]">Nom</h2>
+          <h2 className="w-full text-[10px] mb-[12px] tracking-[2px]">{t("register.last_name")}</h2>
 
           <div className="flex bg-black/40 border border-white/10 rounded-[28px] w-full mb-[24px]">
             <img
@@ -155,7 +156,7 @@ export function Register() {
           </div>
 
           <h2 className="w-full text-[10px] mb-[12px] tracking-[2px]">
-            Canal de Communication
+            {t("register.email")}
           </h2>
 
           <div className="flex bg-black/40 border border-white/10 rounded-[28px] w-full mb-[24px]">
@@ -176,7 +177,7 @@ export function Register() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-[24px] w-full">
             <div className="w-full">
               <h2 className=" tracking-[2px] text-[10px] mb-[12px]">
-                Clé d'Accès
+                {t("register.password")}
               </h2>
               <div className="flex bg-black/40 border border-white/10 rounded-[28px] w-full">
                 <input
@@ -196,7 +197,7 @@ export function Register() {
 
             <div>
               <h2 className="tracking-[2px] text-[10px] mb-[12px]">
-                Vérification
+                {t("register.confirm_pasword")}
               </h2>
 
               <div className="flex bg-black/40 border border-white/10 rounded-[28px] w-full">
@@ -240,7 +241,7 @@ export function Register() {
 
 
   <h2 className="mr-auto tracking-[1px]">
-    Je consents aux Termers et au condition GENERAL
+    {t("register.condition")}
   </h2>
 </div>
 
@@ -252,16 +253,16 @@ export function Register() {
             {" "}
             <Send size={20} />{" "}
             <h2>
-              {registerMutation.isPending ? "Loading..." : "Initialiser Flux"}
+              {registerMutation.isPending ? "Loading..." : t("register.register_button")}
             </h2>
           </button>
 
           <div className="flex w-full gap-[15px] justify-center items-center sm:items-end flex-col sm:flex-row ">
             <h2 className="text-[11px] white-[80px] tracking-[2.2px]">
-              Déjà Enregistré ?
+              {t("register.login_text")}
             </h2>
             <h2 className="text-[16px] capitalize tracking-[2.2px] mb-[-3px]">
-              Ouvrir Session
+              {t("register.login_button")}
             </h2>
           </div>
         </div>

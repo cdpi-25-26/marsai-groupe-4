@@ -1,11 +1,13 @@
 import ClockIcon from "../../assets/reservation_svg/Clock.svg";
 import LocationIcon from "../../assets/reservation_svg/Location.svg";
 import UserIcon from "../../assets/reservation_svg/User.svg";
+import { useTranslation } from "react-i18next";
 
 
 
    
  export default function EventReservation() {
+  const { t } = useTranslation();
       const eventDetails = [
     { title: "Lieu", value: "STUDIO 1 - LA PLATEFORME_", icon: LocationIcon },
     { title: "Horaires", value: "14H30 — 13 JUIN", icon: ClockIcon },
@@ -24,11 +26,11 @@ import UserIcon from "../../assets/reservation_svg/User.svg";
 <div className="flex flex-col w-full max-w-[800px] p-4 sm:p-5 mb-5 rounded-xl border border-white shadow-inner bg-gradient-to-b from-[#51A2FF]/20 to-[#9810FA]/20 text-gray-300 gap-4">
 <h6 className="text-[10px] sm:text-xs uppercase text-gray-400 tracking-wider">
 
- Evénements selectionné :
+ {t("reservation.event_selected")}
 </h6>
 <h5 className="text-base sm:text-lg uppercase text-gray-200 tracking-wider">
 
- GENERATION VIDEO : LES BASES
+ {t("reservation.generated_video")}
 </h5>
   {eventDetails.map((detail, index) => (
     
@@ -51,7 +53,7 @@ import UserIcon from "../../assets/reservation_svg/User.svg";
       <form className="flex flex-wrap gap-5 w-full max-w-[800px] p-5 mt-8 mb-5 rounded-xl border border-white bg-[#262424]">
 
     <div className="flex flex-row-reverse items-center mt-4 w-11/12 mx-auto">
-  <h4 className="text-sm text-gray-400">Reserver ma place</h4>
+      <h4 className="text-sm text-gray-400">{t("reservation_title")}</h4>
   <div className="flex-1 border-t border-gray-400 ml-4 self-center">
 
   </div>
@@ -61,32 +63,32 @@ import UserIcon from "../../assets/reservation_svg/User.svg";
 
         <div className="flex flex-col sm:flex-row gap-3 w-full">
           <div className="flex flex-col flex-1">
-            <label className="text-gray-400 text-xs mb-1">Prénom</label>
-            <input type="text" placeholder="Prénom" className="bg-[#3a3a3a] text-white rounded-xl border border-white p-2 text-sm"/>
+            <label className="text-gray-400 text-xs mb-1">{t("reservation.first_name")}</label>
+            <input type="text" placeholder={t("reservation.first_name")} className="bg-[#3a3a3a] text-white rounded-xl border border-white p-2 text-sm"/>
           </div>
           <div className="flex flex-col flex-1">
-            <label className="text-gray-400 text-xs mb-1">Nom</label>
-            <input type="text" placeholder="Nom" className="bg-[#3a3a3a] text-white rounded-xl border border-white p-2 text-sm"/>
+            <label className="text-gray-400 text-xs mb-1">{t("reservation.last_name")}</label>
+            <input type="text" placeholder={t("reservation.last_name")} className="bg-[#3a3a3a] text-white rounded-xl border border-white p-2 text-sm"/>
           </div>
         </div>
 
      
         <div className="flex flex-col w-full">
-          <label className="text-gray-400 text-xs mb-1">Adresse e-mail</label>
-          <input type="email" placeholder="email@example.com" className="bg-[#3a3a3a] text-white rounded-xl border border-white p-2 text-sm"/>
+          <label className="text-gray-400 text-xs mb-1">{t("reservation.email")}</label>
+          <input type="email" placeholder={t("reservation.email")} className="bg-[#3a3a3a] text-white rounded-xl border border-white p-2 text-sm"/>
         </div>
 
       
         <div className="flex flex-col w-full">
-          <label className="text-gray-400 text-xs mb-1">Profession / spécialité</label>
-          <input type="text" placeholder="Profession" className="bg-[#3a3a3a] text-white rounded-xl border border-white p-2 text-sm"/>
+          <label className="text-gray-400 text-xs mb-1">{t("reservation.speciality")}</label>
+          <input type="text" placeholder={t("reservation.speciality")} className="bg-[#3a3a3a] text-white rounded-xl border border-white p-2 text-sm"/>
         </div>
 
     
         <div className="flex items-start gap-2 w-full text-xs mb-5">
           <input type="checkbox" className="w-4 h-4"/>
           <span className="text-[#602be6]">
-            J'accepte les conditions générales et le règlement de protection des données.
+            {t("reservation.publish")}
           </span>
         </div>
 
@@ -97,17 +99,15 @@ import UserIcon from "../../assets/reservation_svg/User.svg";
                      bg-gradient-to-b from-[#51A2FF]/20 to-[#9810FA]/60
                      transition transform hover:scale-105 hover:opacity-90 hover:shadow-lg active:scale-95"
         >
-          ENVOYER
+          {t("reservation.publish")}
         </button>
       </form>
 
      
       <div className="w-full max-w-[800px] p-5 mb-5 rounded-xl border border-white shadow-inner bg-gradient-to-b from-[#51A2FF]/20 to-[#9810FA]/20 text-gray-300">
-        <h4 className="text-lg mb-3">CERTIFICAT DE PROPRIÉTÉ</h4>
+        <h4 className="text-lg mb-3">{t("reservation.certificat_title")}</h4>
         <p className="text-xs">
-          En soumettant ce dossier, vous certifiez sur l'honneur être l'auteur
-          original de l'œuvre et détenir l'intégralité des droits de diffusion.
-          Vous acceptez que MARS.AI utilise ces éléments pour la promotion du festival.
+          {t("reservation.certificat_text")}
         </p>
       </div>
     </div>
