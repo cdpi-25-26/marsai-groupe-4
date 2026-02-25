@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import { getJurys, createJury, updateJury, deleteJury } from "../../api/jury.js";
-import { useMutation } from "@tanstack/react-query";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { getJuryMembers, getJuryFilms, assignFilmToJury, unassignFilmFromJury } from "../../api/jury.js";
+import { getAllVideos } from "../../api/videos.js";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { 
   flexRender, 
   getCoreRowModel, 
@@ -25,122 +23,106 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-  DialogFooter,
 } from "@/components/ui/dialog";
-import FormField from "@/components/FormField";
-
-const jurySchema = z.object({
-  id: z.preprocess((val) => {
-        if (val === "" || val === undefined || val === null) return undefined;
-        return Number(val);
-    }, z.number().optional()),
-  first_name: z.string().min(1, "Le prénom est requis"),
-  last_name: z.string().min(1, "Le nom est requis"),
-  email: z.string().email("Email invalide"),
-  password: z.string().optional(),
-});
 
 function Jury() {
   const [jurys, setJurys] = useState([]);
-  const [modeEdit, setModeEdit] = useState(false);
+  const [allVideos, setAllVideos] = useState([]);
+  const [selectedJury, setSelectedJury] = useState(null);
+  const [assignedFilms, setAssignedFilms] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [sorting, setSorting] = useState([]);
-  const [serverError, setServerError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
-    getJurys().then((data) => {
-      // Filter only JURY role users
-      const juryUsers = data.data.filter(user => user.role === "JURY");
-      setJurys(juryUsers);
-    });
+    loadJuryMembers();
+    loadAllVideos();
   }, []);
 
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm({
-    resolver: zodResolver(jurySchema),
-  });
-
-  const createMutation = useMutation({
-    mutationFn: async (newJury) => {
-      return await createJury(newJury);
-    },
-    onSuccess: () => {
-      window.location.reload();
-    },
-    onError: (error) => {
-      console.error('Error creating jury:', error);
-      setServerError(error.response?.data?.error || "Erreur lors de la création");
-    },
-  });
-
-  const updateMutation = useMutation({
-    mutationFn: async (updatedJury) => {
-      return await updateJury(updatedJury.id, updatedJury);
-    },
-    onSuccess: () => {
-      window.location.reload();
-    },
-    onError: (error) => {
-      console.error('Error updating jury:', error);
-      setServerError(error.response?.data?.error || "Erreur lors de la mise à jour");
-    },
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: async (id) => {
-      return await deleteJury(id);
-    },
-    onSuccess: () => {
-      window.location.reload();
-    },
-  });
-
-  function onSubmit(data) {
-    setServerError(""); // Clear previous errors
-    
-    // Validate password for create mode
-    if (!modeEdit && (!data.password || data.password.length < 6)) {
-      setServerError("Le mot de passe doit contenir au moins 6 caractères");
-      return;
-    }
-    
-    // Don't send empty password in edit mode
-    if (modeEdit && !data.password) {
-      const { password, ...dataWithoutPassword } = data;
-      return updateMutation.mutate(dataWithoutPassword);
-    }
-    
-    if (modeEdit && data.id) {
-      return updateMutation.mutate(data);
-    } else {
-      return createMutation.mutate(data);
+  async function loadJuryMembers() {
+    try {
+      const { data } = await getJuryMembers();
+      setJurys(data.juryMembers || []);
+    } catch (error) {
+      console.error("Error loading jury members:", error);
     }
   }
 
-  function handleEdit(jury) {
-    setValue("id", jury.id);
-    setValue("first_name", jury.first_name);
-    setValue("last_name", jury.last_name);
-    setValue("email", jury.email);
-    setValue("password", "");
+  async function loadAllVideos() {
+    try {
+      const { data } = await getAllVideos();
+      setAllVideos(data.showVideos || []);
+    } catch (error) {
+      console.error("Error loading videos:", error);
+    }
+  }
+
+  async function handleOpenAssignModal(jury) {
+    setSelectedJury(jury);
+    setLoading(true);
     setIsDialogOpen(true);
-    setModeEdit(true);
+    
+    try {
+      const { data } = await getJuryFilms(jury.id);
+      setAssignedFilms(data.assignedFilms || []);
+    } catch (error) {
+      console.error("Error loading assigned films:", error);
+      setAssignedFilms([]);
+    } finally {
+      setLoading(false);
+    }
   }
 
-  function handleReset() {
-    setValue("id", undefined);
-    setValue("first_name", "");
-    setValue("last_name", "");
-    setValue("email", "");
-    setValue("password", "");
-    setServerError("");
-    setIsDialogOpen(false);
-    setModeEdit(false);
+  function isFilmAssigned(filmId) {
+    return assignedFilms.some(film => film.id === filmId);
   }
 
-  function handleDelete(id) {
-    if (confirm("Voulez-vous vraiment supprimer ce membre du jury ?")) {
-      deleteMutation.mutate(id);
+  const assignMutation = useMutation({
+    mutationFn: async ({ filmId, userId }) => {
+      return await assignFilmToJury(filmId, userId);
+    },
+    onSuccess: () => {
+      // Refresh assigned films
+      if (selectedJury) {
+        getJuryFilms(selectedJury.id).then(({ data }) => {
+          setAssignedFilms(data.assignedFilms || []);
+        });
+      }
+    },
+    onError: (error) => {
+      console.error('Error assigning film:', error);
+      alert(error.response?.data?.error || "Erreur lors de l'assignation");
+    },
+  });
+
+  const unassignMutation = useMutation({
+    mutationFn: async ({ filmId, userId }) => {
+      return await unassignFilmFromJury(filmId, userId);
+    },
+    onSuccess: () => {
+      // Refresh assigned films
+      if (selectedJury) {
+        getJuryFilms(selectedJury.id).then(({ data }) => {
+          setAssignedFilms(data.assignedFilms || []);
+        });
+      }
+    },
+    onError: (error) => {
+      console.error('Error unassigning film:', error);
+      alert(error.response?.data?.error || "Erreur lors de la suppression");
+    },
+  });
+
+  function handleToggleAssignment(film) {
+    if (!selectedJury) return;
+    
+    const isAssigned = isFilmAssigned(film.id);
+    
+    if (isAssigned) {
+      unassignMutation.mutate({ filmId: film.id, userId: selectedJury.id });
+    } else {
+      assignMutation.mutate({ filmId: film.id, userId: selectedJury.id });
     }
   }
 
@@ -167,16 +149,9 @@ function Jury() {
             <Button 
               variant="outline"
               size="sm"
-              onClick={() => handleEdit(jury)}
+              onClick={() => handleOpenAssignModal(jury)}
             >
-              Modifier
-            </Button>
-            <Button 
-              variant="destructive"
-              size="sm"
-              onClick={() => handleDelete(jury.id)}
-            >
-              Supprimer
+              Assign Videos
             </Button>
           </div>
         );
@@ -200,110 +175,7 @@ function Jury() {
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800">Membres du Jury</h2>
-          <Dialog open={isDialogOpen && !modeEdit} onOpenChange={(open) => {
-            setIsDialogOpen(open);
-            if (!open) handleReset();
-          }}>
-            <DialogTrigger asChild>
-              <Button>Ajouter un membre du jury</Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl">
-              <DialogHeader>
-                <DialogTitle>Ajouter un membre du jury</DialogTitle>
-                <DialogDescription>
-                  Remplissez les informations pour créer un nouveau membre du jury
-                </DialogDescription>
-              </DialogHeader>
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <input type="hidden" {...register("id")} />
-                
-                {serverError && (
-                  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-                    <p className="font-medium">{serverError}</p>
-                  </div>
-                )}
-                
-                {Object.keys(errors).length > 0 && (
-                  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-                    <p className="font-medium">Erreurs de validation:</p>
-                    <ul className="list-disc list-inside">
-                      {Object.entries(errors).map(([key, error]) => (
-                        <li key={key}>{error.message}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField label="Prénom" id="first_name" register={register} required />
-                  <FormField label="Nom" id="last_name" register={register} required />
-                  <FormField label="Email" id="email" type="email" register={register} required />
-                  <FormField label="Mot de passe" id="password" type="password" register={register} required />
-                </div>
-
-                <DialogFooter>
-                  <Button type="button" variant="outline" onClick={handleReset}>
-                    Annuler
-                  </Button>
-                  <Button type="submit">
-                    Créer
-                  </Button>
-                </DialogFooter>
-              </form>
-            </DialogContent>
-          </Dialog>
         </div>
-
-        {/* Edit Dialog */}
-        <Dialog open={isDialogOpen && modeEdit} onOpenChange={(open) => {
-          setIsDialogOpen(open);
-          if (!open) handleReset();
-        }}>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>Modifier un membre du jury</DialogTitle>
-              <DialogDescription>
-                Modifiez les informations du membre du jury
-              </DialogDescription>
-            </DialogHeader>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              <input type="hidden" {...register("id")} />
-              
-              {serverError && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-                  <p className="font-medium">{serverError}</p>
-                </div>
-              )}
-              
-              {Object.keys(errors).length > 0 && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-                  <p className="font-medium">Erreurs de validation:</p>
-                  <ul className="list-disc list-inside">
-                    {Object.entries(errors).map(([key, error]) => (
-                      <li key={key}>{error.message}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField label="Prénom" id="first_name" register={register} required />
-                <FormField label="Nom" id="last_name" register={register} required />
-                <FormField label="Email" id="email" type="email" register={register} required />
-                <FormField label="Mot de passe (laisser vide pour ne pas changer)" id="password" type="password" register={register} />
-              </div>
-
-              <DialogFooter>
-                <Button type="button" variant="outline" onClick={handleReset}>
-                  Annuler
-                </Button>
-                <Button type="submit">
-                  Enregistrer
-                </Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
 
         {jurys.length > 0 ? (
           <div className="rounded-md border">
@@ -349,6 +221,70 @@ function Jury() {
           </div>
         )}
       </div>
+
+      {/* Video Assignment Modal */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>
+              Assigner des vidéos - {selectedJury?.first_name} {selectedJury?.last_name}
+            </DialogTitle>
+            <DialogDescription>
+              Cliquez sur "Add" pour assigner une vidéo ou "Remove" pour la retirer
+            </DialogDescription>
+          </DialogHeader>
+          
+          {loading ? (
+            <div className="text-center py-8">Chargement...</div>
+          ) : (
+            <div className="space-y-3">
+              {allVideos.length > 0 ? (
+                allVideos.map((video) => {
+                  const isAssigned = isFilmAssigned(video.id);
+                  const isPending = assignMutation.isPending || unassignMutation.isPending;
+                  
+                  return (
+                    <div 
+                      key={video.id} 
+                      className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50"
+                    >
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900">{video.title}</h3>
+                        {video.translated_title && (
+                          <p className="text-sm text-gray-600">{video.translated_title}</p>
+                        )}
+                        <div className="flex gap-4 mt-1">
+                          <span className="text-xs text-gray-500">
+                            Status: <span className="font-medium">{video.status}</span>
+                          </span>
+                          {video.duration && (
+                            <span className="text-xs text-gray-500">
+                              Durée: {video.duration}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <Button
+                        variant={isAssigned ? "destructive" : "default"}
+                        size="sm"
+                        onClick={() => handleToggleAssignment(video)}
+                        disabled={isPending}
+                      >
+                        {isAssigned ? "Remove" : "Add"}
+                      </Button>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  Aucune vidéo disponible
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }

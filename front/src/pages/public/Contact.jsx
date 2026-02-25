@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Train, Car, MapPin, CalendarDays, Clock, Navigation } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -11,6 +11,16 @@ export default function Contact() {
     subject: "",
     message: "",
   });
+
+  const [schedule, setSchedule] = useState([]);
+
+  // ===== FETCH SCHEDULE FROM DB =====
+  useEffect(() => {
+    fetch("/api/schedule/today")
+      .then((res) => res.json())
+      .then((data) => setSchedule(data))
+      .catch(() => setSchedule([]));
+  }, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -68,6 +78,14 @@ export default function Contact() {
 
   return (
     <div className="bg-black text-white min-h-screen flex flex-col items-center px-6 py-16">
+      {/* HERO */}
+      <section className="w-full max-w-4xl mb-20">
+        <div className="flex items-center gap-3 text-pink-500 mb-4">
+          <CalendarDays size={18} />
+          <span className="uppercase tracking-widest text-sm">
+            Infos pratiques
+          </span>
+        </div>
 
       {/* HERO + PROGRAMME */}
       <section className="w-full max-w-4xl mb-20">
@@ -151,11 +169,10 @@ export default function Contact() {
           <div>
             <h3 className="text-xl font-semibold">{t("contact.address")}</h3>
             <p className="text-gray-400">
-              155 Rue Peyssonnel, 13002 Marseille (Entrée principale)
+              155 Rue Peyssonnel, 13002 Marseille
             </p>
           </div>
         </div>
-
       </div>
 
       {/* MAP */}
@@ -239,7 +256,6 @@ export default function Contact() {
 
         </form>
       </div>
-
     </div>
   );
 }

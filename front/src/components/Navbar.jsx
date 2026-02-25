@@ -1,7 +1,7 @@
 import { NavLink } from "react-router";
 import { ThemeToggle } from "./ThemeToggle";
 import { useState, useEffect } from "react";
-import { Trophy, House, Search, Calendar, User } from "lucide-react";
+import { Trophy, House, Search, Calendar, User, Gavel } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export default function Navbar() {
@@ -10,7 +10,9 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   const isLoggedIn = !!localStorage.getItem("token");
+  const userRole = localStorage.getItem("role");
   const userPath = isLoggedIn ? "/admin" : "/auth/login";
+  const isJury = userRole === "JURY" || userRole === "ADMIN";
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -63,6 +65,11 @@ export default function Navbar() {
           <NavLink to="/agenda" className={iconLinkClass}>
             <Calendar size={20} />
           </NavLink>
+          {isJury && (
+            <NavLink to="/jury" className={iconLinkClass}>
+              <Gavel size={20} />
+            </NavLink>
+          )}
           <NavLink to={userPath} end className={iconLinkClass}>
             <User size={20} />
           </NavLink>
@@ -131,6 +138,11 @@ export default function Navbar() {
         <NavLink to="/agenda" onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition">
           Agenda
         </NavLink>
+        {isJury && (
+          <NavLink to="/jury" onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition">
+            Espace Jury
+          </NavLink>
+        )}
         <NavLink to={userPath} onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition">
           Profile
         </NavLink>

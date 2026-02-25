@@ -3,8 +3,12 @@ import express from "express";
 import cors from "cors";
 import router from "./src/routes/index.js";
 import { configDotenv } from "dotenv";
+import { setupAssociations } from "./src/models/associations.js";
 
 configDotenv(); // Charger les variables d'environnement depuis le fichier .env
+
+// Setup model associations
+setupAssociations();
 
 const app = express(); // Créer une application Express
 
