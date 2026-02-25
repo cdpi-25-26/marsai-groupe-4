@@ -1,19 +1,29 @@
 import instance from "./config.js";
 
-async function getJurys() {
-  return await instance.get("users");
+async function getJuryMembers() {
+  return await instance.get("jury/members");
 }
 
-async function createJury(juryData) {
-  return await instance.post("users", { ...juryData, role: "JURY" });
+async function getJuryFilms(userId) {
+  return await instance.get(`jury/${userId}/films`);
 }
 
-async function updateJury(id, juryData) {
-  return await instance.put(`users/${id}`, { ...juryData, role: "JURY" });
+async function getFilmJury(filmId) {
+  return await instance.get(`jury/films/${filmId}`);
 }
 
-async function deleteJury(id) {
-  return await instance.delete(`users/${id}`);
+async function assignFilmToJury(filmId, userId) {
+  return await instance.post("jury/assign", { film_id: filmId, user_id: userId });
 }
 
-export { getJurys, createJury, updateJury, deleteJury };
+async function unassignFilmFromJury(filmId, userId) {
+  return await instance.delete(`jury/unassign/${filmId}/${userId}`);
+}
+
+export { 
+  getJuryMembers, 
+  getJuryFilms, 
+  getFilmJury,
+  assignFilmToJury, 
+  unassignFilmFromJury 
+};

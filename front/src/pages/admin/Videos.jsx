@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { getVideos, deleteVideo } from "../../api/videos.js";
+import { getVideos, deleteVideo, updateVideo } from "../../api/videos.js";
 import { useState, Fragment } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { 
   flexRender, 
   getCoreRowModel, 
@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { YouTubePlayer } from "@/components/ui/youtube-video-player.jsx";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, Users } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -27,12 +27,32 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 function Videos() {
   const [currentPage, setCurrentPage] = useState(1);
   const [expandedVideoId, setExpandedVideoId] = useState(null);
   const [sorting, setSorting] = useState([]);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingVideo, setEditingVideo] = useState(null);
   const limit = 10;
+  const queryClient = useQueryClient();
 
   const { isPending, isError, data, error } = useQuery({
     queryKey: ["films", currentPage, limit],
@@ -45,12 +65,49 @@ function Videos() {
       return await deleteVideo(id);
     },
     onSuccess: (data, variables, context) => {
+      queryClient.invalidateQueries(['films']);
       window.location.reload();
     },
     onError: (error) => {
-      alert('Erreur lors de la supression: ' + (error.response?.data?.error || error.message));
+      alert('Erreur lors de la suppression: ' + (error.response?.data?.error || error.message));
     }
   });
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, data }) => {
+      return await updateVideo(id, data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['films']);
+      setIsEditDialogOpen(false);
+      setEditingVideo(null);
+    },
+    onError: (error) => {
+      alert('Erreur lors de la mise à jour: ' + (error.response?.data?.error || error.message));
+    }
+  });
+
+  function handleEdit(video) {
+    setEditingVideo(video);
+    setIsEditDialogOpen(true);
+  }
+
+  function handleUpdateVideo(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = {
+      title: formData.get('title'),
+      translated_title: formData.get('translated_title'),
+      synopsis: formData.get('synopsis'),
+      synopsis_en: formData.get('synopsis_en'),
+      status: formData.get('status'),
+      ai_tools: formData.get('ai_tools'),
+      language: formData.get('language'),
+      duration: formData.get('duration'),
+      youtube_link: formData.get('youtube_link'),
+    };
+    updateMutation.mutate({ id: editingVideo.id, data });
+  }
 
   function handleDelete(id) {
     if (confirm("Voulez-vous vraiment supprimer cet video ?")) {
@@ -98,6 +155,23 @@ function Videos() {
       cell: ({ row }) => row.original.user?.email || "N/A",
     },
     {
+      accessorKey: "juryMembers",
+      header: "Jury Assigné",
+      cell: ({ row }) => {
+        const juryMembers = row.original.juryMembers || [];
+        return (
+          <div className="flex items-center gap-2">
+            <Users className="w-4 h-4 text-gray-500" />
+            <span>
+              {juryMembers.length > 0 
+                ? juryMembers.map(j => `${j.first_name} ${j.last_name}`).join(", ")
+                : "Aucun jury"}
+            </span>
+          </div>
+        );
+      },
+    },
+    {
       accessorKey: "created_at",
       header: "Date de création",
       cell: ({ row }) => {
@@ -115,7 +189,7 @@ function Videos() {
             <Button 
               variant="outline"
               size="sm"
-              onClick={() => console.log("Edit video:", video.id)} className="hover:cursor-pointer"
+              onClick={() => handleEdit(video)} className="hover:cursor-pointer"
             >
               Modifier
             </Button>
@@ -143,7 +217,7 @@ function Videos() {
     onSortingChange: setSorting,
   });
 
-  // Handle loading and error states AFTER all hooks
+  
   if (isPending) {
     return <div className="container mx-auto px-4 py-8">Chargement en cours...</div>;
   }
@@ -151,9 +225,6 @@ function Videos() {
   if (isError) {
     return <div className="container mx-auto px-4 py-8">Une erreur est survenue : {error.message}</div>;
   }
-
-  console.log("Video data received:", data);
-  console.log("showVideos array:", data?.data?.showVideos);
 
   return (
     <section className="container mx-auto px-4 py-8">
@@ -206,7 +277,7 @@ function Videos() {
                                         ? `http://localhost:3000/uploads/images/${video.thumbnail}`
                                         : "http://localhost:3000/uploads/images/thumbnail-placeholder.png"
                                     }
-                                    defaultExpanded={true}
+                                    defaultExpanded={false}
                                     className="mb-4"
                                   />
                                 </div>
@@ -273,6 +344,130 @@ function Videos() {
           </Pagination>
         )}
       </div>
+
+      {/* Edit Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Modifier la vidéo</DialogTitle>
+            <DialogDescription>
+              Modifiez les informations de la vidéo ci-dessous.
+            </DialogDescription>
+          </DialogHeader>
+
+          {editingVideo && (
+            <form onSubmit={handleUpdateVideo} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="title">Titre *</Label>
+                  <Input
+                    id="title"
+                    name="title"
+                    defaultValue={editingVideo.title}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="translated_title">Titre traduit</Label>
+                  <Input
+                    id="translated_title"
+                    name="translated_title"
+                    defaultValue={editingVideo.translated_title || ""}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="language">Langue</Label>
+                  <Input
+                    id="language"
+                    name="language"
+                    defaultValue={editingVideo.language || ""}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="duration">Durée</Label>
+                  <Input
+                    id="duration"
+                    name="duration"
+                    defaultValue={editingVideo.duration || ""}
+                    placeholder="ex: 5:30"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="status">Statut</Label>
+                  <Select name="status" defaultValue={editingVideo.status}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="submitted">Soumis</SelectItem>
+                      <SelectItem value="under_review">En révision</SelectItem>
+                      <SelectItem value="rejected">Rejeté</SelectItem>
+                      <SelectItem value="selected">Sélectionné</SelectItem>
+                      <SelectItem value="finalist">Finaliste</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="youtube_link">Lien YouTube</Label>
+                  <Input
+                    id="youtube_link"
+                    name="youtube_link"
+                    defaultValue={editingVideo.youtube_link || ""}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="synopsis">Synopsis</Label>
+                <Textarea
+                  id="synopsis"
+                  name="synopsis"
+                  defaultValue={editingVideo.synopsis || ""}
+                  rows={3}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="synopsis_en">Synopsis (Anglais)</Label>
+                <Textarea
+                  id="synopsis_en"
+                  name="synopsis_en"
+                  defaultValue={editingVideo.synopsis_en || ""}
+                  rows={3}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="ai_tools">Outils IA utilisés</Label>
+                <Textarea
+                  id="ai_tools"
+                  name="ai_tools"
+                  defaultValue={editingVideo.ai_tools || ""}
+                  rows={2}
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsEditDialogOpen(false)}
+                >
+                  Annuler
+                </Button>
+                <Button type="submit" disabled={updateMutation.isPending}>
+                  {updateMutation.isPending ? "Enregistrement..." : "Enregistrer"}
+                </Button>
+              </div>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }

@@ -13,11 +13,19 @@ async function getVideos(req, res) {
 
     const { rows, count } = await Video.findAndCountAll({
       where: { youtube_link: { [Op.ne]: null } },
-      include: [{
-        model: User,
-        as: "user",
-        attributes: ["id", "first_name", "last_name", "email"],
-      }],
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: ["id", "first_name", "last_name", "email"],
+        },
+        {
+          model: User,
+          as: "juryMembers",
+          attributes: ["id", "first_name", "last_name", "email"],
+          through: { attributes: [] }
+        }
+      ],
       limit,
       offset,
       order: [["id"]],
@@ -63,6 +71,54 @@ function createVideo(req, res) {
   });
 }
 
+async function updateVideo(req, res) {
+  const { id } = req.params;
+  const updateData = {};
+
+  // Only include fields that are provided
+  const allowedFields = ['title', 'translated_title', 'synopsis', 'synopsis_en', 'status', 'ai_tools', 'language', 'duration', 'youtube_link'];
+  
+  allowedFields.forEach(field => {
+    if (req.body[field] !== undefined) {
+      updateData[field] = req.body[field];
+    }
+  });
+
+  try {
+    const video = await Video.findByPk(id);
+    
+    if (!video) {
+      return res.status(404).json({ error: "Video not found" });
+    }
+
+    await video.update(updateData);
+
+    // Fetch updated video with associations
+    const updatedVideo = await Video.findByPk(id, {
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: ["id", "first_name", "last_name", "email"],
+        },
+        {
+          model: User,
+          as: "juryMembers",
+          attributes: ["id", "first_name", "last_name", "email"],
+          through: { attributes: [] }
+        }
+      ]
+    });
+
+    res.json(updatedVideo);
+  } catch (error) {
+    res.status(500).json({
+      error: "Failed to update video",
+      details: error.message
+    });
+  }
+}
+
 async function deleteVideo(req, res) {
   const { id } = req.params;
 
@@ -92,4 +148,4 @@ async function deleteVideo(req, res) {
   }
 }
 
-export default { getVideos, createVideo, deleteVideo };
+export default { getVideos, createVideo, updateVideo, deleteVideo };
