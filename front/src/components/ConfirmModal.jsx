@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 function ConfirmModal({ isOpen, onClose, onConfirm, data }) {
   const [shouldAnimate, setShouldAnimate] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-
+  const {t} = useTranslation();
   useEffect(() => {
     if (isOpen) {
       setIsMounted(true);
@@ -41,7 +42,7 @@ function ConfirmModal({ isOpen, onClose, onConfirm, data }) {
         onClick={(e) => e.stopPropagation()}
       >
         <h3 className="text-xl font-bold text-white text-center uppercase tracking-[3px]">
-          Confirmer l'envoi
+          {t("confirmmodal.upload_title")}
         </h3>
 
       
@@ -49,16 +50,16 @@ function ConfirmModal({ isOpen, onClose, onConfirm, data }) {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-3">
-              <p><strong className="text-gray-200 block text-[10px] uppercase tracking-wider">Titre</strong> 
+              <p><strong className="text-gray-200 block text-[10px] uppercase tracking-wider">{t("confirmmodal.title")}</strong> 
                 <span className="text-gray-300">{formatVal(data.title)}</span></p>
               
-              <p><strong className="text-gray-200 block text-[10px] uppercase tracking-wider">Titre traduit</strong> 
+              <p><strong className="text-gray-200 block text-[10px] uppercase tracking-wider">{t("confirmmodal.title_trad")}</strong> 
                 <span className="text-gray-300">{formatVal(data.translated_title)}</span></p>
               
-              <p><strong className="text-gray-200 block text-[10px] uppercase tracking-wider">Langue</strong> 
+              <p><strong className="text-gray-200 block text-[10px] uppercase tracking-wider">{t("confirmmodal.language")}</strong> 
                 <span className="text-gray-300">{data.language || "—"}</span></p>
 
-              <p><strong className="text-gray-200 block text-[10px] uppercase tracking-wider">Outils IA</strong> 
+              <p><strong className="text-gray-200 block text-[10px] uppercase tracking-wider">{t("confirmmodal.ai_type")}</strong> 
                 <span className="text-gray-300">{formatVal(data.ai_tools)}</span></p>
             </div>
 
@@ -66,7 +67,7 @@ function ConfirmModal({ isOpen, onClose, onConfirm, data }) {
               <p><strong className="text-gray-200 block text-[10px] uppercase tracking-wider">Synopsis</strong> 
                 <span className="text-gray-300 italic">"{formatVal(data.synopsis, 60)}"</span></p>
               
-              <p><strong className="text-gray-200 block text-[10px] uppercase tracking-wider">Synopsis Anglais</strong> 
+              <p><strong className="text-gray-200 block text-[10px] uppercase tracking-wider">{t("confirmmodal.synopsis_english")}</strong> 
                 <span className="text-gray-300 italic">"{formatVal(data.synopsis_en, 60)}"</span></p>
             </div>
           </div>
@@ -80,7 +81,7 @@ function ConfirmModal({ isOpen, onClose, onConfirm, data }) {
               <span className="text-xs text-gray-300 truncate block">{formatVal(data.video?.name, 20)}</span>
             </div>
             <div>
-              <strong className="text-[#741748] block text-[10px] uppercase font-bold">Sous-titres</strong>
+              <strong className="text-[#741748] block text-[10px] uppercase font-bold">{t("confirmmodal.subtitle")}</strong>
               <span className="text-xs text-gray-300 truncate block">{formatVal(data.subtitles?.name, 20)}</span>
             </div>
             <div>
@@ -104,13 +105,13 @@ function ConfirmModal({ isOpen, onClose, onConfirm, data }) {
             onClick={onClose}
             className="flex-1 px-5 py-3 uppercase text-xs font-bold bg-white/5 text-white border border-white/10 rounded-xl hover:bg-white/0 transition-all cursor-pointer"
           >
-            Annuler
+            {t("confirmmodal.cancel_button")}
           </button>
           <button
             onClick={onConfirm}
             className="flex-1 px-5 py-3 uppercase text-xs font-bold bg-[#741748] text-white border border-white/10 rounded-xl hover:bg-white/0 shadow-lg shadow-[#741748]/20 transition-all active:scale-95 cursor-pointer"
           >
-            Confirmer et envoyer
+            {t("confirmmodal.publish_button")}
           </button>
         </div>
       </div>

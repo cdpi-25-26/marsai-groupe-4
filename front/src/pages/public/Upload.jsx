@@ -209,7 +209,7 @@ export default function Upload() {
   " 
 />
           <h2 className="uppercase text-[20px] sm:text-[24px] font-bold">
-            Appel à projets 2026
+            {t("upload.call")}
           </h2>
           <Sparkles 
   className="
@@ -221,9 +221,9 @@ export default function Upload() {
         </div >
 
 <div>
-<span className="uppercase text-[32px] sm:text-[54px] font-bold ">Déposer UN </span>
+<span className="uppercase text-[32px] sm:text-[54px] font-bold "> {t("upload.drop_1")} </span>
         <span className="uppercase text-[32px] sm:text-[54px] font-bold text-[#2b7fff]">
-          FILM
+{t("upload.drop_2")}  
         </span>
 </div>
         
@@ -234,16 +234,14 @@ export default function Upload() {
           <div className="flex flex-col md:grid md:grid-cols-[40px_1fr] gap-4 items-center mt-8">
             <CircleCheck size={40} className="text-[#2b7fff] hidden md:flex" />
             <h2 className="uppercase text-[16px] tracking-[0.06em]">
-              Transmettez les éléments techniques, l'usage de l'IA et la
-              composition de votre équipe. Tous les champs marqués d'une étoile
-              (*) sont obligatoires.
+             {t("upload.rules")}
             </h2>
           </div>
 
           <div className="grid grid-cols-[40px_1fr] gap-4 items-center mt-10">
             <Film size={39} className="text-[#c27aff] min-w-[39px]" />
             <h2 className="text-[22px] sm:text-[32px] text-[#c27aff] uppercase">
-              01.Identitée du film
+              {t("upload.first_title")}
             </h2>
           </div>
           
@@ -254,24 +252,24 @@ export default function Upload() {
                 <div className="flex flex-col xl:grid xl:grid-cols-2  gap-6">
                   <div className="flex flex-col">
                     <label className="uppercase text-[18px] text-white/40 sm:text-[22px] mb-1">
-                      titre du court métrage * :
+                      {t("upload.title")} * :
                     </label>
                     <input
                       className="bg-white/2 border-white/5 placeholder:text-white/40 border-[1px] rounded-[10px] p-[10px] mt-3"
                       {...register("title")}
-                      placeholder="Titre de la vidéo"
+                      placeholder={t("upload.placeholder_title")}
                     />
                     {errors.title && <p className="mt-2 text-white/40-400">{errors.title.message}</p>}
                   </div>
 
                   <div className="flex flex-col">
                     <label className="uppercase text-[18px] text-white/40 sm:text-[22px] mb-1">
-                      traduction anglaise * :
+                      {t("upload.title_trad")} * :
                     </label>
                     <input
                       className="bg-white/2 border-white/5 placeholder:text-white/40 border-[1px] rounded-[10px] p-[10px] mt-3"
                       {...register("translated_title")}
-                      placeholder="Translated title"
+                      placeholder={t("upload.placeholder_trad_title")}
                     />
                     {errors.translated_title && (
                       <p className="mt-2 text-white/40-400">{errors.translated_title.message}</p>
@@ -285,21 +283,21 @@ export default function Upload() {
                     <input
                       className="bg-white/2 border-white/5 placeholder:text-white/40 border-[1px] rounded-[10px] p-[10px] mt-3 resize-none w-full flex items-start"
                       {...register("language")}
-                      placeholder="Français, Anglais, etc."
+                      placeholder={t("upload.language_placeholder")}
                     />
                     {errors.language && <p className="mt-2 text-white/40-400">{errors.language.message}</p>}
                   </div>
 
                   <div className="flex flex-col">
                     <label className="uppercase text-[18px] text-white/40 sm:text-[22px] mb-1">
-                      Outils IA (optionnel)
+                      {t("upload.ai_type")} (optionnel)
                     </label>
                     <input
                       type="text"
                       className="bg-white/2 border-white/5 placeholder:text-white/40 border-[1px] rounded-[10px] p-[10px] mt-3 resize-none w-full"
                       {...register("ai_tools")}
                       rows={3}
-                      placeholder="Midjourney, Runway, Luma, etc."
+                      placeholder={t("upload.ai_type_placeholder")}
                     />
                     {errors.ai_tools && <p className="mt-2 text-white/40-400">{errors.ai_tools.message}</p>}
                   </div>
@@ -310,20 +308,20 @@ export default function Upload() {
                   <textarea
                     className="bg-white/2 placeholder:text-white/40 border-white/5 border-[1px] rounded-[10px] p-[10px] mt-3 resize-none w-full h-[120px]"
                     {...register("synopsis")}
-                    placeholder="Description du film"
+                    placeholder={t("upload.synopsis_placeholder")}
                   />
                   {errors.synopsis && <p className="mt-2 text-white/40-400">{errors.synopsis.message}</p>}
                 </div>
 
                 <div className="flex flex-col mt-10">
                   <label className="uppercase text-[18px] text-white/40 sm:text-[22px] mb-1">
-                    Synopsis en anglais (optionnel)
+                    {t("upload.synopsis_english")} (optionnel)
                   </label>
                   <textarea
                     className="bg-white/2 placeholder:text-white/40 border-white/5 border-[1px] rounded-[10px] p-[10px] mt-3 resize-none w-full h-[120px]"
                     {...register("synopsis_en")}
                     rows={4}
-                    placeholder="English synopsis"
+                    placeholder={t("upload.synopsis_english")}
                   />
                   {errors.synopsis_en && <p className="mt-2 text-white/40-400">{errors.synopsis_en.message}</p>}
                 </div>
@@ -334,7 +332,7 @@ export default function Upload() {
           <div className="grid grid-cols-[40px_1fr] gap-4 items-center mt-10">
             <Film size={39} className="text-[#c27aff] min-w-[39px]" />
             <h2 className="text-[22px] sm:text-[32px] text-[#c27aff] uppercase">
-              02. Livrables et Accessibilité
+              {t("upload.second_title")}
             </h2>
           </div>
 
@@ -359,7 +357,7 @@ export default function Upload() {
                     className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-[10px] cursor-pointer w-full mt-3"
                   >
                     <span className="text-white/40">
-                      {watch("video") ? watch("video").name.slice(0, 30) + '...' : "Choisir une vidéo"}
+                      {watch("video") ? watch("video").name.slice(0, 30) + '...' : t("upload.selected_vid")}
                     </span>
                   </label>
                   {errors.video && (
@@ -369,7 +367,7 @@ export default function Upload() {
 
                 <div className="flex flex-col">
                   <label className="uppercase text-[18px] placeholder:text-white/40 text-white/40 sm:text-[22px] mb-1">
-                    Sous-titres (.srt) (optionnel)
+                    {t("upload.subtitle")} (.srt) (optionnel)
                   </label>
                   <input
                     className="hidden"
@@ -390,7 +388,7 @@ export default function Upload() {
                     <span className="text-white/40">
                       {watch("subtitles")
                         ? watch("video").name.slice(0, 30) + '...'
-                        : "Choisir sous titre"}
+                        : t("upload.selected_sub")}
                     </span>
                   </label>
                   {errors.subtitles && <p className="mt-2 text-white/40-400">{errors.subtitles.message}</p>}
@@ -432,7 +430,7 @@ export default function Upload() {
                     ) : (
                       <div className="flex flex-col items-center gap-2">
                         <Image size={30} className="text-zinc-500" />
-                        <span className="text-white/40 text-sm">Choisir une image</span>
+                        <span className="text-white/40 text-sm">{t("upload.selected_img")}</span>
                       </div>
                     )}
                   </label>
@@ -443,7 +441,7 @@ export default function Upload() {
 
                 <div className="col-span-2 mt-12">
                   <h3 className="uppercase text-[18px] text-white/40 sm:text-[22px] mb-5">
-                    Galerie Médias <span className="text-white/40 text-sm ml-2">(Stills - Max 2)</span>
+                    {t("upload.title_gallery")} <span className="text-white/40 text-sm ml-2">(Stills - Max 2)</span>
                   </h3>
                   
                   <div className="flex flex-col xl:grid xl:grid-cols-2 gap-6">
@@ -546,7 +544,7 @@ export default function Upload() {
               disabled={loading}
               className="min-h-20 w-full md:w-[60%] px-6 bg-[#741748] border border-white/10 text-[16px] sm:text-[16px] rounded-[13px] font-bold uppercase hover:bg-[#ffffff10] duration-300 cursor-pointer transition-colors disabled:opacity-50"
             >
-              {loading ? "Envoi en cours..." : "finaliser ma soumission"}
+              {loading ? "Envoi en cours..." : t("upload.upload_button")}
             </button>
           </div>
           
