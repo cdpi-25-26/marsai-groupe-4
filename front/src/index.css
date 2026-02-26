@@ -19,11 +19,8 @@
   }
 }
 
-body{
-  
-  background-color: rgb(20, 20, 20);
- 
-}
+
+
 
 *{
   outline: none;
@@ -111,6 +108,10 @@ body{
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
+  --image: url('src/assets/ggggg.png');
+  --background-2: oklch(1 0 0);
+  --filter:rgba(59, 0, 47, 0);
+  --immersion: rgba(0, 0, 0, 0.1);
   --foreground: oklch(0.13 0.028 261.692);
   --card: oklch(1 0 0);
   --card-foreground: oklch(48.574% 0.05699 269.225);
@@ -145,6 +146,10 @@ body{
 
 .dark {
   --background: oklch(0.13 0.028 261.692);
+  --background-2: oklch(0% 0 0);
+  --image: url('@mars/img.png');
+  --filter:rgba(0, 0, 0, 1);
+  --immersion: rgba(255, 255, 255, 0.3);
   --foreground: oklch(0% 0 0);
   --card: oklch(0.21 0.034 264.665);
   --card-foreground: oklch(0.985 0.002 247.839);

@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 export function ThemeToggle() {
   const [theme, setTheme] = useState('light');
 
+  
+
   useEffect(() => {
 
     const savedTheme = localStorage.getItem('theme') || 
@@ -21,7 +23,7 @@ export function ThemeToggle() {
   };
 
   return (
-    <Button variant="ghost" size="icon" onClick={toggleTheme}>
+    <Button variant="ghost" className="cursor-pointer" size="icon" onClick={toggleTheme}>
       {theme === 'light' ? <Moon className="h-5 w-5 hover:cursor-pointer" /> : <Sun className="h-5 w-5 hover:cursor-pointer" />}
     </Button>
   );
