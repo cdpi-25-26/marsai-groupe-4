@@ -387,7 +387,7 @@ export default function Upload() {
                   >
                     <span className="text-white/40">
                       {watch("subtitles")
-                        ? watch("video").name.slice(0, 30) + '...'
+                        ? watch("subtitles").name.slice(0, 30) + '...'
                         : t("upload.selected_sub")}
                     </span>
                   </label>

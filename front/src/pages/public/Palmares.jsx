@@ -117,7 +117,7 @@ export default function Palmares() {
               className="bg-white/5 p-6 rounded-3xl border border-white/10 hover:scale-105 transition"
             >
               <div className="h-36 bg-gradient-to-br from-pink-500 to-indigo-500 rounded-xl mb-4" />
-              <h3 className="font-semibold">{item.title}</h3>
+              <h3 className="font-semibold">{title}</h3>
               <p className="text-gray-400 text-sm mt-2">
                 {t("palmares.description")}
               </p>

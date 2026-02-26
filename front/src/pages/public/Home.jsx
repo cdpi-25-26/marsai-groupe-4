@@ -62,8 +62,10 @@ function Home() {
               <div className="stat-value stat-cyan">5</div>
             </div>
           </div>
-
-          <button className="btn-aventure">{t("home.adventure_button")} </button>
+          <Link to="./upload">
+            <button className="btn-aventure">{t("home.adventure_button")} </button>
+          </Link>
+          
         </div>
       </section>
 

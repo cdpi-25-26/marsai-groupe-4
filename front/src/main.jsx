@@ -49,7 +49,9 @@ createRoot(document.getElementById("root")).render(
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/register" element={<Register />} />
             <Route path="/films/:id" element={<Film />} />
-            <Route path="/upload" element={<Upload />} />
+            <Route path="/upload" element={<RoleGuard allowedRoles={["ADMIN", "PRODUCER"]}>
+             <Upload />
+            </RoleGuard>} />
             <Route path="/palmares" element={<Palmares />} />
             <Route path="/agenda" element={<Agenda />} />
             <Route path="/reservation" element={<Reservation />} />
