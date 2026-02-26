@@ -3,12 +3,22 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import ConfirmModal from "@/components/ConfirmModal";
+import { Sparkles } from "lucide-react";
+import { Film } from "lucide-react";
+import { CircleCheck } from "lucide-react";
+import { Info } from "lucide-react";
+import { Image } from "lucide-react";
 import { useTranslation} from "react-i18next";
 
 const MAX_SECONDS = 60;
 const MAX_FILE_SIZE = 500 * 1024 * 1024;
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+const ACCEPTED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+];
 const ACCEPTED_VIDEO_TYPES = ["video/mp4", "video/quicktime", "video/webm"];
 
 const uploadSchema = z.object({
@@ -19,31 +29,63 @@ const uploadSchema = z.object({
   synopsis_en: z.string().max(2000).optional(),
   youtube_link: z.string().url().optional().or(z.literal("")),
   ai_tools: z.string().max(1000).optional(),
-  subtitles: z.any()
-    .refine((val) => !val || val instanceof File, "Veuillez sélectionner un fichier .srt")
-    .refine((val) => !val || val.name.toLowerCase().endsWith(".srt"), "Seul le format .srt est autorisé")
+  subtitles: z
+    .any()
+    .refine(
+      (val) => !val || val instanceof File,
+      "Veuillez sélectionner un fichier .srt",
+    )
+    .refine(
+      (val) => !val || val.name.toLowerCase().endsWith(".srt"),
+      "Seul le format .srt est autorisé",
+    )
     .optional(),
-  thumbnail: z.any()
-    .refine((val) => !val || val instanceof File, "Veuillez sélectionner une image")
+  thumbnail: z
+    .any()
+    .refine(
+      (val) => !val || val instanceof File,
+      "Veuillez sélectionner une image",
+    )
     .refine((val) => !val || val.size <= MAX_IMAGE_SIZE, "Max 5 Mo")
-    .refine((val) => !val || ACCEPTED_IMAGE_TYPES.includes(val.type), "jpg, png, webp, gif")
+    .refine(
+      (val) => !val || ACCEPTED_IMAGE_TYPES.includes(val.type),
+      "jpg, png, webp, gif",
+    )
     .optional(),
-  image_2: z.any()
-    .refine((val) => !val || val instanceof File, "Veuillez sélectionner une image")
+  image_2: z
+    .any()
+    .refine(
+      (val) => !val || val instanceof File,
+      "Veuillez sélectionner une image",
+    )
     .refine((val) => !val || val.size <= MAX_IMAGE_SIZE, "Max 5 Mo")
-    .refine((val) => !val || ACCEPTED_IMAGE_TYPES.includes(val.type), "jpg, png, webp, gif")
+    .refine(
+      (val) => !val || ACCEPTED_IMAGE_TYPES.includes(val.type),
+      "jpg, png, webp, gif",
+    )
     .optional(),
-  image_3: z.any()
-    .refine((val) => !val || val instanceof File, "Veuillez sélectionner une image")
+  image_3: z
+    .any()
+    .refine(
+      (val) => !val || val instanceof File,
+      "Veuillez sélectionner une image",
+    )
     .refine((val) => !val || val.size <= MAX_IMAGE_SIZE, "Max 5 Mo")
-    .refine((val) => !val || ACCEPTED_IMAGE_TYPES.includes(val.type), "jpg, png, webp, gif")
+    .refine(
+      (val) => !val || ACCEPTED_IMAGE_TYPES.includes(val.type),
+      "jpg, png, webp, gif",
+    )
     .optional(),
-  video: z.any()
+  video: z
+    .any()
     .refine((val) => val instanceof File, "Veuillez sélectionner une vidéo")
     .refine((val) => val.size <= MAX_FILE_SIZE, "Max 500 Mo")
-    .refine((val) => ACCEPTED_VIDEO_TYPES.includes(val.type), "MP4, MOV, WebM seulement")
+    .refine(
+      (val) => ACCEPTED_VIDEO_TYPES.includes(val.type),
+      "MP4, MOV, WebM seulement",
+    )
     .refine(async (val) => {
-      if (!val || !(val instanceof File)) return true; // ← null → OK (champ optionnel)
+      if (!val || !(val instanceof File)) return true;
       try {
         const duration = await getVideoDuration(val);
         return duration <= MAX_SECONDS;
@@ -156,189 +198,369 @@ export default function Upload() {
 
   const { t } = useTranslation();
   return (
-    <div className="max-w-4xl mx-auto p-8 bg-white rounded-2xl shadow-2xl">
-      <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
-        {t("upload.upload_title")}
-      </h2>
+    <section className="py-40 bg-black text-white placeholder:bg-white px-4 sm:px-6  text-[15px] md:text-[15px]">
+      <div className="flex flex-col justify-center mb-12 sm:mb-12 text-center">
+        <div className="flex items-center gap-[5px] mb-4 sm:mb-6 text-[#f6339a]  w-full justify-center">
+          <Sparkles 
+  className="
+    w-6 h-6        // 24px на мобилке
+    
+    sm:w-10 sm:h-10 // 40px от 1024px
+  " 
+/>
+          <h2 className="uppercase text-[20px] sm:text-[24px] font-bold">
+            Appel à projets 2026
+          </h2>
+          <Sparkles 
+  className="
+    w-6 h-6        // 
+    
+    sm:w-10 sm:h-10 
+  " 
+/>
+        </div >
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Titre */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">{t("upload.title")} *</label>
-          <input
-            {...register("title")}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            placeholder={t("upload.placeholder_title")}
-          />
-          {errors.title && <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>}
-        </div>
-
-        {/* Titre traduit */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">{t("upload.title_trad")}</label>
-          <input
-            {...register("translated_title")}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            placeholder={t("upload.placeholder_trad_title")}
-          />
-          {errors.translated_title && <p className="mt-1 text-sm text-red-600">{errors.translated_title.message}</p>}
-        </div>
-
-        {/* Synopsis */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Synopsis (optionnel)</label>
-          <textarea
-            {...register("synopsis")}
-            rows={4}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            placeholder={t("upload.synopsis_placeholder")}
-          />
-          {errors.synopsis && <p className="mt-1 text-sm text-red-600">{errors.synopsis.message}</p>}
-        </div>
-
-        {/* Langue */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">{t("upload.language")} (optionnel)</label>
-          <input
-            {...register("language")}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            placeholder={t("upload.language_placeholder")}
-          />
-          {errors.language && <p className="mt-1 text-sm text-red-600">{errors.language.message}</p>}
-        </div>
-
-        {/* Synopsis anglais */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">{t("upload.synopsis_english")} (optionnel)</label>
-          <textarea
-            {...register("synopsis_en")}
-            rows={4}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            placeholder={t("upload.synopsis_placeholder")}
-          />
-          {errors.synopsis_en && <p className="mt-1 text-sm text-red-600">{errors.synopsis_en.message}</p>}
-        </div>
-
-        
-        {/* Outils IA */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">{t("upload.ai_type")} (optionnel)</label>
-          <textarea
-            {...register("ai_tools")}
-            rows={3}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            placeholder={t("upload.ai_type_placeholder")}
-          />
-          {errors.ai_tools && <p className="mt-1 text-sm text-red-600">{errors.ai_tools.message}</p>}
-        </div>
-
-        {/* Sous-titres */}
-       <div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    {t("upload.subtitle")} 
-  </label>
-  <input
-    type="file"
-    accept=".srt"
-    onChange={(e) => {
-      const file = e.target.files?.[0];
-      if (file) {
-        setValue("subtitles", file, { shouldValidate: true });
-      }
-    }}
-    className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition cursor-pointer"
-  />
-  {errors.subtitles && (
-    <p className="mt-1 text-sm text-red-600">{errors.subtitles.message}</p>
-  )}
-  {watch("subtitles") && (
-    <p className="mt-2 text-sm text-green-600">
-       {t("upload.selected_doc")} : {watch("subtitles").name}
-    </p>
-  )}
+<div>
+<span className="uppercase text-[32px] sm:text-[54px] font-bold ">Déposer UN </span>
+        <span className="uppercase text-[32px] sm:text-[54px] font-bold text-[#2b7fff]">
+          FILM
+        </span>
 </div>
+        
+      </div>
+      
+      <div className="bg-gray-500/20 border mt-8 p-6 sm:p-9 border-white/10 rounded-[25px] shadow-[0_0_300px_rgba(255,0,128,0.400)] max-w-[1000px] mx-auto">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex flex-col md:grid md:grid-cols-[40px_1fr] gap-4 items-center mt-8">
+            <CircleCheck size={40} className="text-[#2b7fff] hidden md:flex" />
+            <h2 className="uppercase text-[16px] tracking-[0.06em]">
+              Transmettez les éléments techniques, l'usage de l'IA et la
+              composition de votre équipe. Tous les champs marqués d'une étoile
+              (*) sont obligatoires.
+            </h2>
+          </div>
 
-        {/* Vidéo */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Vidéo *</label>
-          <input
-            type="file"
-            accept={ACCEPTED_VIDEO_TYPES.join(",")}
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) setValue("video", file, { shouldValidate: true });
-            }}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          />
-          {errors.video && <p className="mt-1 text-sm text-red-600">{errors.video.message}</p>}
-        </div>
+          <div className="grid grid-cols-[40px_1fr] gap-4 items-center mt-10">
+            <Film size={39} className="text-[#c27aff] min-w-[39px]" />
+            <h2 className="text-[22px] sm:text-[32px] text-[#c27aff] uppercase">
+              01.Identitée du film
+            </h2>
+          </div>
+          
+          <div className="mt-6">
+            <div className="flex flex-col md:grid md:grid-cols-[40px_1fr] gap-4">
+              <div></div>
+              <div>
+                <div className="flex flex-col xl:grid xl:grid-cols-2  gap-6">
+                  <div className="flex flex-col">
+                    <label className="uppercase text-[18px] text-white/40 sm:text-[22px] mb-1">
+                      titre du court métrage * :
+                    </label>
+                    <input
+                      className="bg-white/2 border-white/5 placeholder:text-white/40 border-[1px] rounded-[10px] p-[10px] mt-3"
+                      {...register("title")}
+                      placeholder="Titre de la vidéo"
+                    />
+                    {errors.title && <p className="mt-2 text-white/40-400">{errors.title.message}</p>}
+                  </div>
 
-        {/* Thumbnail */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Thumbnail (optionnel)</label>
-          <input
-            type="file"
-            accept={ACCEPTED_IMAGE_TYPES.join(",")}
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) setValue("thumbnail", file, { shouldValidate: true });
-            }}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          />
-          {errors.thumbnail && <p className="mt-1 text-sm text-red-600">{errors.thumbnail.message}</p>}
-        </div>
+                  <div className="flex flex-col">
+                    <label className="uppercase text-[18px] text-white/40 sm:text-[22px] mb-1">
+                      traduction anglaise * :
+                    </label>
+                    <input
+                      className="bg-white/2 border-white/5 placeholder:text-white/40 border-[1px] rounded-[10px] p-[10px] mt-3"
+                      {...register("translated_title")}
+                      placeholder="Translated title"
+                    />
+                    {errors.translated_title && (
+                      <p className="mt-2 text-white/40-400">{errors.translated_title.message}</p>
+                    )}
+                  </div>
 
-        {/* Image 2 */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Image 2 (optionnel)</label>
-          <input
-            type="file"
-            accept={ACCEPTED_IMAGE_TYPES.join(",")}
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) setValue("image_2", file, { shouldValidate: true });
-            }}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          />
-          {errors.image_2 && <p className="mt-1 text-sm text-red-600">{errors.image_2.message}</p>}
-        </div>
+                  <div className="flex flex-col">
+                    <label className="uppercase text-[18px] text-white/40 sm:text-[22px] mb-1">
+                      Langue (optionnel)
+                    </label>
+                    <input
+                      className="bg-white/2 border-white/5 placeholder:text-white/40 border-[1px] rounded-[10px] p-[10px] mt-3 resize-none w-full flex items-start"
+                      {...register("language")}
+                      placeholder="Français, Anglais, etc."
+                    />
+                    {errors.language && <p className="mt-2 text-white/40-400">{errors.language.message}</p>}
+                  </div>
 
-        {/* Image 3 */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Image 3 (optionnel)</label>
-          <input
-            type="file"
-            accept={ACCEPTED_IMAGE_TYPES.join(",")}
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) setValue("image_3", file, { shouldValidate: true });
-            }}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          />
-          {errors.image_3 && <p className="mt-1 text-sm text-red-600">{errors.image_3.message}</p>}
-        </div>
+                  <div className="flex flex-col">
+                    <label className="uppercase text-[18px] text-white/40 sm:text-[22px] mb-1">
+                      Outils IA (optionnel)
+                    </label>
+                    <input
+                      type="text"
+                      className="bg-white/2 border-white/5 placeholder:text-white/40 border-[1px] rounded-[10px] p-[10px] mt-3 resize-none w-full"
+                      {...register("ai_tools")}
+                      rows={3}
+                      placeholder="Midjourney, Runway, Luma, etc."
+                    />
+                    {errors.ai_tools && <p className="mt-2 text-white/40-400">{errors.ai_tools.message}</p>}
+                  </div>
+                </div>
 
-        {serverError && <p className="text-red-600 font-medium">{serverError}</p>}
+                <div className="flex flex-col mt-10">
+                  <label className="uppercase text-[18px] text-white/40 sm:text-[22px] mb-1">Synopsis</label>
+                  <textarea
+                    className="bg-white/2 placeholder:text-white/40 border-white/5 border-[1px] rounded-[10px] p-[10px] mt-3 resize-none w-full h-[120px]"
+                    {...register("synopsis")}
+                    placeholder="Description du film"
+                  />
+                  {errors.synopsis && <p className="mt-2 text-white/40-400">{errors.synopsis.message}</p>}
+                </div>
 
-        {serverError && <p className="text-red-600 font-medium text-center">{serverError}</p>}
+                <div className="flex flex-col mt-10">
+                  <label className="uppercase text-[18px] text-white/40 sm:text-[22px] mb-1">
+                    Synopsis en anglais (optionnel)
+                  </label>
+                  <textarea
+                    className="bg-white/2 placeholder:text-white/40 border-white/5 border-[1px] rounded-[10px] p-[10px] mt-3 resize-none w-full h-[120px]"
+                    {...register("synopsis_en")}
+                    rows={4}
+                    placeholder="English synopsis"
+                  />
+                  {errors.synopsis_en && <p className="mt-2 text-white/40-400">{errors.synopsis_en.message}</p>}
+                </div>
+              </div>
+            </div>
+          </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className={`w-full py-4 px-8 rounded-xl text-white font-semibold text-lg transition-all
-            ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg"}`}
-        >
-          {loading ? t("upload.upload_progress") : t("upload.upload_button")}
-        </button>
-      </form>
+          <div className="grid grid-cols-[40px_1fr] gap-4 items-center mt-10">
+            <Film size={39} className="text-[#c27aff] min-w-[39px]" />
+            <h2 className="text-[22px] sm:text-[32px] text-[#c27aff] uppercase">
+              02. Livrables et Accessibilité
+            </h2>
+          </div>
 
+          <div className="mt-10">
+            <div className="md:grid md:grid-cols-[40px_1fr] gap-4">
+              <div></div>
+              <div className="flex flex-col lg:grid lg:grid-cols-2  gap-6">
+                <div className="flex flex-col">
+                  <label className="uppercase text-[18px] placeholder:text-white/40 text-white/40 sm:text-[22px] mb-1">Vidéo *</label>
+                  <input
+                    type="file"
+                    accept={ACCEPTED_VIDEO_TYPES.join(",")}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) setValue("video", file, { shouldValidate: true });
+                    }}
+                    className="hidden"
+                    id="video-upload"
+                  />
+                  <label
+                    htmlFor="video-upload"
+                    className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-[10px] cursor-pointer w-full mt-3"
+                  >
+                    <span className="text-white/40">
+                      {watch("video") ? watch("video").name.slice(0, 30) + '...' : "Choisir une vidéo"}
+                    </span>
+                  </label>
+                  {errors.video && (
+                    <p className="mt-2 text-white/40-400">{errors.video.message}</p>
+                  )}
+                </div>
 
-      <ConfirmModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        onConfirm={confirmSubmit}
-        data={tempData}
-      />
-    </div>
+                <div className="flex flex-col">
+                  <label className="uppercase text-[18px] placeholder:text-white/40 text-white/40 sm:text-[22px] mb-1">
+                    Sous-titres (.srt) (optionnel)
+                  </label>
+                  <input
+                    className="hidden"
+                    type="file"
+                    id="sous-titre-upload"
+                    accept=".srt"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setValue("subtitles", file, { shouldValidate: true });
+                      }
+                    }}
+                  />
+                  <label
+                    htmlFor="sous-titre-upload"
+                    className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-[10px] cursor-pointer w-full mt-3"
+                  >
+                    <span className="text-white/40">
+                      {watch("subtitles")
+                        ? watch("video").name.slice(0, 30) + '...'
+                        : "Choisir sous titre"}
+                    </span>
+                  </label>
+                  {errors.subtitles && <p className="mt-2 text-white/40-400">{errors.subtitles.message}</p>}
+                </div>
+
+                <div className="flex flex-col col-span-2 mt-6">
+                  <label className="uppercase text-[18px] text-white/40 sm:text-[22px] mb-1">Thumbnail (optionnel)</label>
+                  <input
+                    type="file"
+                    accept={ACCEPTED_IMAGE_TYPES.join(",")}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setValue("thumbnail", file, { shouldValidate: true });
+                      }
+                    }}
+                    className="hidden"
+                    id="thumbnail-upload"
+                  />
+                  <label
+                    htmlFor="thumbnail-upload"
+                    className="flex items-center gap-2 p-3 sm:p-6 bg-white/5 border border-white/10 rounded-[10px] cursor-pointer w-full min-h-[100px] justify-center mt-3"
+                  >
+                    {watch("thumbnail") ? (
+                      <div className="relative w-full h-full flex items-center justify-center">
+                        {(() => {
+                          const file = watch("thumbnail");
+                          const previewUrl = URL.createObjectURL(file);
+                          return (
+                            <img 
+                              src={previewUrl} 
+                              alt="preview" 
+                              className="max-w-full full aspect-video rounded-[10px] object-cover"
+                              onLoad={() => URL.revokeObjectURL(previewUrl)}
+                            />
+                          );
+                        })()}
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center gap-2">
+                        <Image size={30} className="text-zinc-500" />
+                        <span className="text-white/40 text-sm">Choisir une image</span>
+                      </div>
+                    )}
+                  </label>
+                  {errors.thumbnail && (
+                    <p className="mt-2 text-white/40-400">{errors.thumbnail.message}</p>
+                  )}
+                </div>
+
+                <div className="col-span-2 mt-12">
+                  <h3 className="uppercase text-[18px] text-white/40 sm:text-[22px] mb-5">
+                    Galerie Médias <span className="text-white/40 text-sm ml-2">(Stills - Max 2)</span>
+                  </h3>
+                  
+                  <div className="flex flex-col xl:grid xl:grid-cols-2 gap-6">
+                    <div className="flex flex-col">
+                      <input
+                        type="file"
+                        accept={ACCEPTED_IMAGE_TYPES.join(",")}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            setValue("image_2", file, { shouldValidate: true });
+                          }
+                        }}
+                        className="hidden"
+                        id="image-2-upload"
+                      />
+                      <label
+                        htmlFor="image-2-upload"
+                        className="flex items-center justify-center  gap-2 p-3 sm:p-6 bg-white/5 border border-white/10 rounded-[10px] cursor-pointer min-h-[120px]"
+                      >
+                        {watch("image_2") ? (
+                          <div className="relative w-full h-full flex items-center justify-center">
+                            {(() => {
+                              const file = watch("image_2");
+                              const previewUrl = URL.createObjectURL(file);
+                              return (
+                                <img 
+                                  src={previewUrl} 
+                                  alt="preview 2" 
+                                  className="max-w-full max-h-full aspect-video rounded-[10px] object-cover"
+                                  onLoad={() => URL.revokeObjectURL(previewUrl)}
+                                />
+                              );
+                            })()}
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center gap-2">
+                            <Image size={30} className="text-zinc-500" />
+                            <span className="text-white/40 text-sm text-center">
+                              Image 2<br/>(optionnel)
+                            </span>
+                          </div>
+                        )}
+                      </label>
+                      {errors.image_2 && <p className="mt-2 text-white/40-400 text-sm">{errors.image_2.message}</p>}
+                    </div>
+
+                    <div className="flex flex-col">
+                      <input
+                        type="file"
+                        accept={ACCEPTED_IMAGE_TYPES.join(",")}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            setValue("image_3", file, { shouldValidate: true });
+                          }
+                        }}
+                        className="hidden"
+                        id="image-3-upload"
+                      />
+                      <label
+                        htmlFor="image-3-upload"
+                        className="flex items-center justify-center gap-2 p-3 sm:p-6 bg-white/5 border border-white/10 rounded-[10px] cursor-pointer min-h-[120px]"
+                      >
+                        {watch("image_3") ? (
+                          <div className="relative w-full h-full flex items-center justify-center">
+                            {(() => {
+                              const file = watch("image_3");
+                              const previewUrl = URL.createObjectURL(file);
+                              return (
+                                <img 
+                                  src={previewUrl} 
+                                  alt="preview 3" 
+                                  className="max-w-full max-h-full aspect-video rounded-[10px] object-cover"
+                                  onLoad={() => URL.revokeObjectURL(previewUrl)}
+                                />
+                              );
+                            })()}
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center gap-2">
+                            <Image size={30} className="text-zinc-500" />
+                            <span className="text-white/40 text-sm text-center">
+                              Image 3<br/>(optionnel)
+                            </span>
+                          </div>
+                        )}
+                      </label>
+                      {errors.image_3 && <p className="mt-2 text-white/40-400 text-sm">{errors.image_3.message}</p>}
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+<div className="flex w-full justify-center mt-14">
+            <button 
+              type="submit" 
+              disabled={loading}
+              className="min-h-20 w-full md:w-[60%] px-6 bg-[#741748] border border-white/10 text-[16px] sm:text-[16px] rounded-[13px] font-bold uppercase hover:bg-[#ffffff10] duration-300 cursor-pointer transition-colors disabled:opacity-50"
+            >
+              {loading ? "Envoi en cours..." : "finaliser ma soumission"}
+            </button>
+          </div>
+          
+
+          {serverError && <p className="mt-6 text-white/40-400 text-center">{serverError}</p>}
+        </form>
+
+        <ConfirmModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onConfirm={confirmSubmit}
+          data={tempData}
+        />
+      </div>
+    </section>
   );
 }
