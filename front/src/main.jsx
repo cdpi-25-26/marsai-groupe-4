@@ -12,7 +12,6 @@ import PublicLayout from "./layouts/PublicLayout.jsx";
 import { Login } from "./pages/auth/Login.jsx";
 import { Register } from "./pages/auth/Register.jsx";
 import { RoleGuard } from "./middlewares/RoleGuard.jsx";
-import GalerieDesFilmsPage from "./pages/public/Gallerie.jsx";
 import Videos from "./pages/admin/Videos.jsx";
 import Users from "./pages/admin/Users.jsx";
 import Jury from "./pages/admin/Jury.jsx";
@@ -26,6 +25,7 @@ import Agenda from "./pages/public/Agenda.jsx";
 import Cms from "./pages/admin/Cms.jsx";
 import Reservation from "./pages/public/Reservation.jsx";
 import JuryVote from "./pages/JuryVote.jsx";
+import Gallerie from "./pages/public/Gallerie.jsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -43,7 +43,7 @@ createRoot(document.getElementById("root")).render(
           {/* Routes publiques */}
           <Route path="/" element={<PublicLayout />}>
             <Route index element={<Home />} />
-            <Route path="/gallerie" element={<GalerieDesFilmsPage />} />
+            <Route path="/gallerie" element={<Gallerie />} />
             <Route path="/evennements" element={<Evennements />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/auth/login" element={<Login />} />

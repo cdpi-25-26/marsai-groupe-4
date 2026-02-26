@@ -78,15 +78,6 @@ export default function Contact() {
 
   return (
     <div className="bg-black text-white min-h-screen flex flex-col items-center px-6 py-16">
-      {/* HERO */}
-      <section className="w-full max-w-4xl mb-20">
-        <div className="flex items-center gap-3 text-pink-500 mb-4">
-          <CalendarDays size={18} />
-          <span className="uppercase tracking-widest text-sm">
-            Infos pratiques
-          </span>
-        </div>
-
       {/* HERO + PROGRAMME */}
       <section className="w-full max-w-4xl mb-20">
         <div className="flex items-center gap-3 text-pink-500 mb-4">

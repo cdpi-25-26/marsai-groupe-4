@@ -9,12 +9,21 @@ async function listFilms(req, res) {
     const offset = (page - 1) * limit;
 
     const { rows, count } = await Film.findAndCountAll({
-      where: { status: "selected" },
-      include: [{
-        model: User,
-        as: "user",
-        attributes: ["id", "first_name", "last_name", "email"],
-      }],
+      where: { status: "submitted" },
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: ["id", "first_name", "last_name", "email"],
+        },
+        {
+          model: User,
+          as: "juryMembers",
+          attributes: ["id", "first_name", "last_name", "email"],
+          through: { attributes: [] },
+          required: false
+        }
+      ],
       limit,
       offset,
       order: [["id"]],
@@ -30,7 +39,11 @@ async function listFilms(req, res) {
       limit,
     });
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch Gallerie films" });
+    console.error("Error fetching gallerie films:", error);
+    res.status(500).json({ 
+      error: "Failed to fetch Gallerie films",
+      details: error.message 
+    });
   }
 }
 
