@@ -47,8 +47,9 @@ function checkToken(req, res) {
     return res.status(401).json({ error: "No token provided" });
   }
 
+  let decoded;
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
     
     // Find user by email from decoded token
     User.findOne({ where: { email: decoded.email } })

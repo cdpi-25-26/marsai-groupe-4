@@ -1,4 +1,5 @@
 import { Input } from "@/components/ui/input";
+import { useTranslation } from "react-i18next";
 
 export default function FormField({ 
   label, 
@@ -11,7 +12,7 @@ export default function FormField({
   placeholder = ""
 }) {
   const baseInputClass = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500";
-
+  const { t } = useTranslation();
   if (type === "textarea") {
     return (
       <div>
@@ -40,8 +41,8 @@ export default function FormField({
           {...register(id)} 
           className={baseInputClass}
         >
-          <option value="">Sélectionner {label.toLowerCase()}</option>
-          {options.map((option) => (
+          <option value="">{t("select_select")}{label.toLowerCase()}</option>
+          {Array.isArray(options) && options.map((option) => (
             <option key={option} value={option}>
               {option}
             </option>

@@ -143,8 +143,8 @@ const s3Client = new S3Client({
   region: "fr-par",
   endpoint: "https://s3.fr-par.scw.cloud",
   credentials: {
-    accessKeyId: process.env.SCW_ACCESS_KEY || "SCW3MFQBR803FXZS4N33",
-    secretAccessKey: process.env.SCW_SECRET_KEY || "c64db8bf-f541-478d-aa6a-cbcb8c7be2ae",
+    accessKeyId: process.env.SCW_ACCESS_KEY,
+    secretAccessKey: process.env.SCW_SECRET_KEY ,
   },
 });
 

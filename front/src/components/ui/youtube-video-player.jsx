@@ -82,6 +82,18 @@ export function YouTubePlayer({
     };
   }, [expanded])
 
+  // Handle body scroll lock when expanded
+  useEffect(() => {
+    if (expanded) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [expanded])
+
   const getThumbnailUrl = () => {
     if (customThumbnail) return customThumbnail
     return actualVideoId
@@ -92,7 +104,7 @@ export function YouTubePlayer({
   return (
     <>
       {/* Main container - always in the document flow */}
-      <div className={cn("relative", expanded ? "invisible" : "visible", className)}>
+      <div className={cn("relative", expanded ? "invisible pointer-events-none" : "visible pointer-events-auto", className)}>
         <motion.div
           layoutId={`youtube-player-${videoId}`}
           className={cn(
@@ -178,92 +190,89 @@ export function YouTubePlayer({
         </motion.div>
       </div>
       {/* Expanded state - fixed position */}
-      <AnimatePresence>
-        {expanded && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className={cn("fixed inset-0 z-40 bg-background/80 backdrop-blur-sm", backdropClassName)}
-              onClick={toggleExpand}
-              aria-label="Close expanded video" />
+      {expanded && (
+        <>
+          <div
+            className={cn("fixed inset-0 z-40 bg-background/80 backdrop-blur-sm", backdropClassName)}
+            onClick={toggleExpand}
+            aria-label="Close expanded video"
+          />
 
+          <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
             <div
-              className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
-              <motion.div
-                layoutId={`youtube-player-${videoId}`}
-                className={cn(
-                  "overflow-hidden border bg-card text-card-foreground shadow-xl rounded-lg pointer-events-auto",
-                  "w-[90vw] max-w-[1200px] max-h-[90vh] aspect-video",
-                  expandedClassName
-                )}>
-                <motion.div
-                  layoutId={`youtube-player-content-${videoId}`}
-                  className={cn("relative aspect-video bg-muted", playerClassName)}>
-                  {!playing && (
-                    <>
-                      <motion.div
-                        layoutId={`youtube-player-thumbnail-container-${videoId}`}
-                        className={cn(
-                          "absolute inset-0 bg-gradient-to-br from-muted to-muted/80",
-                          thumbnailClassName
-                        )}>
-                        {getThumbnailUrl() && (
-                          <motion.img
-                            layoutId={`youtube-player-thumbnail-${videoId}`}
-                            src={getThumbnailUrl()}
-                            alt={title || "Video thumbnail"}
-                            className={cn(
-                              "absolute inset-0 h-full w-full object-cover opacity-70",
-                              thumbnailImageClassName
-                            )} />
-                        )}
-                      </motion.div>
-
-                      <motion.div
-                        layoutId={`youtube-player-content-overlay-${videoId}`}
-                        className="absolute inset-0 flex flex-col items-center justify-center z-10">
-                        <Button
-                          size="lg"
-                          variant="secondary"
+              className={cn(
+                "overflow-hidden border bg-card text-card-foreground shadow-xl rounded-lg pointer-events-auto",
+                "w-[90vw] max-w-[1200px]",
+                expandedClassName
+              )}>
+              {/* Title above video when playing */}
+              {playing && title && (
+                <div className="bg-card px-4 py-3 border-b">
+                  <h3 className="text-lg font-semibold">{title}</h3>
+                </div>
+              )}
+              
+              <div className={cn("relative aspect-video bg-muted", playerClassName)}>
+                {!playing && (
+                  <>
+                    <div
+                      className={cn(
+                        "absolute inset-0 bg-gradient-to-br from-muted to-muted/80",
+                        thumbnailClassName
+                      )}>
+                      {getThumbnailUrl() && (
+                        <img
+                          src={getThumbnailUrl()}
+                          alt={title || "Video thumbnail"}
                           className={cn(
-                            "relative h-16 w-16 rounded-full border border-border/20 bg-background/80 backdrop-blur-sm md:h-20 md:w-20 p-0",
-                            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-                            playButtonClassName
+                            "absolute inset-0 h-full w-full object-cover opacity-70",
+                            thumbnailImageClassName
                           )}
-                          onClick={handlePlay}
-                          aria-label="Play video">
-                          <Play
-                            className={cn(
-                              "h-6 w-6 translate-x-[2px] fill-primary text-primary md:h-8 md:w-8",
-                              playIconClassName
-                            )} />
-                        </Button>
+                        />
+                      )}
+                    </div>
 
-                        {title && (
-                          <motion.h3
-                            layoutId={`youtube-player-title-${videoId}`}
-                            className={cn(
-                              "mt-4 max-w-xs text-center text-sm font-medium text-foreground/90 md:max-w-md md:text-base",
-                              titleClassName
-                            )}>
-                            {title}
-                          </motion.h3>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+                      <Button
+                        size="lg"
+                        variant="secondary"
+                        className={cn(
+                          "relative h-16 w-16 rounded-full border border-border/20 bg-background/80 backdrop-blur-sm md:h-20 md:w-20 p-0",
+                          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                          playButtonClassName
                         )}
-                      </motion.div>
-                    </>
-                  )}
+                        onClick={handlePlay}
+                        aria-label="Play video">
+                        <Play
+                          className={cn(
+                            "h-6 w-6 translate-x-[2px] fill-primary text-primary md:h-8 md:w-8",
+                            playIconClassName
+                          )}
+                        />
+                      </Button>
 
-                  {playing && (
-                    <iframe
-                      src={`https://www.youtube.com/embed/${actualVideoId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&showinfo=0&controls=1`}
-                      title={title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
-                      className="h-full w-full border-0" />
-                  )}
+                      {title && (
+                        <h3
+                          className={cn(
+                            "mt-4 max-w-xs text-center text-sm font-medium text-foreground/90 md:max-w-md md:text-base",
+                            titleClassName
+                          )}>
+                          {title}
+                        </h3>
+                      )}
+                    </div>
+                  </>
+                )}
+
+                {playing && (
+                  <iframe
+                    src={`https://www.youtube.com/embed/${actualVideoId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&showinfo=0&controls=1`}
+                    title={title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    className="h-full w-full border-0"
+                  />
+                )}
 
                   {/* Controls Overlay */}
                   <YouTubePlayerControls
@@ -274,12 +283,11 @@ export function YouTubePlayer({
                     onToggleExpand={toggleExpand}
                     controlsClassName={controlsClassName}
                     expandButtonClassName={expandButtonClassName} />
-                </motion.div>
-              </motion.div>
+              </div>
             </div>
-          </>
-        )}
-      </AnimatePresence>
+          </div>
+        </>
+      )}
     </>
   );
 }

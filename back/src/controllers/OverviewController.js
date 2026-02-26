@@ -7,7 +7,7 @@ async function getStats(req, res) {
     const videos = await Video.findAll({ where: { youtube_link: { [Op.ne]: null } } });
     const users = await User.findAll();
     const producerCount = await User.count({ where: { role: 'PRODUCER' } });
-    const videoCount = await Video.count({ where: { youtube_link: { [Op.ne]: null } } });
+    const videoCount = await Video.count({ where: { status: 'Submitted' } });
 
     const stats = {
       totalVideos: videoCount,

@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router";
 import { login } from "../../api/auth.js";
 import { useMutation } from "@tanstack/react-query";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -9,6 +8,8 @@ import handleLogout from "@/utils/helpers.js";
 import { LogOut } from "lucide-react";
 import { Send } from "lucide-react";
 import { LogIn } from "lucide-react";
+import { useTranslation } from "react-i18next";
+
 
 const loginSchema = z.object({
   email: z.string().email("Email invalide"),
@@ -16,6 +17,7 @@ const loginSchema = z.object({
 });
 
 export function Login() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const { register, handleSubmit } = useForm({
@@ -93,6 +95,7 @@ export function Login() {
   };
 
   return (
+    
     <>
       {/* <h1 className="text-2xl">Login</h1>
 
@@ -147,11 +150,11 @@ export function Login() {
             CONNEXION
           </h2>
           <h2 className="text-center text-[10px] mb-[44px] tracking-[3px] text-white/50 font-bold">
-            Protocole d'accès marsAI
+           {t("login.protocole")}        
           </h2>
 
           <h2 className="w-full text-[10px] mb-[12px] tracking-[2px]">
-            Identifiant de Session
+            {t("login.session_identity")} 
           </h2>
           <div className="flex bg-black/40 border border-white/10 rounded-[28px] w-full mb-[24px]">
             <img
@@ -169,7 +172,7 @@ export function Login() {
           </div>
 
           <h2 className="w-full text-[10px] mb-[12px] tracking-[2px]">
-            Clé Cryptographique
+            {t("login.password")}
           </h2>
           <div className="flex bg-black/40 border border-white/10 rounded-[28px] w-full">
             <img
@@ -209,7 +212,7 @@ export function Login() {
             </label>
 
             {/* Текст */}
-            <h2 className="mr-auto tracking-[1px]">Maintenir session</h2>
+            <h2 className="mr-auto tracking-[1px]">{t("login.hold")}</h2>
             <h2 className="text-[#51A2FF] tracking-[2px]  cursor-pointer">
               Reset ?
             </h2>
@@ -223,16 +226,16 @@ export function Login() {
             {" "}
             <Send size={20} />
             <h2>
-              {loginMutation.isPending ? "Connecting..." : "Initialiser Flux"}
+              {loginMutation.isPending ? "Connecting..." : t("login.login_button")}
             </h2>
           </button>
 
           <div className="flex items-center sm:items-end flex-col sm:flex-row   w-full gap-[15px] justify-center">
             <h2 className="text-[11px] text-[rgba(255,255,255,0.6)] tracking-[2.2px]">
-              Nouveau Voyageur ?
+              {t("login.register_text")}
             </h2>
             <h2 className="text-[16px] capitalize tracking-[2.2px] mb-[-3px]">
-              Générer Identité
+              {t("login.register_button")}
             </h2>
           </div>
         </div>

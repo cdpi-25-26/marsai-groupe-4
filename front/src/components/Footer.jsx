@@ -1,6 +1,8 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 function Footer() {
+  const { t } = useTranslation()
   return (
     <div className="bg-black py-[96px] px-[40px] w-full">
         <section className="max-w-[1000px] m-0 mx-auto">
@@ -11,8 +13,7 @@ function Footer() {
               </h1>
 
               <h1 className="text-white/30 text-start text-[18px] italic max-w-[300px]">
-                "La plateforme mondiale de la narration générative, ancrée dans
-                la lumière de Marseille."
+                {t("footer.subtitle")}
               </h1>
 
               <div className="grid grid-cols-4 max-w-[250px] gap-2">

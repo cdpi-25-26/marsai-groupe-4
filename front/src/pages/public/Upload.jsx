@@ -8,6 +8,7 @@ import { Film } from "lucide-react";
 import { CircleCheck } from "lucide-react";
 import { Info } from "lucide-react";
 import { Image } from "lucide-react";
+import { useTranslation} from "react-i18next";
 
 const MAX_SECONDS = 60;
 const MAX_FILE_SIZE = 500 * 1024 * 1024;
@@ -195,6 +196,7 @@ export default function Upload() {
     setIsModalOpen(false);
   };
 
+  const { t } = useTranslation();
   return (
     <section className="py-40 bg-black text-white placeholder:bg-white px-4 sm:px-6  text-[15px] md:text-[15px]">
       <div className="flex flex-col justify-center mb-12 sm:mb-12 text-center">
