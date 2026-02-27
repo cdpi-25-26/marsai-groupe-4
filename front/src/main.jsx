@@ -25,6 +25,7 @@ import Cms from "./pages/admin/Cms.jsx";
 import Reservation from "./pages/public/Reservation.jsx";
 import JuryVote from "./pages/JuryVote.jsx";
 import Gallerie from "./pages/public/Gallerie.jsx";
+import { UploadRoleGuard } from "./middlewares/Upload.jsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -48,9 +49,9 @@ createRoot(document.getElementById("root")).render(
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/register" element={<Register />} />
             <Route path="/films/:id" element={<Film />} />
-            <Route path="/upload" element={<RoleGuard allowedRoles={["ADMIN", "PRODUCER"]}>
+            <Route path="/upload" element={<UploadRoleGuard allowedRoles={["Producer", "ADMIN"]}>
              <Upload />
-            </RoleGuard>} />
+            </UploadRoleGuard>} />
             <Route path="/palmares" element={<Palmares />} />
             <Route path="/agenda" element={<Evennements />} />
             <Route path="/reservation" element={<Reservation />} />
