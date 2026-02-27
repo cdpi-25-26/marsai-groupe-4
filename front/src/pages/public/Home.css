@@ -1,4 +1,10 @@
 /* Hero Section */
+
+@import '../../index.css';
+
+
+
+
 .hero {
   position: relative;
   min-height: 100vh;
@@ -6,18 +12,31 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: url('/mars-hero.png') center center / cover no-repeat;
+  background: var(--image) center center / cover no-repeat;
 }
+
+
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    ellipse at center,
-    transparent 0%,
-    rgba(20, 10, 25, 0.4) 100%
-  );
+  background: 
+    /* Общее затемнение (очень легкое) */
+    linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+    
+    /* Верхний градиент */
+    linear-gradient(to bottom, 
+      var(--filter) 0%,
+      transparent 25%
+    ),
+    
+    /* Нижний градиент */
+    linear-gradient(to top, 
+      var(--filter) 0%,
+      transparent 25%
+    );
   pointer-events: none;
+  transition: background 0.5s ease-in-out;
 }
 
 .hero-content {
@@ -59,7 +78,7 @@
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1;
-  color: var(--text-primary);
+  color: oklch(0.928 0.006 264.531);;
   margin: 0 0 1.5rem 0;
 }
 
@@ -75,7 +94,7 @@
   font-size: clamp(1.25rem, 3vw, 2rem);
   font-weight: 700;
   letter-spacing: 0.05em;
-  color: var(--text-primary);
+  color: rgba(255, 255, 255, 0.8);
   margin: 0 0 1rem 0;
 }
 
@@ -87,7 +106,7 @@
 /* Subtitle */
 .subtitle {
   font-size: clamp(1rem, 2vw, 1.25rem);
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.8);
   margin: 0 0 0.5rem 0;
   font-weight: 400;
 }
@@ -95,7 +114,7 @@
 /* Immersion text */
 .immersion-text {
   font-size: clamp(1rem, 2vw, 1.25rem);
-  color: var(--text-secondary);
+  color: var(--secondary-foreground);
   font-style: italic;
   margin: 0 0 3rem 0;
 }
@@ -152,7 +171,7 @@
 }
 
 .btn-secondary:hover {
-  border-color: var(--text-secondary);
+  border-color: var(--secondary-foreground);
   background: rgba(255, 255, 255, 0.05);
 }
 
@@ -165,7 +184,7 @@
 /* ==================== */
 
 .immersion-section {
-  background: #fafafa;
+  background: var(--background-2);
   padding: 6rem 2rem;
   text-align: center;
 }
@@ -203,7 +222,7 @@
   letter-spacing: -0.02em;
   margin: 0 0 4rem 0;
   color: transparent;
-  -webkit-text-stroke: 2px rgba(0, 0, 0, 0.1);
+  -webkit-text-stroke: 2px var(--immersion);
 }
 
 .stats-grid {
@@ -258,7 +277,7 @@
   justify-content: center;
   padding: 1.25rem 3rem;
   background: linear-gradient(135deg, #e879f9 0%, #a855f7 50%, #7c3aed 100%);
-  color: var(--text-primary);
+  color: oklch(0.928 0.006 264.531);
   border: none;
   border-radius: 9999px;
   font-size: 1rem;
@@ -288,11 +307,11 @@
   margin: 0 auto;
 }
 
-.objectives-title {
+.objective-title {
   font-size: clamp(3rem, 8vw, 5rem);
   font-weight: 800;
   line-height: 1;
-  color: var(--text-primary);
+  color: oklch(0.928 0.006 264.531);
   margin: 0 0 4rem 0;
   letter-spacing: -0.02em;
 }
@@ -330,13 +349,13 @@
 .objective-name {
   font-size: 1.125rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: oklch(0.928 0.006 264.531);
   letter-spacing: 0.05em;
   margin: 0 0 1rem 0;
 }
 
 .objective-description {
-  color: var(--text-secondary);
+  color: oklch(0.928 0.006 264.531);
   font-size: 1rem;
   line-height: 1.6;
   margin: 0;
@@ -347,7 +366,7 @@
 /* ==================== */
 
 .films-section {
-  background: var(--bg-primary);
+  background: var(--background-2);
   padding: 6rem 2rem;
   min-height: 100vh;
 }
@@ -394,7 +413,7 @@
   font-size: clamp(3rem, 8vw, 6rem);
   font-weight: 800;
   line-height: 1;
-  color: var(--text-primary);
+  color: var(--primary);
   margin: 0 0 2rem 0;
   letter-spacing: -0.02em;
 }
@@ -407,7 +426,7 @@
 }
 
 .films-description {
-  color: var(--text-secondary);
+  color: var(--secondary-foreground);
   font-size: 1.125rem;
   line-height: 1.7;
   margin: 0;
@@ -431,7 +450,7 @@
 }
 
 .btn-selection:hover {
-  color: var(--text-primary);
+  color: var(--primary);
 }
 
 .btn-selection-arrow {
@@ -451,7 +470,7 @@
 }
 
 .btn-selection:hover .btn-selection-arrow {
-  border-color: var(--text-secondary);
+  border-color: var(--secondary-foreground);
   background: rgba(255, 255, 255, 0.05);
 }
 
@@ -522,7 +541,7 @@
 /* ==================== */
 
 .night-section {
-  background: #fafafa;
+  background: var(--background-2);
   padding: 6rem 2rem;
 }
 
@@ -544,7 +563,7 @@
   padding: 0.5rem 1.25rem;
   background: linear-gradient(135deg, #c084fc 0%, #a855f7 100%);
   border-radius: 0.5rem;
-  color: var(--text-primary);
+  color: oklch(0.928 0.006 264.531);
   font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -561,8 +580,8 @@
   font-size: clamp(3rem, 8vw, 6rem);
   font-weight: 800;
   letter-spacing: -0.02em;
-  color: transparent;
-  -webkit-text-stroke: 2px rgba(0, 0, 0, 0.1);
+  color: var(--primary);
+  /* -webkit-text-stroke: 2px var(--immersion); */
 }
 
 .night-title-bold {
@@ -575,7 +594,7 @@
 }
 
 .night-description {
-  color: rgba(0, 0, 0, 0.4);
+  color: var(--primary);
   font-size: 1.125rem;
   line-height: 1.7;
   margin: 0;
@@ -640,7 +659,7 @@
   font-size: clamp(2.5rem, 6vw, 4.5rem);
   font-weight: 800;
   line-height: 1.1;
-  color: var(--text-primary);
+  color: var(--primary);
   margin: 0 0 2rem 0;
   letter-spacing: -0.02em;
 }
@@ -662,7 +681,7 @@
 }
 
 .conferences-list li {
-  color: var(--text-secondary);
+  color: var(--secondary-foreground);
   font-size: 1.125rem;
   line-height: 1.8;
   padding-left: 1.5rem;
@@ -673,7 +692,7 @@
   content: counter(list-item) ".";
   position: absolute;
   left: 0;
-  color: var(--text-secondary);
+  color: var(--secondary-foreground);
 }
 
 .conferences-list li {
@@ -688,7 +707,7 @@
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 9999px;
-  color: var(--text-primary);
+  color: var(--primary);
   font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -766,7 +785,7 @@
 }
 
 .event-card-dark .event-name {
-  color: var(--text-primary);
+  color: var(--primary);
 }
 
 .event-description {
@@ -780,7 +799,7 @@
 }
 
 .event-card-dark .event-description {
-  color: var(--text-secondary);
+  color: var(--secondary-foreground);
 }
 
 /* ==================== */
@@ -803,7 +822,7 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  color: var(--text-secondary);
+  color: var(--secondary-foreground);
   font-size: 0.875rem;
   letter-spacing: 0.2em;
   margin-bottom: 1.5rem;
@@ -818,7 +837,7 @@
 .sponsors-title {
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 800;
-  color: var(--text-primary);
+  color: var(--primary);
   margin: 0 0 4rem 0;
   letter-spacing: -0.02em;
 }
@@ -881,7 +900,7 @@
   padding: 0.5rem 1rem;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 9999px;
-  color: var(--text-primary);
+  color: var(--primary);
   font-size: 0.875rem;
   letter-spacing: 0.1em;
   margin-bottom: 1.5rem;
@@ -898,7 +917,7 @@
   line-height: 1;
   margin: 0 0 3rem 0;
   letter-spacing: -0.02em;
-  color: var(--text-primary);
+  color: var(--primary);
 }
 
 .location-title-outline {
@@ -923,14 +942,14 @@
 }
 
 .location-address {
-  color: var(--text-primary);
+  color: var(--primary);
   font-size: 1rem;
   font-weight: 500;
   line-height: 1.5;
 }
 
 .location-access {
-  color: var(--text-secondary);
+  color: var(--secondary-foreground);
   font-size: 0.875rem;
   letter-spacing: 0.05em;
 }
@@ -958,7 +977,7 @@
 }
 
 .venue-description {
-  color: var(--text-secondary);
+  color: var(--secondary-foreground);
   font-size: 1rem;
   line-height: 1.7;
   margin: 0;
@@ -998,7 +1017,7 @@
 .footer-logo {
   font-size: 2rem;
   font-weight: 800;
-  color: var(--text-primary);
+  color: var(--primary);
   margin: 0 0 1rem 0;
 }
 
@@ -1010,7 +1029,7 @@
 }
 
 .footer-tagline {
-  color: var(--text-secondary);
+  color: var(--secondary-foreground);
   font-size: 0.95rem;
   font-style: italic;
   line-height: 1.6;
@@ -1031,13 +1050,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-secondary);
+  color: var(--secondary-foreground);
   transition: all 0.3s ease;
 }
 
 .social-link:hover {
   background: rgba(255, 255, 255, 0.1);
-  color: var(--text-primary);
+  color: var(--primary);
 }
 
 .social-link svg {
@@ -1065,14 +1084,14 @@
 }
 
 .footer-link {
-  color: var(--text-secondary);
+  color: var(--secondary-foreground);
   font-size: 0.95rem;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .footer-link:hover {
-  color: var(--text-primary);
+  color: var(--primary);
 }
 
 .footer-newsletter {
@@ -1083,7 +1102,7 @@
 }
 
 .newsletter-title {
-  color: var(--text-primary);
+  color: var(--primary);
   font-size: 1.5rem;
   font-weight: 700;
   margin: 0 0 1.5rem 0;
@@ -1101,7 +1120,7 @@
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 0.5rem;
-  color: var(--text-primary);
+  color: var(--primary);
   font-size: 0.95rem;
 }
 
@@ -1161,7 +1180,7 @@
 }
 
 .footer-bottom-link:hover {
-  color: var(--text-primary);
+  color: var(--primary);
 }
 
 /* ==================== */

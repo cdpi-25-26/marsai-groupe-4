@@ -23,7 +23,7 @@ export default function LanguageSwitcher() {
     <button
       onClick={toggleLanguage}
       className="
-        px-4 py-2 rounded-full text-sm font-semibold
+        px-4 py-2 rounded-full cursor-pointer text-sm font-semibold
         bg-[linear-gradient(180deg,rgba(81,162,255,1)_0%,rgba(173,70,255,1)_50%,rgba(255,43,127,1)_100%)]
         text-white shadow-md
         transition-all duration-200
