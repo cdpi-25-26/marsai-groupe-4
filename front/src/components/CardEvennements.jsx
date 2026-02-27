@@ -141,7 +141,7 @@ useEffect(() => {
 
         <div className="flex gap-[8px]">
           <button className="w-full tracking-[1px] bg-white/5 border border-white/10 rounded-[16px] h-[42px] flex items-center justify-center text-[10px] font-bold uppercase">
-            DÃ©tails
+            Details
           </button>
 
           <div className="w-[52px] h-[42px] flex items-center justify-center border border-white/10 bg-white/5 rounded-[16px]">
