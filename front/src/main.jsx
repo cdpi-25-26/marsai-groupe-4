@@ -18,10 +18,9 @@ import Jury from "./pages/admin/Jury.jsx";
 import Events from "./pages/admin/Events";
 import Contact from "./pages/public/Contact.jsx";
 import Film from "./pages/public/Film.jsx";
-import Evennements from "./pages/Evennements.jsx";
 import Upload from "./pages/public/Upload.jsx";
 import Palmares from "./pages/public/Palmares.jsx";
-import Agenda from "./pages/public/Agenda.jsx";
+import Evennements from "./pages/public/Evennements.jsx";
 import Cms from "./pages/admin/Cms.jsx";
 import Reservation from "./pages/public/Reservation.jsx";
 import JuryVote from "./pages/JuryVote.jsx";
@@ -53,7 +52,7 @@ createRoot(document.getElementById("root")).render(
              <Upload />
             </RoleGuard>} />
             <Route path="/palmares" element={<Palmares />} />
-            <Route path="/agenda" element={<Agenda />} />
+            <Route path="/agenda" element={<Evennements />} />
             <Route path="/reservation" element={<Reservation />} />
 
             

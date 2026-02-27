@@ -1,5 +1,5 @@
-import React from "react";
-import { MicVocal } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { MicVocal, Film, Wrench } from "lucide-react";
 import { Calendar } from "lucide-react";
 import { Clock } from "lucide-react";
 import { EllipsisVertical } from "lucide-react";
@@ -7,9 +7,47 @@ import { MapPin } from "lucide-react";
 import { Pen } from "lucide-react";
 
 function CardEvennements({ data }) {
+
+const typeIcons = {
+  conference: <MicVocal size={16} className="text-[#51A2FF]" />,
+  masterclass: <Film size={16} className="text-[#51A2FF]" />,
+  workshop: <Wrench size={16} className="text-[#51A2FF]" />
+};
+
+const [maxLength, setMaxLength] = useState(40);
+
+useEffect(() => {
+  const updateMaxLength = () => {
+    const width = window.innerWidth;
+    if (width >= 1700) {
+      setMaxLength(40);
+    } else if (width >= 1200) {
+      setMaxLength(25);
+    } else if (width >= 868) {
+      setMaxLength(15);
+    } else {
+      setMaxLength(20);
+    }
+  };
+
+  updateMaxLength();
+  window.addEventListener('resize', updateMaxLength);
+  return () => window.removeEventListener('resize', updateMaxLength);
+}, []);
+
+
+
+
+  const cardTitle = data.title.length > maxLength 
+    ? data.title.slice(0, maxLength) + '...' 
+    : data.title;
+
+
+
+    
   const percentage = Math.round((data.enrolled / data.capacity) * 100);
 
-  console.log(data);
+  
   return (
     <div className="p-[30px] w-full bg-white/2  text-white border border-white/5 rounded-[32px]">
       <div className="flex h-[0px] w-full justify-end">
@@ -34,31 +72,44 @@ function CardEvennements({ data }) {
         </div>
 
         <div className="flex items-center gap-[8px] mb-[8px]">
-          <MicVocal size={12} color="blue" />
+          
+          {typeIcons[data.type] || <MicVocal size={12} className="text-[#51A2FF]" />}
 
-          <h2 className="text-[10px] font-bold">{data.type}</h2>
+          <h2 className="text-[10px] text-[#51A2FF] tracking-[3px] uppercase font-bold ">{data.type}</h2>
         </div>
 
-        <h2 className="text-[24px] font-bold tracking-[-0.6] mb-[20px]">
-          {data.title}
-        </h2>
+      <div className="h-[70px] flex items-center ">
+  <h2 className="text-[24px] w-full font-bold uppercase tracking-[-0.6] break-words">
+    {cardTitle}
+  </h2>
+</div>
+        
 
-        <div className="flex flex-col gap-[12px]">
+        <div className="flex flex-col gap-[12px] mt-[18px]">
           <div className="flex items-center gap-[12px]">
             <Calendar size={16} className="mt-[-3px] text-white/50" />
-            <h2 className="text-[14px] text-white/50">20 juin</h2>
+            <h2 className="text-[14px] text-white/50">
+
+            {new Date(data.event_date).toLocaleDateString('fr-FR', {
+              day: 'numeric',
+              month: 'long'
+            })}
+            
+            </h2>
           </div>
 
           <div className="flex items-center gap-[12px]">
             <Clock size={16} className="mt-[-2px] text-white/50" />
-            <h2 className="text-[14px] text-white/50">{data.time}</h2>
+            <h2 className="text-[14px] text-white/50">{data.time_start?.slice(0,5)} - {data.time_end?.slice(0,5)}
+
+</h2>
           </div>
 
           <div className="flex items-center gap-[12px]">
             <MapPin size={16} className="mt-[-3px] text-white/50" />
-            <h2>
+           
               <h2 className="text-[14px] text-white/50">{data.location}</h2>
-            </h2>
+           
           </div>
         </div>
 
@@ -90,7 +141,7 @@ function CardEvennements({ data }) {
 
         <div className="flex gap-[8px]">
           <button className="w-full tracking-[1px] bg-white/5 border border-white/10 rounded-[16px] h-[42px] flex items-center justify-center text-[10px] font-bold uppercase">
-            Détails
+            DÃ©tails
           </button>
 
           <div className="w-[52px] h-[42px] flex items-center justify-center border border-white/10 bg-white/5 rounded-[16px]">
