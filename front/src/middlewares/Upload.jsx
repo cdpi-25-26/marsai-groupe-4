@@ -11,7 +11,7 @@ export function UploadRoleGuard({ allowedRoles, children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Re-check token whenever admin route changes
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     setLoading(true);

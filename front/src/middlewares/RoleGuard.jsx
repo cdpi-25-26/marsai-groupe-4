@@ -1,17 +1,17 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import instance from "../api/config";
 import AccessDeniedPage from "../pages/public/AccessDenied";
-import handleLogout from "../utils/helpers";
 
 export function RoleGuard({ allowedRoles, children }) {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Re-check token whenever admin route changes
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     setLoading(true);
@@ -19,7 +19,7 @@ export function RoleGuard({ allowedRoles, children }) {
     if (!token) {
       setUser(null);
       setLoading(false);
-      handleLogout();
+      navigate("/auth/login");
       return;
     }
 
@@ -38,9 +38,9 @@ export function RoleGuard({ allowedRoles, children }) {
         console.error("Error response:", error.response?.data);
         setUser(null);
         setLoading(false);
-        handleLogout();
+        navigate("/auth/login");
       });
-  }, [location.pathname]);
+  }, [location.pathname, navigate]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -49,7 +49,6 @@ export function RoleGuard({ allowedRoles, children }) {
   if (allowedRoles.includes(user?.role)) {
     return children;
   } else {
-    
     return <AccessDeniedPage />;
   }
 }
