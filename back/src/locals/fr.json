@@ -86,7 +86,7 @@
     "not_access": " pas accès",
     "page": "à cette page.",
     "message_reason": "  Cette page est réservée aux utilisateurs autorisés.  ",
-    "button_home": "Revenir à l’accueil",
+    "home_button": "Revenir à l’accueil",
     "back_button": "Retour"
   },
   "contact": {
