@@ -10,6 +10,7 @@ import youtubeRouter from "./Youtube.route.js";
 import traductionRouter from "./Traduction.route.js";
 import juryRouter from "./admin/Jury.route.js";
 import evaluationRouter from "./admin/Evaluation.route.js";
+import profileRouter from "./Profile.route.js";
 
 const router = express.Router();
 
@@ -24,5 +25,6 @@ router.use("/youtube", youtubeRouter);
 router.use("/translations", traductionRouter);
 router.use("/jury", juryRouter);
 router.use("/admin/evaluations", evaluationRouter);
+router.use("/profile",profileRouter);
 
 export default router;

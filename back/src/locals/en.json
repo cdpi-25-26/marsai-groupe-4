@@ -242,5 +242,26 @@
     "connected": "CONNECTED",
     "year": "© 2026 MARS.A.I ● MARSEILLE HUB PROTOCOL",
     "legal_text": "CYBER-PREMIUM DESIGN SYSTEM LEGAL"
-  }
+  },
+"profile": {
+  "title": "PROFILE",
+  "subtitle": "Manage your personal information",
+  "personal_info": "Personal information",
+  "other_info": "Other information",
+  "first_name": "First name",
+  "last_name": "Last name",
+  "email": "Email",
+  "role": "Role",
+  "created_at": "Registered on",
+  "phone": "Phone",
+  "company": "Company",
+  "country": "Country",
+  "discovery_source": "Discovery source",
+  "no_info": "Not provided",
+  "update_profile": "Update profile",
+  "save_changes": "Save changes",
+  "saving": "Saving...",
+  "update_success": "Profile updated successfully",
+  "update_error": "Error updating profile"
+}
 }

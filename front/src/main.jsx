@@ -25,6 +25,7 @@ import Cms from "./pages/admin/Cms.jsx";
 import Reservation from "./pages/public/Reservation.jsx";
 import JuryVote from "./pages/JuryVote.jsx";
 import Gallerie from "./pages/public/Gallerie.jsx";
+import Profile from "./pages/public/Profile.jsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -54,6 +55,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/palmares" element={<Palmares />} />
             <Route path="/agenda" element={<Evennements />} />
             <Route path="/reservation" element={<Reservation />} />
+            <Route path="/profile" element={<Profile />} />
 
             
           </Route>
