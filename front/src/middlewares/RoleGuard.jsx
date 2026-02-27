@@ -19,7 +19,6 @@ export function RoleGuard({ allowedRoles, children }) {
     if (!token) {
       setUser(null);
       setLoading(false);
-      navigate("/auth/login");
       return;
     }
 
