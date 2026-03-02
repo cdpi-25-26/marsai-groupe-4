@@ -42,6 +42,14 @@ export default function Navbar() {
       : "bg-transparent text-white border-white/0 backdrop-blur-[0px] "
     : "bg-[var(--navbar-background)] text-[var(--primary)] border-white/5 backdrop-blur-[10px] shadow-lg";
 
+
+      const svgClass = isHome
+    ? scrolled
+      ? "text-[var(--primary)]"
+      : "text-white"
+    : "text-[var(--primary)]";
+
+
   return (
     <section className="fixed top-0 left-0 w-full z-30 p-4 sm:p-6">
       {/* MAIN NAVBAR */}
@@ -97,7 +105,7 @@ export default function Navbar() {
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
-              className="text-[var(--primary)]"
+              className={svgClass}
             >
               <line x1="3" y1="6" x2="21" y2="6" />
               <line x1="3" y1="12" x2="21" y2="12" />
