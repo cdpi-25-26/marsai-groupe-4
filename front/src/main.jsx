@@ -1,5 +1,5 @@
-import { StrictMode } from "react";
-import './i18n'
+import { StrictMode, Suspense } from "react";
+import './i18n/i18n.js'
 
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router";
@@ -37,6 +37,7 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
+       <Suspense fallback="...loading">
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <Routes>
@@ -72,5 +73,6 @@ createRoot(document.getElementById("root")).render(
         </Routes>
       </QueryClientProvider>
     </BrowserRouter>
+    </Suspense>
   </StrictMode>,
 );

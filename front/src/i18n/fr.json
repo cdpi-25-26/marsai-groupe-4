@@ -1,7 +1,14 @@
 {
   "home": {
     "welcome": "Bienvenue au Festival du Film",
-    "description": "Découvrez notre programmation exceptionnelle."
+    "description": "Découvrez notre programmation exceptionnelle.",
+       "tagline1": "IMAGINEZ DES ",
+    "taglineHighlight": "FUTURS",
+    "tagline2": " SOUHAITABLES",
+    "subtitle": "Le festival de courts-métrages de 60 secondes réalisés par IA.",
+    "discover": "DÉCOUVRIR LA SÉLECTION",
+    "learnMore": "EN SAVOIR",
+    "startAdventure": "COMMENCER L'AVENTURE"
   },
   "menu": {
     "home": "Accueil",

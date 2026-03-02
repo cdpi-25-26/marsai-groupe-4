@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from "react-router";
+import { NavLink, Outlet } from "react-router-dom";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import Navbar from "@/components/Navbar";
 import AdminSidebar from "@/components/admin/AdminSideBar";

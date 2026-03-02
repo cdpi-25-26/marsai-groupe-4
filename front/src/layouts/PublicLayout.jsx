@@ -1,6 +1,7 @@
 import { Outlet } from "react-router";
 import Navbar from "../components/Navbar";
 import LanguageSwitcher from "../components/LanguageSwitcher";
+import { Suspense } from "react";
 
 import {Facebook} from "lucide-react"
 import {Instagram} from "lucide-react"

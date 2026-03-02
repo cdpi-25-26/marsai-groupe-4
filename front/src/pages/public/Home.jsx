@@ -1,9 +1,18 @@
 import { Link } from "react-router";
+import { useTranslation } from "react-i18next";
+import { Suspense } from "react";
+
 import "./Home.css";
 
-function Home() {
+
+
+export default function Home() {
+  const { t } = useTranslation();
+
+ 
   return (
-    <>
+   
+     <Suspense fallback={<div>Loading...</div>}>
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-overlay"></div>
@@ -12,9 +21,11 @@ function Home() {
             MARS<span className="gradient-text">AI</span>
           </h1>
 
-          <h2 className="tagline">
-            IMAGINEZ DES<span className="highlight">FUTURS</span> SOUHAITABLES
-          </h2>
+         <h2 className="tagline">
+  {t("home.tagline1")}
+  <span className="highlight">{t("home.taglineHighlight")}</span>
+  {t("home.tagline2")}
+</h2>
 
           <p className="subtitle">
             Le festival de courts-métrages de 60 secondes réalisés par IA.
@@ -22,7 +33,8 @@ function Home() {
 
           <div className="cta-buttons">
             <Link to="/gallerie" className="btn-primary">
-              DÉCOUVRIR LA SÉLECTION
+             {t("home.discover")}
+
               <svg className="btn-arrow" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </Link>
             <Link to="/contact" className="btn-secondary">
@@ -261,8 +273,10 @@ function Home() {
           </div>
         </div>
       </section>
-    </>
+  
+    
+   </Suspense>
   );
 }
 
-export default Home;
+
