@@ -242,6 +242,15 @@
   --login-input-bg: rgba(255,255,255,0.05);
 }
 
+/* NAVBAR */
+
+:root {
+ --navbar-background: rgba(255,255,255,0.05);
+}
+
+.dark {
+--navbar-background: rgba(255, 255, 255, 0.05);
+}
 
 
 
