@@ -11,23 +11,28 @@ const Evaluation = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
+
+    comment: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
+
     decision: {
       type: DataTypes.ENUM("YES", "MAYBE", "NO"),
       allowNull: false,
       defaultValue: "MAYBE",
     },
-    comment: {
-      type: DataTypes.STRING(255),
-      allowNull: true,
-    },
-    user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
+
     film_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+
   },
   {
     tableName: "evaluations",
@@ -38,7 +43,7 @@ const Evaluation = sequelize.define(
   }
 );
 
-Evaluation.belongsTo(User, { foreignKey: "user_id", as: "jury" });
-Evaluation.belongsTo(Film, { foreignKey: "film_id", as: "film" });
+
 
 export default Evaluation;
+
