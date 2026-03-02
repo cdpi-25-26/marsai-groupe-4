@@ -311,13 +311,13 @@
   font-size: clamp(3rem, 8vw, 5rem);
   font-weight: 800;
   line-height: 1;
-  color: oklch(0.928 0.006 264.531);
+  color: var(--primary);
   margin: 0 0 4rem 0;
   letter-spacing: -0.02em;
 }
 
 .objectives-title-gradient {
-  background: linear-gradient(180deg, #ffffff 0%, #666666 100%);
+  background: var(--festival-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -349,13 +349,13 @@
 .objective-name {
   font-size: 1.125rem;
   font-weight: 700;
-  color: oklch(0.928 0.006 264.531);
+  color: var(--primary);
   letter-spacing: 0.05em;
   margin: 0 0 1rem 0;
 }
 
 .objective-description {
-  color: oklch(0.928 0.006 264.531);
+  color: var(--primary);
   font-size: 1rem;
   line-height: 1.6;
   margin: 0;
@@ -419,7 +419,7 @@
 }
 
 .films-title-gradient {
-  background: linear-gradient(180deg, #ffffff 0%, #666666 100%);
+  background: var(--text-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -442,7 +442,7 @@
   gap: 1rem;
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--selection);
   font-size: 0.875rem;
   letter-spacing: 0.1em;
   cursor: pointer;
@@ -456,7 +456,7 @@
 .btn-selection-arrow {
   width: 3rem;
   height: 3rem;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--selection-arrow);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -482,7 +482,7 @@
 }
 
 .film-card {
-  background: linear-gradient(180deg, #1a1a1a 0%, #0f0f0f 100%);
+  background: var(--card);
   border-radius: 1.5rem;
   overflow: hidden;
   transition: transform 0.3s ease;
@@ -516,6 +516,7 @@
 
 .film-info {
   padding: 1.5rem;
+  color: var(--primary);
 }
 
 .film-title {
@@ -857,7 +858,7 @@
 }
 
 .sponsor-card {
-  background: var(--bg-card);
+  background: var(--card);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 1rem;
   padding: 2rem;
@@ -874,7 +875,7 @@
 }
 
 .sponsor-placeholder {
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--popover-foreground);
   font-size: 0.75rem;
   letter-spacing: 0.1em;
 }

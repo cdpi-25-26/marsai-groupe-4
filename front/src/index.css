@@ -109,16 +109,20 @@
 
 :root {
   --radius: 0.625rem;
+  --selection: rgba(0, 0, 0, 0.8);
+  --selection-arrow: rgba(0, 0, 0, 0.3);
   --background: oklch(1 0 0);
   --image: url('src/assets/ggggg.png');
+  --festival-gradient: linear-gradient(180deg, rgb(174, 174, 174) 0%, #666666 100%);
   --background-2: oklch(1 0 0);
-  --filter:rgba(59, 0, 47, 0);
-  --immersion: rgba(0, 0, 0, 0.1);
+  --filter:rgba(59, 0, 47, 0.339);
+  --immersion: rgba(0, 0, 0, 0.306);
   --foreground: oklch(0.13 0.028 261.692);
-  --card: oklch(1 0 0);
+  --text-gradient: linear-gradient(180deg, #656565 0%, rgb(172, 172, 172) 100%);
+  --card: oklch(97.015% 0.00011 271.152);
   --card-foreground: oklch(48.574% 0.05699 269.225);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.13 0.028 261.692);
+  --popover-foreground: oklch(0% 0 0 / 0.402);
   --primary: oklch(0.21 0.034 264.665);
   --primary-foreground: oklch(0.985 0.002 247.839);
   --secondary: oklch(0.967 0.003 264.542);
@@ -147,16 +151,20 @@
 }
 
 .dark {
+  --selection: rgba(255, 255, 255, 0.8);
+  --selection-arrow: rgba(255, 255, 255, 0.3);
   --background: oklch(0.13 0.028 261.692);
   --background-2: oklch(0% 0 0);
+  --festival-gradient: linear-gradient(180deg, #ffffff 0%, #666666 100%);
   --image: url('src/assets/ggggg.png');
   --filter:rgba(0, 0, 0, 1);
   --immersion: rgba(255, 255, 255, 0.3);
   --foreground: oklch(0% 0 0);
-  --card: oklch(0.21 0.034 264.665);
+  --text-gradient: linear-gradient(180deg, #ffffff 0%, #666666 100%);
+  --card: oklch(23.929% 0.00003 271.152);
   --card-foreground: oklch(0.985 0.002 247.839);
   --popover: oklch(0.21 0.034 264.665);
-  --popover-foreground: oklch(0.985 0.002 247.839);
+  --popover-foreground: oklch(100% 0.00011 271.152 / 0.308);
   --primary: oklch(0.928 0.006 264.531);
   --primary-foreground: oklch(0.21 0.034 264.665);
   --secondary: oklch(0.278 0.033 256.848);
@@ -183,6 +191,38 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
+
+
+
+
+/* FOOTER */
+
+
+:root {
+  --footer-text: rgb(0, 0, 0);
+  --footer-subtitle: rgba(0, 0, 0, 0.3);
+  --footer-credit: rgba(0, 0, 0, 0.4);
+  --email-bg: rgba(0, 0, 0, 0.03);
+  --email-border: rgba(0, 0, 0, 0.03);
+  --email-gradient: linear-gradient(45deg, rgb(249, 248, 248) 60%, rgba(143, 143, 143, 0.2) 100%);
+  --email-gradient-border: rgba(0, 0, 0, 0);
+  --email-placeholder: rgb(146, 146, 146)
+}
+
+.dark {
+  --footer-text: rgb(255, 255, 255);
+  --footer-subtitle: rgba(255, 255, 255, 0.305);
+  --footer-credit: rgba(255, 255, 255, 0.4);
+  --email-bg: rgba(255, 255, 255, 0.030);
+  --email-border: rgba(255, 255, 255, 0.030);
+  --email-gradient: linear-gradient(45deg, rgba(13,13,13,1) 60%, rgba(173,70,255,0.2) 100%);
+  --email-gradient-border: rgba(255, 255, 255, 0.030);
+  --email-placeholder: rgba(255, 255, 255, 0.300);
+  
+}
+
+
+
 
 @layer base {
   * {
