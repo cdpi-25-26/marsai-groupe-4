@@ -222,6 +222,28 @@
 }
 
 
+/* LOGIN */
+
+:root {
+  --login-bg-main: #ffffff;
+  --login-bg-card: rgba(255,255,255,0.7);
+  --login-border-main: rgba(0,0,0,0.1);
+  --login-text-main: #000000;
+  --login-text-muted: rgba(0,0,0,0.5);
+  --login-input-bg: rgba(0,0,0,0.04);
+}
+
+.dark {
+  --login-bg-main: #000000;
+  --login-bg-card: rgba(0,0,0,0.7);
+  --login-border-main: rgba(255,255,255,0.1);
+  --login-text-main: #ffffff;
+  --login-text-muted: rgba(255,255,255,0.5);
+  --login-input-bg: rgba(255,255,255,0.05);
+}
+
+
+
 
 
 @layer base {
