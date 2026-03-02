@@ -222,7 +222,7 @@
 }
 
 
-/* LOGIN */
+/* LOGIN REGISTER */
 
 :root {
   --login-bg-main: #ffffff;
@@ -231,7 +231,7 @@
   --login-text-main: #000000;
   --login-text-muted: rgba(0,0,0,0.5);
   --login-input-bg: rgba(0,0,0,0.04);
-  --login-btn-bg: rgb(40, 40, 40)
+  --login-btn-bg: rgb(20, 20, 20)
 }
 
 .dark {
