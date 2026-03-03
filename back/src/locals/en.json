@@ -262,6 +262,16 @@
   "save_changes": "Save changes",
   "saving": "Saving...",
   "update_success": "Profile updated successfully",
-  "update_error": "Error updating profile"
+  "update_error": "Error updating profile",
+  "birth_date":"Date of birth",
+  "birth_date_placeholder":"DD/MM/YYYY",
+  "street":"Street",
+  "postal_code":"Postal code",
+  "biography":"Biography",
+  "current_job":"Current job",
+  "portfolio_url":"Portfolio URL",
+  "recent_videos":"Recent videos",
+  "save": "Save changes",
+  "edit_profile": "Edit profile"
 }
 }

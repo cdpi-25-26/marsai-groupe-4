@@ -209,10 +209,33 @@ async function deleteUpload(req, res) {
   }
 }
 
+async function getRecentUploads(req, res) {
+  try {
+    const userId = req.params.id; 
+
+    if (req.user.role !== "ADMIN" && userId !== req.user.id.toString()) {
+      return res.status(403).json({ error: "Accès interdit" });
+    }
+
+    const recentVideos = await Upload.findAll({
+      where: { user_id: userId },
+      order: [['created_at', 'DESC']],
+      limit: 3,
+      attributes: ['id', 'title', 'thumbnail', 'youtube_video_id', 'youtube_status', 'created_at']
+    });
+
+    res.json(recentVideos);
+  } catch (err) {
+    console.error("[Recent Uploads] Erreur :", err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+}
+
 export default {
   getUploads,
   getUploadbyId,
   createUpload,
   updateUpload,
   deleteUpload,
+  getRecentUploads,
 };

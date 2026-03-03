@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { useQuery, useMutation, useQueryClient} from '@tanstack/react-query';
-import { getProfileById, updateProfile } from '../../api/profile.js'; // ← crée updateProfile aussi
+import { getProfileById, updateProfile } from '../../api/profile.js'; 
+import { getRecentUploads } from '../../api/upload.js';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -24,6 +25,8 @@ const profileSchema = z.object({
   youtube_channel: z.string().url("URL invalide").optional().or(z.literal("")),
 });
 
+
+
 export default function Profile() {
   const { t } = useTranslation();
   const { id } = useParams();
@@ -36,6 +39,12 @@ export default function Profile() {
     enabled: !!id,
     staleTime: 5 * 60 * 1000,
   });
+
+const { data: recentVideos, isLoading: videosLoading } = useQuery({
+  queryKey: ['recentVideos', id],
+  queryFn: () => getRecentUploads(id),
+  enabled: !!id && !!localStorage.getItem("token"),
+});
 
   const user = apiResponse?.data;
 
@@ -180,7 +189,9 @@ export default function Profile() {
               <p><strong>{t('profile.first_name') || "Prénom"} :</strong> {user.first_name || "—"}</p>
               <p><strong>{t('profile.last_name') || "Nom"} :</strong> {user.last_name || "—"}</p>
               <p><strong>{t('profile.email') || "Email"} :</strong> {user.email || "—"}</p>
-              <p><strong>{t('profile.role') || "Rôle"} :</strong> {user.role || "—"}</p>
+              <p><strong>{t('profile.phone') || "Téléphone"} :</strong> {user.phone || "—"}</p>
+              <p><strong>{t('profile.city') || "Ville"} :</strong> {user.city || "—"}</p>
+              <p><strong>{t('profile.country') || "Pays"} :</strong> {user.country || "—"}</p>
               <p>
                 <strong>{t('profile.created_at') || "Inscrit le"} :</strong>{' '}
                 {user.created_at ? (
@@ -199,7 +210,7 @@ export default function Profile() {
               <h2 className="text-2xl font-semibold border-b border-pink-500 pb-2">
                 {t('profile.other_info') || "Autres informations"}
               </h2>
-              <p><strong>{t('profile.phone') || "Téléphone"} :</strong> {user.phone || "—"}</p>
+            
               <p><strong>{t('profile.mobile') || "Mobile"} :</strong> {user.mobile || "—"}</p>
               <p>
                 <strong>{t('profile.birth_date') || "Date de naissance"} :</strong>{' '}
@@ -215,8 +226,6 @@ export default function Profile() {
               </p>
               <p><strong>{t('profile.street') || "Rue"} :</strong> {user.street || "—"}</p>
               <p><strong>{t('profile.postal_code') || "Code postal"} :</strong> {user.postal_code || "—"}</p>
-              <p><strong>{t('profile.city') || "Ville"} :</strong> {user.city || "—"}</p>
-              <p><strong>{t('profile.country') || "Pays"} :</strong> {user.country || "—"}</p>
               <p>
                 <strong>{t('profile.biography') || "Biographie"} :</strong>{' '}
                 {user.biography ? (
@@ -232,15 +241,46 @@ export default function Profile() {
                   </a>
                 ) : "—"}
               </p>
-              <p>
-                <strong>{t('profile.youtube_channel') || "Chaîne YouTube"} :</strong>{' '}
-                {user.youtube_channel ? (
-                  <a href={user.youtube_channel} target="_blank" rel="noopener noreferrer" className="text-pink-500 hover:underline break-all">
-                    {user.youtube_channel}
-                  </a>
-                ) : "—"}
-              </p>
             </div>
+          </div>
+        )}
+      </div>
+<div className="max-w-4xl mx-auto mt-16">
+        <h2 className="text-3xl font-bold mb-8 text-center">
+          {t('profile.recent_videos') || "Mes vidéos récentes"}
+        </h2>
+
+        {videosLoading ? (
+          <p className="text-center text-gray-400 py-8 animate-pulse">
+            Chargement des vidéos récentes...
+          </p>
+        ) : recentVideos?.length > 0 ? (
+          <div className="grid md:grid-cols-3 gap-6">
+            {recentVideos.map((video) => (
+              <div key={video.id} className="bg-gray-900/50 rounded-xl overflow-hidden border border-gray-800 hover:border-pink-500 transition">
+                <div className="aspect-video bg-black relative">
+                  {video.thumbnail ? (
+                    <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-500">Pas de miniature</div>
+                  )}
+                </div>
+
+                <div className="p-4">
+                  <h3 className="font-semibold line-clamp-2">{video.title || "Sans titre"}</h3>
+                  <p className="text-sm text-gray-400 mt-1">
+                    {new Date(video.created_at).toLocaleDateString('fr-FR')}
+                  </p>
+
+                 
+                
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12 text-gray-500">
+            Vous n'avez pas encore uploadé de vidéo.
           </div>
         )}
       </div>
