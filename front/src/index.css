@@ -6,7 +6,7 @@
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
   input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 1000px rgba(255,255,255,0) inset !important;
+    -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0) inset !important;
     -webkit-text-fill-color: rgb(255, 255, 255) !important;
     transition: background-color 5000s ease-in-out 0s !important;
   }
@@ -15,23 +15,18 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    
   }
 }
 
-
-
-
-*{
+* {
   outline: none;
   font-family: Arimo;
 }
 
 ::selection {
   background-color: #ec4899; /* цвет фона выделения */
-  color: white;              /* цвет текста при выделении */
+  color: white; /* цвет текста при выделении */
 }
-
 
 /* Chrome, Edge, Safari */
 ::-webkit-scrollbar {
@@ -58,9 +53,6 @@
   scrollbar-width: thin;
   scrollbar-color: #f2f2f2 #302f30;
 }
-
-
-
 
 @custom-variant dark (&:is(.dark *));
 
@@ -112,10 +104,14 @@
   --selection: rgba(0, 0, 0, 0.8);
   --selection-arrow: rgba(0, 0, 0, 0.3);
   --background: oklch(1 0 0);
-  --image: url('src/assets/ddddd.png');
-  --festival-gradient: linear-gradient(180deg, rgb(174, 174, 174) 0%, #666666 100%);
+  --image: url("src/assets/ddddd.png");
+  --festival-gradient: linear-gradient(
+    180deg,
+    rgb(174, 174, 174) 0%,
+    #666666 100%
+  );
   --background-2: oklch(1 0 0);
-  --filter:rgba(59, 0, 47, 0.339);
+  --filter: rgba(59, 0, 47, 0.339);
   --immersion: rgba(0, 0, 0, 0.306);
   --foreground: oklch(0.13 0.028 261.692);
   --text-gradient: linear-gradient(180deg, #656565 0%, rgb(172, 172, 172) 100%);
@@ -156,8 +152,8 @@
   --background: oklch(0.13 0.028 261.692);
   --background-2: oklch(0% 0 0);
   --festival-gradient: linear-gradient(180deg, #ffffff 0%, #666666 100%);
-  --image: url('src/assets/ddddd.png');
-  --filter:rgba(0, 0, 0, 1);
+  --image: url("src/assets/ddddd.png");
+  --filter: rgba(0, 0, 0, 1);
   --immersion: rgba(255, 255, 255, 0.3);
   --foreground: oklch(0% 0 0);
   --text-gradient: linear-gradient(180deg, #ffffff 0%, #666666 100%);
@@ -192,11 +188,7 @@
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
-
-
-
 /* FOOTER */
-
 
 :root {
   --footer-text: rgb(0, 0, 0);
@@ -204,54 +196,60 @@
   --footer-credit: rgba(0, 0, 0, 0.4);
   --email-bg: rgba(0, 0, 0, 0.03);
   --email-border: rgba(0, 0, 0, 0.03);
-  --email-gradient: linear-gradient(45deg, rgb(249, 248, 248) 60%, rgba(143, 143, 143, 0.2) 100%);
+  --email-gradient: linear-gradient(
+    45deg,
+    rgb(249, 248, 248) 60%,
+    rgba(143, 143, 143, 0.2) 100%
+  );
   --email-gradient-border: rgba(0, 0, 0, 0);
-  --email-placeholder: rgb(146, 146, 146)
+  --email-placeholder: rgb(146, 146, 146);
 }
 
 .dark {
   --footer-text: rgb(255, 255, 255);
   --footer-subtitle: rgba(255, 255, 255, 0.305);
   --footer-credit: rgba(255, 255, 255, 0.4);
-  --email-bg: rgba(255, 255, 255, 0.030);
-  --email-border: rgba(255, 255, 255, 0.030);
-  --email-gradient: linear-gradient(45deg, rgba(13,13,13,1) 60%, rgba(173,70,255,0.2) 100%);
-  --email-gradient-border: rgba(255, 255, 255, 0.030);
-  --email-placeholder: rgba(255, 255, 255, 0.300);
-  
+  --email-bg: rgba(255, 255, 255, 0.03);
+  --email-border: rgba(255, 255, 255, 0.03);
+  --email-gradient: linear-gradient(
+    45deg,
+    rgba(13, 13, 13, 1) 60%,
+    rgba(173, 70, 255, 0.2) 100%
+  );
+  --email-gradient-border: rgba(255, 255, 255, 0.03);
+  --email-placeholder: rgba(255, 255, 255, 0.3);
 }
-
 
 /* LOGIN REGISTER */
 
 :root {
   --login-bg-main: #ffffff;
-  --login-bg-card: rgba(255,255,255,0.7);
-  --login-border-main: rgba(0,0,0,0.1);
+  --login-bg-card: rgba(255, 255, 255, 0.7);
+  --login-border-main: rgba(0, 0, 0, 0.1);
   --login-text-main: #000000;
-  --login-text-muted: rgba(0,0,0,0.5);
-  --login-input-bg: rgba(0,0,0,0.04);
-  --login-btn-bg: rgb(20, 20, 20)
+  --login-text-muted: rgba(0, 0, 0, 0.5);
+  --login-input-bg: rgba(0, 0, 0, 0.04);
+  --login-btn-bg: rgb(20, 20, 20);
 }
 
 .dark {
   --login-bg-main: #000000;
-  --login-bg-card: rgba(0,0,0,0.7);
-  --login-border-main: rgba(255,255,255,0.1);
+  --login-bg-card: rgba(0, 0, 0, 0.7);
+  --login-border-main: rgba(255, 255, 255, 0.1);
   --login-text-main: #ffffff;
-  --login-text-muted: rgba(255,255,255,0.5);
-  --login-input-bg: rgba(255,255,255,0.05);
+  --login-text-muted: rgba(255, 255, 255, 0.5);
+  --login-input-bg: rgba(255, 255, 255, 0.05);
   --login-btn-bg: #ffffff;
 }
 
 /* NAVBAR */
 
 :root {
- --navbar-background: rgba(255,255,255,0.05);
+  --navbar-background: rgba(255, 255, 255, 0.05);
 }
 
 .dark {
---navbar-background: rgba(255, 255, 255, 0.05);
+  --navbar-background: rgba(255, 255, 255, 0.05);
 }
 *
 
@@ -260,43 +258,84 @@
 
 :root {
   --evennements-bg: #ffffff;
-  --evennements-card-bg: rgba(0,0,0,0.02);
-  --evennements-card-border: rgba(0,0,0,0.08);
+  --evennements-card-bg: rgba(0, 0, 0, 0.02);
+  --evennements-card-border: rgba(0, 0, 0, 0.08);
 
   --evennements-text: #000000;
-  --evennements-text-muted: rgba(0,0,0,0.5);
-  --evennements-text-soft: rgba(0,0,0,0.3);
+  --evennements-text-muted: rgba(0, 0, 0, 0.5);
+  --evennements-text-soft: rgba(0, 0, 0, 0.3);
 
-  --evennements-accent: #2B7FFF;
-  --evennements-accent-bg: rgba(43,127,255,0.1);
-  --evennements-accent-border: rgba(43,127,255,0.2);
+  --evennements-accent: #2b7fff;
+  --evennements-accent-bg: rgba(43, 127, 255, 0.1);
+  --evennements-accent-border: rgba(43, 127, 255, 0.2);
 
-  --evennements-progress-from: #E60076;
-  --evennements-progress-to: #FF637E;
+  --evennements-progress-from: #e60076;
+  --evennements-progress-to: #ff637e;
 
-  --evennements-input-bg: rgba(0,0,0,0.03);
-  --evennements-input-border: rgba(0,0,0,0.1);
+  --evennements-input-bg: rgba(0, 0, 0, 0.03);
+  --evennements-input-border: rgba(0, 0, 0, 0.1);
 }
 
 .dark {
   --evennements-bg: #000000;
-  --evennements-card-bg: rgba(255,255,255,0.02);
-  --evennements-card-border: rgba(255,255,255,0.05);
+  --evennements-card-bg: rgba(255, 255, 255, 0.02);
+  --evennements-card-border: rgba(255, 255, 255, 0.05);
 
   --evennements-text: #ffffff;
-  --evennements-text-muted: rgba(255,255,255,0.5);
-  --evennements-text-soft: rgba(255,255,255,0.3);
+  --evennements-text-muted: rgba(255, 255, 255, 0.5);
+  --evennements-text-soft: rgba(255, 255, 255, 0.3);
 
-  --evennements-accent: #51A2FF;
-  --evennements-accent-bg: rgba(43,127,255,0.1);
-  --evennements-accent-border: rgba(43,127,255,0.2);
+  --evennements-accent: #51a2ff;
+  --evennements-accent-bg: rgba(43, 127, 255, 0.1);
+  --evennements-accent-border: rgba(43, 127, 255, 0.2);
 
-  --evennements-progress-from: #E60076;
-  --evennements-progress-to: #FF637E;
+  --evennements-progress-from: #e60076;
+  --evennements-progress-to: #ff637e;
 
-  --evennements-input-bg: rgba(255,255,255,0.02);
-  --evennements-input-border: rgba(255,255,255,0.1);
+  --evennements-input-bg: rgba(255, 255, 255, 0.02);
+  --evennements-input-border: rgba(255, 255, 255, 0.1);
 }
+
+
+
+
+
+
+
+
+/* DASHBOARD */
+
+/* OVERWIEV */
+
+:root {
+  --overwiev-recentUsers-primary: rgb(0, 0, 0);
+  --sidebar-gradient: linear-gradient(
+    45deg,
+    rgba(13, 13, 13, 1) 60%,
+    rgba(173, 70, 255, 1) 100%
+  );
+
+}
+
+
+.dark {
+  --overwiev-recentUsers-bg: rgba(255, 255, 255, 0.05);
+  --overwiev-recentUsers-border: rgba(255, 255, 255, 0.1);
+  --overwiev-recentUsers-primary: rgb(255, 255, 255);
+  --overwiev-recentUsers-second-text: rgba(255, 255, 255, 0.5);
+  --overwiev-rounded: 24px;
+  --sidebar-gradient: linear-gradient(
+    45deg,
+    rgba(13, 13, 13, 1) 60%,
+    rgba(173, 70, 255, 1) 100%
+  );
+}
+
+
+
+
+
+
 
 
 

@@ -18,32 +18,53 @@ function Overview() {
   const stats = data.data;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Tableau de bord - Vue d'ensemble</h1>
-      
-      <div style={{ display: "flex", gap: "20px", marginBottom: "30px" }}>
-        <div style={{ padding: "20px", border: "1px solid #ddd", borderRadius: "8px", flex: 1 }}>
-          <h3>Total Utilisateurs</h3>
-          <p style={{ fontSize: "2rem", fontWeight: "bold" }}>{stats.totalUsers}</p>
-        </div>
-        <div style={{ padding: "20px", border: "1px solid #ddd", borderRadius: "8px", flex: 1 }}>
-          <h3>Total Vidéos</h3>
-          <p style={{ fontSize: "2rem", fontWeight: "bold" }}>{stats.totalVideos}</p>
-        </div>
-        <div style={{ padding: "20px", border: "1px solid #ddd", borderRadius: "8px", flex: 1 }}>
-          <h3>Comptes Réalisateur actifs</h3>
-          <p style={{ fontSize: "2rem", fontWeight: "bold" }}>{stats.producerCount}</p>
+    <div className="p-5">
+      <h1 className="font-bold uppercase text-[38px] mb-6 text-gray-300 tracking-[2px]">
+        Tableau de bord - Vue d'ensemble
+      </h1>
+
+      <div className="flex flex-col mb-[-10px]">
+        <div className="grid grid-cols-3 w-full bg-gradient-to-r from-gray-300 via-green-500 to-gray-600 font-bold text-[120px] bg-clip-text text-transparent">
+          <div>
+            <h3 className="text-[16px] mb-[-30px] font-bold uppercase text-gray-350 tracking-[1.4px]">
+              Total Utilisateurs
+            </h3>
+            <p className="">{stats.totalUsers}</p>
+          </div>
+
+          <div>
+            <h3 className="text-[16px] mb-[-30px] font-bold uppercase text-gray-350 tracking-[1.4px]">
+              Total Vidéos
+            </h3>
+            <p className="">{stats.totalVideos}</p>
+          </div>
+
+          <div>
+            <h3 className="text-[16px] mb-[-30px] font- uppercase text-gray-350 tracking-[1.4px]">
+              Comptes Réalisateur actifs
+            </h3>
+
+            <p className="">{stats.producerCount}</p>
+          </div>
         </div>
       </div>
 
-      <div style={{ marginBottom: "30px" }}>
-        <h2>Utilisateurs récents</h2>
+      <div className="mb-8">
+        <h2 className="text-gray-500 uppercase tracking-[2px] text-xl mb-4">Utilisateurs récents</h2>
+
         {stats.recentUsers && stats.recentUsers.length > 0 ? (
-          <div style={{ display: "grid", gap: "10px" }}>
+          <div className="grid gap-2.5">
             {stats.recentUsers.map((user) => (
-              <div key={user.id} style={{ padding: "10px", border: "1px solid #eee", borderRadius: "4px" }}>
-                <strong>{user.first_name} {user.last_name}</strong>
-                <p style={{ margin: "5px 0 0 0", color: "#666" }}>{user.email}</p>
+              <div
+                key={user.id}
+                className="border border-[var(--overwiev-recentUsers-border)] text-[var(--overwiev-recentUsers-primary)] bg-[var(--overwiev-recentUsers-bg)] p-5 rounded-[var(--overwiev-rounded)]"
+              >
+                <strong>
+                  {user.first_name} {user.last_name}
+                </strong>
+                <p className="mt-1 text-[var(--overwiev-recentUsers-second-text)]">
+                  {user.email}
+                </p>
               </div>
             ))}
           </div>
@@ -54,10 +75,14 @@ function Overview() {
 
       <div>
         <h2>Vidéos récentes</h2>
+
         {stats.recentVideos && stats.recentVideos.length > 0 ? (
-          <div style={{ display: "grid", gap: "10px" }}>
+          <div className="grid gap-2.5">
             {stats.recentVideos.map((video) => (
-              <div key={video.id} style={{ padding: "10px", border: "1px solid #eee", borderRadius: "4px" }}>
+              <div
+                key={video.id}
+                className="p-2.5 border border-[var(--overwiev-recentUsers-border)] text-[var(--overwiev-recentUsers-primary)] bg-[var(--overwiev-recentUsers-bg)] p-5 rounded-[var(--overwiev-rounded)]"
+              >
                 <strong>{video.title || `Video #${video.id}`}</strong>
               </div>
             ))}
