@@ -3,11 +3,12 @@ import Film from "./Video.js";
 import Award from "./Award.js";  
 import FilmsJury from "./FilmsJury.js";
 
+
 export function setupAssociations() {
-  // Film -> User (belongsTo)
+
   Film.belongsTo(User, { foreignKey: "user_id", as: "user" });
 
-  // Film <-> User (many-to-many through FilmsJury)
+
   Film.belongsToMany(User, {
     through: FilmsJury,
     foreignKey: "film_id",
@@ -22,7 +23,7 @@ export function setupAssociations() {
     as: "assignedFilms",
   });
 
-  // FilmsJury associations
+
   FilmsJury.belongsTo(Film, { foreignKey: "film_id", as: "film" });
   FilmsJury.belongsTo(User, { foreignKey: "user_id", as: "jury" });
 
