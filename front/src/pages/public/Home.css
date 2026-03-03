@@ -121,18 +121,42 @@
 
 /* CTA Buttons */
 .cta-buttons {
+  margin-top: 2rem;
+  margin-bottom: -2rem;
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
 }
 
+.btn-protocole {
+  color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  gap: 13px; 
+  background-color: rgba(255, 255, 255, 0.05); 
+  text-transform: uppercase;
+  letter-spacing: 3px; 
+  border: 1px solid rgba(255, 255, 255, 0.1); 
+  padding: 0.7rem 1.5rem; 
+  border-radius: 9999px; 
+  margin-bottom: 1rem;
+  font-size: 13px;
+  font: bold;
+  align-items: center;
+
+}
+
+.btn-sparkle{
+  color: #ff83fd;
+  width: 20px;
+}
+
 .btn-primary {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1rem 2.5rem;
-  background: #fffbf5;
+  padding: 1.5rem 2.5rem;
+  background: rgb(255, 251, 245);
   color: #1a1a1a;
   border: none;
   border-radius: 9999px;
@@ -158,10 +182,10 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 1rem 2.5rem;
-  background: transparent;
+  padding: 1.5rem 2.5rem;
+  background-color: rgba(255, 255, 255, 0.05); 
   color: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 9999px;
   font-size: 1rem;
   font-weight: 600;

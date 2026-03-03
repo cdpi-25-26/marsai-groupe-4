@@ -28,6 +28,7 @@ export default function PublicLayout() {
               grid gap-[48px]
               grid-cols-1
               md:grid-cols-2
+              md:grid-rows-2
               lg:grid-cols-3
             "
           >
@@ -76,7 +77,8 @@ export default function PublicLayout() {
               <div
                style={{ background: "var(--email-gradient)" }}
                 className="
-                  w-full md:w-[330px]
+                  w-full
+                  md:w-auto 
                   rounded-[28px]
                   border border-[var(--email-gradient-border)]
                   p-[28px] sm:p-[40px]
@@ -124,11 +126,12 @@ export default function PublicLayout() {
           {/* BOTTOM */}
           <div
             className="
-              mt-[64px] sm:mt-[96px]
+              mt-[60px] sm:mt-[96px]
               pt-[32px]
               border-t border-white/5
               flex flex-col gap-[12px]
               sm:flex-row sm:justify-between
+              
               text-[10px] tracking-[3px] text-[var(--footer-subtitle)]
             "
           >
