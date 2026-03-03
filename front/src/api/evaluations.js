@@ -1,36 +1,35 @@
 import instance from "./config.js";
 
 async function getEvaluations() {
-  // TODO: Implement
+  return await instance.get("admin/evaluations");
 }
 
 async function getFilmsToEvaluate() {
-  // TODO: Implement
+  return await instance.get("admin/evaluations/films");
 }
 
 async function getEvaluationsByFilm(filmId) {
-  // TODO: Implement
+  return await instance.get(`admin/evaluations/film/${filmId}`);
 }
 
 async function createEvaluation(data) {
-  // TODO: Implement
+  return await instance.post("admin/evaluations", data);
 }
 
 async function updateEvaluation(id, data) {
-  // TODO: Implement
+  return await instance.put(`admin/evaluations/${id}`, data);
 }
 
 async function deleteEvaluation(id) {
-  // TODO: Implement
+  return await instance.delete(`admin/evaluations/${id}`);
 }
 
 async function undoLastEvaluation() {
-  // TODO: Implement
+  return await instance.post("admin/evaluations/undo");
 }
 
 async function getFilmStats(filmId) {
-  // TODO: Implement
+  return await instance.get(`admin/evaluations/stats/${filmId}`);
 }
 
 export { getEvaluations, getFilmsToEvaluate, getEvaluationsByFilm, createEvaluation, updateEvaluation, deleteEvaluation, undoLastEvaluation, getFilmStats };
-

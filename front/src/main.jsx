@@ -23,7 +23,7 @@ import Palmares from "./pages/public/Palmares.jsx";
 import Evennements from "./pages/public/Evennements.jsx";
 import Cms from "./pages/admin/Cms.jsx";
 import Reservation from "./pages/public/Reservation.jsx";
-import JuryVote from "./pages/JuryVote.jsx";
+import JuryVote from "./pages/jury/JuryVote.jsx";
 import Gallerie from "./pages/public/Gallerie.jsx";
 import { UploadRoleGuard } from "./middlewares/Upload.jsx";
 

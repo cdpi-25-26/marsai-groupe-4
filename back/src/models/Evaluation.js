@@ -43,7 +43,8 @@ const Evaluation = sequelize.define(
   }
 );
 
-
+Evaluation.belongsTo(User, { foreignKey: "user_id", as: "jury" });
+Evaluation.belongsTo(Film, { foreignKey: "film_id", as: "film" });
 
 export default Evaluation;
 
