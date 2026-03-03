@@ -1,10 +1,9 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../db/connection.js";
-import User from "./User.js";
 import Film from "./Video.js";
 
-const Evaluation = sequelize.define(
-  "Evaluation",
+const Award = sequelize.define(
+  "Award",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -12,30 +11,33 @@ const Evaluation = sequelize.define(
       autoIncrement: true,
     },
 
-    comment: {
+    name: {
       type: DataTypes.STRING(255),
-      allowNull: true,
+      allowNull: false,
     },
 
-    decision: {
-      type: DataTypes.ENUM("YES", "MAYBE", "NO"),
+    edition_year: {
+      type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: "MAYBE",
+    },
+
+    prize: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+    },
+
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
     },
 
     film_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-
-    user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-
   },
   {
-    tableName: "evaluations",
+    tableName: "awards",
     timestamps: true,
     createdAt: "created_at",
     updatedAt: "updated_at",
@@ -43,8 +45,7 @@ const Evaluation = sequelize.define(
   }
 );
 
-Evaluation.belongsTo(User, { foreignKey: "user_id", as: "jury" });
-Evaluation.belongsTo(Film, { foreignKey: "film_id", as: "film" });
+// 🔗 Связь
+Award.belongsTo(Film, { foreignKey: "film_id" });
 
-export default Evaluation;
-
+export default Award;

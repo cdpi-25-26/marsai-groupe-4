@@ -4,19 +4,23 @@ import { useState, useEffect } from "react";
 import { Trophy, House, Search, Calendar, User, Gavel } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import instance from "../api/config";
+
 
 export default function Navbar() {
   const { t } = useTranslation();
   const location = useLocation();
   const isHome = location.pathname === "/";
 
+
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [roleFallback, setRoleFallback] = useState("");
 
-  const isLoggedIn = !!localStorage.getItem("token");
-  const userRole = localStorage.getItem("role");
-  const userPath = isLoggedIn ? "/admin" : "/auth/login";
-  const isJury = userRole === "JURY" || userRole === "ADMIN";
+  const token = localStorage.getItem("token");
+  const storedRole = localStorage.getItem("role") || "";
+  const isLoggedIn = !!token;
+  const effectiveRole = token ? storedRole || roleFallback : "";
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -27,6 +31,37 @@ export default function Navbar() {
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "auto";
   }, [open]);
+
+  useEffect(() => {
+    if (!token || storedRole) {
+      return;
+    }
+
+    let cancelled = false;
+
+    instance
+      .post("/auth/checkToken", { token })
+      .then((response) => {
+        if (cancelled) return;
+
+        const freshRole = response?.data?.role || "";
+        if (!freshRole) return;
+
+        localStorage.setItem("role", freshRole);
+        setRoleFallback(freshRole);
+      })
+      .catch(() => {
+        // Keep navbar usable even if role refresh fails.
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [location.pathname, token, storedRole]);
+
+  const normalizedRole = effectiveRole.toUpperCase();
+  const isJury = normalizedRole === "JURY" || normalizedRole === "ADMIN";
+  const userPath = isLoggedIn ? "/admin" : "/auth/login";
 
   const iconLinkClass = ({ isActive }) =>
     `flex items-center justify-center transition-all duration-300
