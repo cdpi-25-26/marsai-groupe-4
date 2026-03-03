@@ -1,4 +1,4 @@
-import i18n from  "./utils/i18n.js";
+import "./utils/i18n.js";
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -55,16 +55,17 @@ createRoot(document.getElementById("root")).render(
             <Route path="/palmares" element={<Palmares />} />
             <Route path="/agenda" element={<Evennements />} />
             <Route path="/reservation" element={<Reservation />} />
+            <Route
+              path="/jury"
+              element={
+                <RoleGuard allowedRoles={["JURY", "ADMIN"]}>
+                  <JuryVote />
+                </RoleGuard>
+              }
+            />
 
             
           </Route>
-
-          {/* Route jury */}
-          <Route path="/jury" element={
-            <RoleGuard allowedRoles={["JURY", "ADMIN"]}>
-              <JuryVote />
-            </RoleGuard>
-          } />
 
           {/* Routes privées */}
           <Route path="admin" element={ <RoleGuard allowedRoles={["ADMIN"]}>

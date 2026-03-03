@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   getEvaluations,
   getFilmsToEvaluate,
@@ -52,21 +52,19 @@ function JuryVote() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  async function fetchData() {
-    const [filmsRes, evaluationsRes] = await Promise.all([
-      getFilmsToEvaluate(),
-      getEvaluations(),
-    ]);
+  const fetchData = useCallback(async () => {
+    const [filmsRes, evaluationsRes] = await Promise.all([getFilmsToEvaluate(), getEvaluations()]);
 
     return {
       films: extractList(filmsRes.data, "films"),
       evaluations: extractList(evaluationsRes.data, "evaluations"),
     };
-  }
+  }, []);
 
-  async function loadInitialData() {
+  const loadInitialData = useCallback(async () => {
     setLoading(true);
     setError("");
+
     try {
       const { films: nextFilms, evaluations: nextEvaluations } = await fetchData();
       setFilms(nextFilms);
@@ -76,17 +74,17 @@ function JuryVote() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [fetchData]);
 
-  async function refreshData() {
+  const refreshData = useCallback(async () => {
     const { films: nextFilms, evaluations: nextEvaluations } = await fetchData();
     setFilms(nextFilms);
     setEvaluations(nextEvaluations);
-  }
+  }, [fetchData]);
 
   useEffect(() => {
     loadInitialData();
-  }, []);
+  }, [loadInitialData]);
 
   const currentFilm = films[0] ?? null;
   const embedUrl = useMemo(() => getYoutubeEmbedUrl(currentFilm?.youtube_link), [currentFilm?.youtube_link]);
@@ -156,57 +154,74 @@ function JuryVote() {
 
   if (loading) {
     return (
-      <section className="min-h-screen bg-black px-4 py-8 text-white">
-        <div className="mx-auto max-w-5xl rounded-2xl border border-white/10 bg-white/5 p-6">
-          Loading jury workspace...
+      <section className="relative min-h-screen overflow-hidden bg-black px-4 pb-16 pt-32 text-white sm:px-6 sm:pt-36">
+        <div className="pointer-events-none absolute -left-24 top-20 h-72 w-72 rounded-full bg-[#AD46FF]/20 blur-3xl" />
+        <div className="pointer-events-none absolute -right-20 top-40 h-80 w-80 rounded-full bg-[#51A2FF]/15 blur-3xl" />
+
+        <div className="relative mx-auto max-w-6xl rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur-xl sm:p-10">
+          <p className="text-xs uppercase tracking-[0.28em] text-white/40">Jury Console</p>
+          <h1 className="mt-4 text-3xl font-black tracking-tight sm:text-4xl">
+            Loading jury workspace...
+          </h1>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="min-h-screen bg-black px-4 py-8 text-white">
-      <div className="mx-auto flex max-w-5xl flex-col gap-5">
-        <header className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 p-5">
-          <div>
-            <h1 className="text-2xl font-semibold">Jury Vote</h1>
-            <p className="text-sm text-white/70">
-              {completed} evaluated · {films.length} remaining
-            </p>
+    <section className="relative min-h-screen overflow-hidden bg-black px-4 pb-16 pt-32 text-white sm:px-6 sm:pt-36">
+      <div className="pointer-events-none absolute -left-24 top-20 h-72 w-72 rounded-full bg-[#AD46FF]/20 blur-3xl" />
+      <div className="pointer-events-none absolute -right-20 top-40 h-80 w-80 rounded-full bg-[#51A2FF]/15 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-10 left-1/3 h-56 w-56 rounded-full bg-[#F6339A]/10 blur-3xl" />
+
+      <div className="relative mx-auto flex max-w-6xl flex-col gap-6">
+        <header className="rounded-[28px] border border-white/10 bg-white/5 p-5 backdrop-blur-xl sm:p-7">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em] text-white/45">Jury Console</p>
+              <h1 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl">
+                Vote <span className="bg-[linear-gradient(180deg,#51A2FF_0%,#AD46FF_50%,#FF2B7F_100%)] bg-clip-text text-transparent">Workspace</span>
+              </h1>
+              <p className="mt-3 text-sm text-white/70">
+                {completed} evaluated · {films.length} remaining
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleUndo}
+                disabled={submitting || completed === 0}
+                className="rounded-full border border-white/25 px-4 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Undo Last
+              </button>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="rounded-full border border-[#F6339A]/40 bg-[#F6339A]/15 px-4 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-[#ffd6ea] transition hover:bg-[#F6339A]/25"
+              >
+                Logout
+              </button>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handleUndo}
-              disabled={submitting || completed === 0}
-              className="rounded-lg border border-white/30 px-3 py-2 text-sm transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              Undo last
-            </button>
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="rounded-lg border border-red-500/40 bg-red-500/15 px-3 py-2 text-sm text-red-200 transition hover:bg-red-500/25"
-            >
-              Logout
-            </button>
-          </div>
-          <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
+
+          <div className="mt-5 h-2.5 w-full overflow-hidden rounded-full bg-white/10">
             <div
-              className="h-full bg-gradient-to-r from-cyan-400 to-emerald-400 transition-all"
+              className="h-full rounded-full bg-[linear-gradient(90deg,#51A2FF_0%,#AD46FF_50%,#34D399_100%)] transition-all"
               style={{ width: `${progress}%` }}
             />
           </div>
         </header>
 
         {error && (
-          <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+          <div className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
             {error}
           </div>
         )}
 
         {stats && (
-          <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3">
+          <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3">
             <p className="text-sm text-emerald-200">
               Last vote on <span className="font-semibold">{stats.filmTitle}</span>: {stats.decision}
             </p>
@@ -217,55 +232,52 @@ function JuryVote() {
         )}
 
         {!currentFilm ? (
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-8 text-center">
-            <h2 className="text-xl font-semibold">No films left to evaluate</h2>
-            <p className="mt-2 text-sm text-white/70">
-              All assigned films have been reviewed.
-            </p>
+          <div className="rounded-[28px] border border-white/10 bg-white/5 p-10 text-center backdrop-blur-xl">
+            <p className="text-xs uppercase tracking-[0.24em] text-white/45">Queue Complete</p>
+            <h2 className="mt-3 text-2xl font-bold">No films left to evaluate</h2>
+            <p className="mt-2 text-sm text-white/70">All assigned films have been reviewed.</p>
           </div>
         ) : (
-          <div className="grid gap-5 lg:grid-cols-2">
-            <article className="rounded-2xl border border-white/10 bg-white/5 p-5">
-              <p className="mb-2 text-xs uppercase tracking-[0.2em] text-white/50">
-                Current Film
-              </p>
-              <h2 className="text-2xl font-semibold">{currentFilm.title}</h2>
+          <div className="grid gap-6 lg:grid-cols-[1.05fr_1fr]">
+            <article className="rounded-[28px] border border-white/10 bg-white/5 p-5 backdrop-blur-xl sm:p-6">
+              <p className="text-xs uppercase tracking-[0.24em] text-white/45">Current Film</p>
+              <h2 className="mt-2 text-3xl font-black tracking-tight text-white">{currentFilm.title}</h2>
               {currentFilm.translated_title && (
-                <p className="mt-1 text-sm text-white/70">{currentFilm.translated_title}</p>
+                <p className="mt-2 text-sm text-white/70">{currentFilm.translated_title}</p>
               )}
 
-              <div className="mt-4 flex flex-wrap gap-2 text-xs">
+              <div className="mt-5 flex flex-wrap gap-2 text-[11px] uppercase tracking-[0.14em]">
                 {currentFilm.status && (
-                  <span className="rounded-full border border-white/20 px-2 py-1 text-white/80">
+                  <span className="rounded-full border border-[#AD46FF]/45 bg-[#AD46FF]/10 px-3 py-1 text-[#e8c9ff]">
                     {currentFilm.status}
                   </span>
                 )}
                 {currentFilm.language && (
-                  <span className="rounded-full border border-white/20 px-2 py-1 text-white/80">
+                  <span className="rounded-full border border-[#51A2FF]/40 bg-[#51A2FF]/10 px-3 py-1 text-[#cbe9ff]">
                     {currentFilm.language}
                   </span>
                 )}
                 {currentFilm.duration && (
-                  <span className="rounded-full border border-white/20 px-2 py-1 text-white/80">
+                  <span className="rounded-full border border-[#34D399]/40 bg-[#34D399]/10 px-3 py-1 text-[#ccf8e8]">
                     {currentFilm.duration}
                   </span>
                 )}
               </div>
 
               {currentFilm.user && (
-                <p className="mt-4 text-sm text-white/75">
+                <p className="mt-5 text-sm text-white/75">
                   By {currentFilm.user.first_name} {currentFilm.user.last_name}
                 </p>
               )}
 
               {currentFilm.synopsis && (
-                <p className="mt-4 text-sm leading-6 text-white/85">{currentFilm.synopsis}</p>
+                <p className="mt-5 text-sm leading-7 text-white/85">{currentFilm.synopsis}</p>
               )}
             </article>
 
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+            <div className="rounded-[28px] border border-white/10 bg-white/5 p-5 backdrop-blur-xl sm:p-6">
               {embedUrl ? (
-                <div className="aspect-video overflow-hidden rounded-xl border border-white/10">
+                <div className="aspect-video overflow-hidden rounded-2xl border border-white/10 bg-black/30">
                   <iframe
                     src={embedUrl}
                     title={currentFilm.title}
@@ -275,7 +287,7 @@ function JuryVote() {
                   />
                 </div>
               ) : (
-                <div className="flex aspect-video items-center justify-center rounded-xl border border-white/10 bg-black/30 text-sm text-white/60">
+                <div className="flex aspect-video items-center justify-center rounded-2xl border border-white/10 bg-black/30 px-4 text-center text-sm text-white/60">
                   No YouTube link available
                 </div>
               )}
@@ -284,8 +296,8 @@ function JuryVote() {
                 value={comment}
                 onChange={(event) => setComment(event.target.value)}
                 placeholder="Optional comment"
-                rows={3}
-                className="mt-4 w-full resize-none rounded-xl border border-white/15 bg-black/25 p-3 text-sm text-white placeholder:text-white/40"
+                rows={4}
+                className="mt-4 w-full resize-none rounded-2xl border border-white/15 bg-black/30 p-3 text-sm text-white placeholder:text-white/40 focus:border-[#51A2FF]/50 focus:outline-none"
               />
 
               <div className="mt-4 grid grid-cols-3 gap-2">
@@ -293,7 +305,7 @@ function JuryVote() {
                   type="button"
                   onClick={() => handleVote("NO")}
                   disabled={submitting}
-                  className="rounded-lg bg-red-500/80 px-3 py-2 text-sm font-semibold text-white transition hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-xl bg-gradient-to-r from-[#ef4444] to-[#f97316] px-3 py-2.5 text-xs font-black uppercase tracking-[0.15em] text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   NO
                 </button>
@@ -301,7 +313,7 @@ function JuryVote() {
                   type="button"
                   onClick={() => handleVote("MAYBE")}
                   disabled={submitting}
-                  className="rounded-lg bg-amber-500/80 px-3 py-2 text-sm font-semibold text-white transition hover:bg-amber-500 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-xl bg-gradient-to-r from-[#f59e0b] to-[#eab308] px-3 py-2.5 text-xs font-black uppercase tracking-[0.15em] text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   MAYBE
                 </button>
@@ -309,7 +321,7 @@ function JuryVote() {
                   type="button"
                   onClick={() => handleVote("YES")}
                   disabled={submitting}
-                  className="rounded-lg bg-emerald-500/80 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-xl bg-gradient-to-r from-[#22c55e] to-[#10b981] px-3 py-2.5 text-xs font-black uppercase tracking-[0.15em] text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   YES
                 </button>
@@ -319,20 +331,20 @@ function JuryVote() {
         )}
 
         {evaluations.length > 0 && (
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-white/70">
+          <div className="rounded-[28px] border border-white/10 bg-white/5 p-5 backdrop-blur-xl sm:p-6">
+            <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.24em] text-white/60">
               Recent Evaluations
             </h3>
             <div className="space-y-2">
               {evaluations.slice(0, 5).map((evaluation) => (
                 <div
                   key={evaluation.id}
-                  className="flex items-center justify-between rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm"
+                  className="flex items-center justify-between rounded-xl border border-white/10 bg-black/25 px-3 py-2 text-sm"
                 >
-                  <span className="truncate pr-4">
+                  <span className="truncate pr-4 text-white/90">
                     {evaluation.film?.title || `Film #${evaluation.film_id}`}
                   </span>
-                  <span className="rounded border border-white/20 px-2 py-0.5 text-xs">
+                  <span className="rounded-full border border-white/25 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-white/80">
                     {evaluation.decision}
                   </span>
                 </div>
