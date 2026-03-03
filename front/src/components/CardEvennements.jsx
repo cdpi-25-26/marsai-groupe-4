@@ -5,6 +5,7 @@ import { Clock } from "lucide-react";
 import { EllipsisVertical } from "lucide-react";
 import { MapPin } from "lucide-react";
 import { Pen } from "lucide-react";
+import { Link } from "react-router";
 
 function CardEvennements({ data }) {
 
@@ -109,6 +110,7 @@ useEffect(() => {
             <MapPin size={16} className="mt-[-3px] text-white/50" />
            
               <h2 className="text-[14px] text-white/50">{data.location}</h2>
+   
            
           </div>
         </div>
@@ -140,6 +142,14 @@ useEffect(() => {
         </div>
 
         <div className="flex gap-[8px]">
+            <Link
+    to={`/reservation/${data.id}`}
+    className="w-full"
+  >
+    <button className="w-full tracking-[1px] bg-gradient-to-r from-[#E60076] to-[#FF637E] rounded-[16px] h-[42px] flex items-center justify-center text-[10px] font-bold uppercase">
+      Réserver
+    </button>
+  </Link>
           <button className="w-full tracking-[1px] bg-white/5 border border-white/10 rounded-[16px] h-[42px] flex items-center justify-center text-[10px] font-bold uppercase">
             Details
           </button>

@@ -2,24 +2,60 @@ import ClockIcon from "../../assets/reservation_svg/Clock.svg";
 import LocationIcon from "../../assets/reservation_svg/Location.svg";
 import UserIcon from "../../assets/reservation_svg/User.svg";
 import { useTranslation } from "react-i18next";
+import { useParams } from "react-router";
+import { useEffect, useState } from "react";
 
 
 
    
  export default function EventReservation() {
   const { t } = useTranslation();
-      const eventDetails = [
-    { title: "Lieu", value: "STUDIO 1 - LA PLATEFORME_", icon: LocationIcon },
-    { title: "Horaires", value: "14H30 — 13 JUIN", icon: ClockIcon },
-    { title: "Coach expert", value: "THOMAS AUBERT", icon: UserIcon },
-  ];
+    const { id } = useParams();
+    const [event, setEvent] = useState(null);
+
+  useEffect(() => {
+    fetch(`http://localhost:3000/events/${id}`)
+      .then(res => {
+        if (!res.ok) throw new Error("Erreur lors du chargement de l'événement");
+        return res.json();
+      })
+      .then(data => setEvent(data))
+      .catch(err => console.error(err));
+  }, [id]);
+
+
+
+const eventDetails = [
+  {
+    title: "Lieu",
+    value: event?.location || "À définir",
+    icon: LocationIcon,
+  },
+  {
+    title: "Horaires",
+    value: event?.event_date
+      ? `${event?.time_start?.slice(0, 5) || "??:??"} — ${new Date(
+          event.event_date
+        ).toLocaleDateString("fr-FR")}`
+      : "Date à définir",
+    icon: ClockIcon,
+  },
+  {
+    title: "Coach expert",
+    value: event?.coach || "À définir",
+    icon: UserIcon,
+  },
+];
+
+
+
 
   return (
    
       <div className="flex flex-col items-center min-h-screen px-4 sm:px-6 lg:px-10 py-10 bg-black font-sans">
 
 
-      {/* Bloc événement     test test */}
+      {/* Bloc événement    */}
      
 
 
