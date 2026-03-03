@@ -1,10 +1,32 @@
-import { Trophy, Sparkles } from "lucide-react";
+import { Trophy } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useEffect, useState, useCallback } from "react";
+import { fetchAwards } from "../../api/awards";
 
 export default function Palmares() {
   const { t } = useTranslation();
+  const [awards, setAwards] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // 👉 DATE AUTOMATIQUE
+  const loadAwards = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await fetchAwards();
+      setAwards(data);
+    } catch (err) {
+      setError(err.message);
+      setAwards([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadAwards();
+  }, [loadAwards]);
+
   const today = new Date();
   const formattedDate = today
     .toLocaleDateString("fr-FR", {
@@ -14,135 +36,80 @@ export default function Palmares() {
     })
     .toUpperCase();
 
-  const topWinners = [
-    { place: 2, title: "CODE QUANTIQUE", studio: "Dystopia", prize: "PRIX DES HACKERS" },
-    { place: 1, title: "LE DERNIER HUMAIN", studio: "Ethereal", prize: "GRAND PRIX" },
-    { place: 3, title: "MÉMOIRES VIRTUELLES", studio: "Dystopia", prize: "PRIX DE L'INNOVATION" },
-  ];
+  if (loading) {
+    return <div className="text-white p-20 text-center">Chargement...</div>;
+  }
 
-  const specialMentions = [
-    t("palmares.special_1"),
-    t("palmares.special_2"),
-    t("palmares.special_3"),
-    t("palmares.special_4"),
-    t("palmares.special_5"),
-    t("palmares.special_6"),
-  ];
+  if (error) {
+    return (
+      <div className="text-white p-20 text-center">
+        <p>Erreur: {error}</p>
+        <button 
+          onClick={loadAwards} 
+          className="mt-4 bg-yellow-400 text-black px-6 py-2 rounded-xl font-bold"
+        >
+          Réessayer
+        </button>
+      </div>
+    );
+  }
 
-  const allWinners = [
-    "LE DERNIER HUMAIN",
-    "CODE QUANTIQUE",
-    "MÉMOIRES VIRTUELLES",
-    "NEURAL ODYSSEY",
-    "PIXEL PERFECT",
-    "RÊVES SYNTHÉTIQUES",
-    "ALGORITHMES D'AMOUR",
-    "LEVEL NUMÉRIQUE",
-  ];
+  if (!awards?.length) {
+    return <div className="text-white p-20 text-center">Aucune récompense</div>;
+  }
+
+  const topWinners = awards.slice(0, 3);
 
   return (
     <div className="bg-black text-white min-h-screen px-6">
-
-      {/* HERO */}
-      <section className="text-center py-20 ">
+      <section className="text-center py-20">
         <div className="flex justify-center mb-6">
           <div className="bg-yellow-400 text-black p-4 rounded-2xl">
             <Trophy size={32} />
           </div>
         </div>
-
         <h1 className="text-5xl font-bold tracking-wide">PALMARÈS</h1>
-        <p className="text-gray-400 mt-3 tracking-widest text-sm">
-          {t("palmares.edition_title")}
-        </p>
-
         <p className="text-yellow-400 mt-2 font-semibold">{formattedDate}</p>
-
-        <div className="flex justify-center gap-16 mt-10 text-center">
-          <div>
-            <p className="text-3xl font-bold">247</p>
-            <p className="text-gray-500 text-sm">{t("palmares.submitted_film")}</p>
-          </div>
-          <div>
-            <p className="text-3xl font-bold">23</p>
-            <p className="text-gray-500 text-sm">{t("palmares.laureat")}</p>
-          </div>
-          <div>
-            <p className="text-3xl font-bold">42K</p>
-            <p className="text-gray-500 text-sm">{t("palmares.spectators")}</p>
-          </div>
-        </div>
       </section>
 
-      {/* TOP WINNERS */}
       <section className="max-w-6xl mx-auto mb-24">
         <h2 className="text-xl mb-8 font-semibold">🏆 {t("palmares.winners")}</h2>
-
         <div className="grid md:grid-cols-3 gap-8">
-          {topWinners.map((film) => (
+          {topWinners.map((award, index) => (
             <div
-              key={film.title}
+              key={award.id}
               className={`bg-white/5 p-6 rounded-3xl border border-white/10 ${
-                film.place === 1 ? "ring-2 ring-yellow-400" : ""
+                index === 0 ? "ring-2 ring-yellow-400" : ""
               }`}
             >
-              <div className="text-yellow-400 font-bold text-xl mb-2">
-                #{film.place}
-              </div>
-
-              <div className="h-40 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl mb-4" />
-
-              <h3 className="text-lg font-bold">{film.title}</h3>
-              <p className="text-gray-400 text-sm">{film.studio}</p>
-              <p className="text-pink-400 text-sm mt-2">{film.prize}</p>
-
-              <button className="mt-4 text-sm underline hover:text-pink-400">
-                {t("palmares.show")}
-              </button>
+              <div className="text-yellow-400 font-bold text-xl mb-2">#{index + 1}</div>
+              <img
+                src={`http://localhost:3000/uploads/images|| 'placeholder.jpg'}`}
+                alt={award.Film?.title || "Film"}
+                onError={(e) => e.target.src = "https://via.placeholder.com/300x200/333/fff?text=FILM"}
+                className="h-40 w-full object-cover rounded-xl mb-4"
+              />
+              <h3 className="text-lg font-bold">{award.Film?.title || "Sans titre"}</h3>
+              <p className="text-pink-400 text-sm mt-2">{award.prize}</p>
+              <p className="text-gray-400 text-xs mt-2">{award.description}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* SPECIAL */}
-      <section className="max-w-6xl mx-auto mb-24">
-        <h2 className="text-3xl font-bold text-center mb-12 text-purple-400 flex items-center justify-center gap-3">
-          <Sparkles className="text-pink-400" /> {t("palmares.honorable_mention")}
-        </h2>
-
-        <div className="grid md:grid-cols-3 gap-8">
-          {specialMentions.map((title, i) => (
-            <div
-              key={i}
-              className="bg-white/5 p-6 rounded-3xl border border-white/10 hover:scale-105 transition"
-            >
-              <div className="h-36 bg-gradient-to-br from-pink-500 to-indigo-500 rounded-xl mb-4" />
-              <h3 className="font-semibold">{title}</h3>
-              <p className="text-gray-400 text-sm mt-2">
-                {t("palmares.description")}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ALL */}
       <section className="max-w-6xl mx-auto mb-32">
-        <h2 className="text-3xl font-bold text-center mb-12">
-          {t("palmares.all_laureat")}
-        </h2>
-
+        <h2 className="text-3xl font-bold text-center mb-12">{t("palmares.all_laureat")}</h2>
         <div className="grid md:grid-cols-4 gap-6">
-          {allWinners.map((film, i) => (
-            <div
-              key={i}
-              className="bg-white/5 p-4 rounded-2xl border border-white/10"
-            >
-              <div className="h-40 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl mb-3"></div>
-              <h3 className="font-semibold text-sm">{film}</h3>
-              <p className="text-gray-400 text-xs">
-                {t("palmares.category")}
-              </p>
+          {awards.map((award) => (
+            <div key={award.id} className="bg-white/5 p-4 rounded-2xl border border-white/10">
+              <img
+                src={`http://localhost:3000/uploads/images || 'placeholder.jpg'}`}
+                alt={award.Film?.title || "Film"}
+                onError={(e) => e.target.src = "https://via.placeholder.com/200x150/333/fff?text=FILM"}
+                className="h-40 w-full object-cover rounded-xl mb-3"
+              />
+              <h3 className="font-semibold text-sm">{award.Film?.title || "Sans titre"}</h3>
+              <p className="text-gray-400 text-xs">{award.prize}</p>
             </div>
           ))}
         </div>
