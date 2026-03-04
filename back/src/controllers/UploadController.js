@@ -126,6 +126,10 @@ async function createUpload(req, res) {
 
     await newFilm.update({
   video_path: path.basename(videoFile.path),  
+  subtitles_path: subtitlesFile ? path.basename(subtitlesFile.path) : null,
+  thumbnail_path: thumbnailFile ? path.basename(thumbnailFile.path) : null,
+  image_2_path: image2File ? path.basename(image2File.path) : null,
+  image_3_path: image3File ? path.basename(image3File.path) : null,
 });
 
     try {

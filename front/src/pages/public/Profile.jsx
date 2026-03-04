@@ -88,7 +88,57 @@ const { data: recentVideos, isLoading: videosLoading } = useQuery({
         </p>
       </section>
 
-      <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto mt-16">
+        <h2 className="text-3xl font-bold mb-8 text-center">
+          {t('profile.recent_videos') || "Mes vidéos récentes"}
+        </h2>
+
+        {videosLoading ? (
+          <p className="text-center text-gray-400 py-8 animate-pulse">
+            Chargement des vidéos récentes...
+          </p>
+        ) : recentVideos?.length > 0 ? (
+          <div className="grid md:grid-cols-3 gap-6">
+            {recentVideos.map((video) => (
+              <div key={video.id} className="bg-gray-900/50 rounded-xl overflow-hidden border border-gray-800 hover:border-pink-500 transition">
+               <div className="aspect-video bg-black relative">
+  {video.thumbnail ? (
+    <img 
+      src={`http://localhost:3000/uploads/images/${video.thumbnail}`}   
+      alt={video.title || "Vidéo"}
+      className="w-full h-full object-cover"
+      onError={(e) => {
+        e.target.src = '/placeholder-thumbnail.jpg';
+        e.target.onerror = null;
+      }}
+    />
+  ) : (
+    <div className="w-full h-full flex items-center justify-center text-gray-500">
+      Pas de miniature
+    </div>
+  )}
+</div>
+
+                <div className="p-4">
+                  <h3 className="font-semibold line-clamp-2">{video.title || "Sans titre"}</h3>
+                  <p className="text-sm text-gray-400 mt-1">
+                    {new Date(video.created_at).toLocaleDateString('fr-FR')}
+                  </p>
+
+                 
+                
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12 text-gray-500">
+            Vous n'avez pas encore uploadé de vidéo.
+          </div>
+        )}
+      </div>
+
+      <div className="max-w-4xl mx-auto p-4">
         {!isEditing && (
           <div className="text-right mb-6">
             <button
@@ -157,10 +207,7 @@ const { data: recentVideos, isLoading: videosLoading } = useQuery({
                 <input {...register('portfolio_url')} className="w-full p-3 bg-black border border-gray-600 rounded-lg" placeholder="https://" />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium mb-2">{t('profile.youtube_channel') || "YouTube URL"}</label>
-                <input {...register('youtube_channel')} className="w-full p-3 bg-black border border-gray-600 rounded-lg" placeholder="https://" />
-              </div>
+              
             </div>
 
             <div className="flex gap-4 justify-end">
@@ -245,45 +292,9 @@ const { data: recentVideos, isLoading: videosLoading } = useQuery({
           </div>
         )}
       </div>
-<div className="max-w-4xl mx-auto mt-16">
-        <h2 className="text-3xl font-bold mb-8 text-center">
-          {t('profile.recent_videos') || "Mes vidéos récentes"}
-        </h2>
 
-        {videosLoading ? (
-          <p className="text-center text-gray-400 py-8 animate-pulse">
-            Chargement des vidéos récentes...
-          </p>
-        ) : recentVideos?.length > 0 ? (
-          <div className="grid md:grid-cols-3 gap-6">
-            {recentVideos.map((video) => (
-              <div key={video.id} className="bg-gray-900/50 rounded-xl overflow-hidden border border-gray-800 hover:border-pink-500 transition">
-                <div className="aspect-video bg-black relative">
-                  {video.thumbnail ? (
-                    <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-500">Pas de miniature</div>
-                  )}
-                </div>
 
-                <div className="p-4">
-                  <h3 className="font-semibold line-clamp-2">{video.title || "Sans titre"}</h3>
-                  <p className="text-sm text-gray-400 mt-1">
-                    {new Date(video.created_at).toLocaleDateString('fr-FR')}
-                  </p>
 
-                 
-                
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12 text-gray-500">
-            Vous n'avez pas encore uploadé de vidéo.
-          </div>
-        )}
-      </div>
     </div>
   );
 }
