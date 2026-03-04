@@ -308,12 +308,20 @@
 /* OVERWIEV */
 
 :root {
-  --overwiev-recentUsers-primary: rgb(0, 0, 0);
+  --overwiev-recentUsers-bg: rgba(0, 0, 0, 0.03);
+  --overwiev-recentUsers-border: rgba(0, 0, 0, 0.1);
+  --overwiev-recentUsers-primary: rgb(75, 85, 99);
+    --overwiev-recentUsers-second-text: rgb(107, 114, 128)
+;
+  --overwiev-rounded: 24px;
   --sidebar-gradient: linear-gradient(
-    45deg,
-    rgba(13, 13, 13, 1) 60%,
-    rgba(173, 70, 255, 1) 100%
+    305deg,
+    rgb(255, 255, 255) 40%,
+    rgb(218, 218, 218) 100%
   );
+
+
+--overwiev-recentUsers-icon: rgb(75, 85, 99);
 
 }
 
@@ -321,15 +329,43 @@
 .dark {
   --overwiev-recentUsers-bg: rgba(255, 255, 255, 0.05);
   --overwiev-recentUsers-border: rgba(255, 255, 255, 0.1);
-  --overwiev-recentUsers-primary: rgb(255, 255, 255);
-  --overwiev-recentUsers-second-text: rgba(255, 255, 255, 0.5);
+  --overwiev-recentUsers-primary: rgb(229, 231, 235);
+  --overwiev-recentUsers-second-text: rgba(233, 239, 251, 0.504)
+;
   --overwiev-rounded: 24px;
   --sidebar-gradient: linear-gradient(
-    45deg,
-    rgba(13, 13, 13, 1) 60%,
-    rgba(173, 70, 255, 1) 100%
+    305deg,
+    rgb(0, 0, 0) 40%,
+    rgb(125, 31, 53) 100%
   );
+--overwiev-recentUsers-icon: rgb(229, 231, 235);
+
 }
+
+
+
+/* TABLES */
+
+:root {
+  --delete-primary: rgb(0, 0, 0);
+  --destructive: rgb(255, 219, 219);
+  --foreground: oklch(0% 0 0);
+  --table-producer: rgb(255, 219, 219);
+  --table-producer-text: rgb(255, 0, 98);
+  --table-head: rgb(255, 0, 98);
+  
+}
+
+
+.dark {
+--delete-primary: rgb(255, 255, 255);
+--destructive: oklch(37.909% 0.00004 271.152);
+  --foreground: rgba(233, 239, 251, 0.504);
+  --table-producer: rgb(89, 0, 42);
+  --table-producer-text: rgb(255, 0, 98);
+  --table-head: rgb(255, 0, 98);
+}
+
 
 
 
