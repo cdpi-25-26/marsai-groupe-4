@@ -10,7 +10,7 @@ async function getTop50() {
 }
 
 async function assignPrize(videoId, prizeData){
-    return await instance.put(`/contest/prize/${videoId}`, prizeData);
+    return await instance.put(`/phase/prize/${videoId}`, prizeData);
 }
 
 export {getPhase1Videos, getTop50,assignPrize}
