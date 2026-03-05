@@ -4,6 +4,8 @@ import UserIcon from "../../assets/reservation_svg/User.svg";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+
 
 
 
@@ -50,6 +52,13 @@ const eventDetails = [
   },
 ];
 
+const navigate = useNavigate(); // permet de rediriger
+
+const handleSubmit = (e) => {
+  e.preventDefault(); // empêche le formulaire de recharger la page
+  alert("Réservation effectuée avec succès !"); // popup
+  navigate("/evennements"); // redirige vers la page événements
+};
 
 
 
@@ -89,7 +98,7 @@ const eventDetails = [
 
 
      {/* Formulaire */}
-      <form className="flex flex-wrap gap-5 w-full max-w-[800px] p-5 mt-8 mb-5 rounded-xl border border-white bg-[#262424]">
+      <form onSubmit={handleSubmit} className="flex flex-wrap gap-5 w-full max-w-[800px] p-5 mt-8 mb-5 rounded-xl border border-white bg-[#262424]">
 
     <div className="flex flex-row-reverse items-center mt-4 w-11/12 mx-auto">
       <h4 className="text-sm text-gray-400">{t("reservation_title")}</h4>
@@ -127,7 +136,7 @@ const eventDetails = [
         <div className="flex items-start gap-2 w-full text-xs mb-5">
           <input type="checkbox" className="w-4 h-4"/>
           <span className="text-[#602be6]">
-            {t("reservation.publish")}
+          {t("reservation.certificat_text")}
           </span>
         </div>
 
