@@ -1,18 +1,32 @@
 import { Trophy, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState, useCallback } from "react";
 import { getAwards } from "../../api/awards";
 import { API_URL } from "../../api/config";
 
 export default function Palmares() {
   const { t } = useTranslation();
+  const [awards, setAwards] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["awards"],
-    queryFn: () => getAwards().then((res) => res.data),
-  });
+  const loadAwards = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await getAwards();
+      setAwards(res.data || []);
+    } catch (err) {
+      setError(err.message);
+      setAwards([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-  const awards = data || [];
+  useEffect(() => {
+    loadAwards();
+  }, [loadAwards]);
 
   const today = new Date();
   const formattedDate = today
@@ -23,15 +37,30 @@ export default function Palmares() {
     })
     .toUpperCase();
 
-  // Split awards: top 3 by id order, rest as special mentions
+  if (loading) {
+    return <div className="text-white p-20 text-center">Chargement...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="text-white p-20 text-center">
+        <p>Erreur: {error}</p>
+        <button
+          onClick={loadAwards}
+          className="mt-4 bg-yellow-400 text-black px-6 py-2 rounded-xl font-bold"
+        >
+          Réessayer
+        </button>
+      </div>
+    );
+  }
+
   const topWinners = awards.slice(0, 3);
   const otherWinners = awards.slice(3);
 
   return (
     <div className="bg-black text-white min-h-screen px-6">
-
-      {/* HERO */}
-      <section className="text-center py-20 ">
+      <section className="text-center py-20">
         <div className="flex justify-center mb-6">
           <div className="bg-yellow-400 text-black p-4 rounded-2xl">
             <Trophy size={32} />
@@ -42,7 +71,6 @@ export default function Palmares() {
         <p className="text-gray-400 mt-3 tracking-widest text-sm">
           {t("palmares.edition_title")}
         </p>
-
         <p className="text-yellow-400 mt-2 font-semibold">{formattedDate}</p>
 
         <div className="flex justify-center gap-16 mt-10 text-center">
@@ -52,16 +80,6 @@ export default function Palmares() {
           </div>
         </div>
       </section>
-
-      {/* LOADING / ERROR */}
-      {isLoading && (
-        <div className="text-center text-gray-400 py-12">Loading...</div>
-      )}
-      {error && (
-        <div className="text-center text-red-400 py-12">
-          Error loading awards
-        </div>
-      )}
 
       {/* TOP WINNERS */}
       {topWinners.length > 0 && (
@@ -107,7 +125,7 @@ export default function Palmares() {
         </section>
       )}
 
-      {/* OTHER WINNERS */}
+      {/* HONORABLE MENTIONS */}
       {otherWinners.length > 0 && (
         <section className="max-w-6xl mx-auto mb-32">
           <h2 className="text-3xl font-bold text-center mb-12 text-purple-400 flex items-center justify-center gap-3">
@@ -139,8 +157,7 @@ export default function Palmares() {
         </section>
       )}
 
-      {/* EMPTY STATE */}
-      {!isLoading && awards.length === 0 && (
+      {awards.length === 0 && (
         <div className="text-center text-gray-500 py-20">
           {t("palmares.edition_title")}
         </div>

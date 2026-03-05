@@ -11,7 +11,7 @@ const Award = sequelize.define(
     },
 
     name: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
 
@@ -21,12 +21,12 @@ const Award = sequelize.define(
     },
 
     prize: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
 
     description: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.TEXT,
       allowNull: true,
     },
 

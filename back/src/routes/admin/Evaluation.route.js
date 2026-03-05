@@ -9,9 +9,9 @@ evaluationRouter.use((req, res, next) => AuthMiddleware(req, res, next, ["ADMIN"
 evaluationRouter.get("/", EvaluationController.getEvaluations);
 evaluationRouter.get("/films", EvaluationController.getFilmsToEvaluate);
 evaluationRouter.get("/film/:filmId", EvaluationController.getEvaluationsByFilm);
+evaluationRouter.get("/stats/:filmId", EvaluationController.getFilmStats);
 evaluationRouter.post("/", EvaluationController.createEvaluation);
 evaluationRouter.post("/undo", EvaluationController.undoLastEvaluation);
-evaluationRouter.get("/stats/:filmId", EvaluationController.getFilmStats);
 evaluationRouter.put("/:id", EvaluationController.updateEvaluation);
 evaluationRouter.delete("/:id", EvaluationController.deleteEvaluation);
 

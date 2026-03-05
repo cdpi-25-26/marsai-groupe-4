@@ -1,4 +1,4 @@
-import i18n from  "./utils/i18n.js";
+import "./utils/i18n.js";
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -26,7 +26,7 @@ import Settings from "./pages/admin/Settings.jsx";
 import Evaluations from "./pages/admin/Evaluations.jsx";
 import Reservation from "./pages/public/Reservation.jsx";
 import Profile from "./pages/public/Profile.jsx";
-import JuryVote from "./pages/JuryVote.jsx";
+import JuryVote from "./pages/jury/JuryVote.jsx";
 import Gallerie from "./pages/public/Gallerie.jsx";
 import { UploadRoleGuard } from "./middlewares/Upload.jsx";
 
@@ -63,21 +63,20 @@ createRoot(document.getElementById("root")).render(
                 <Profile />
               </UploadRoleGuard>
             } />
-
-
+            <Route
+              path="/jury"
+              element={
+                <RoleGuard allowedRoles={["JURY", "ADMIN"]}>
+                  <JuryVote />
+                </RoleGuard>
+              }
+            />
           </Route>
-
-          {/* Route jury */}
-          <Route path="/jury" element={
-            <RoleGuard allowedRoles={["JURY", "ADMIN"]}>
-              <JuryVote />
-            </RoleGuard>
-          } />
 
           {/* Routes privées */}
           <Route path="admin" element={ <RoleGuard allowedRoles={["ADMIN"]}>
             <AdminLayout />
-            </RoleGuard> 
+            </RoleGuard>
               } >
             <Route index element={<Dashboard />} />
             <Route path="users" element={<Users />} />

@@ -21,7 +21,7 @@ export default function Gallerie() {
   const [statut, setStatut] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 6;
+  const limit = 9;
 
   const { isPending, isError, data, error } = useQuery({
     queryKey: ["gallerie", currentPage, limit],
@@ -57,7 +57,6 @@ export default function Gallerie() {
     };
   };
 
-  // UI Shell pour chaque état (loading, error, empty)
   const Shell = ({ children }) => (
     <div className="min-h-screen bg-black text-white font-sans">
       {/* gradient flou */}
@@ -85,7 +84,6 @@ export default function Gallerie() {
           </h1>
         </section>
 
-        {/* Skeleton loading : 6 cards avec animation pulse */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {Array.from({ length: limit }).map((_, i) => (
             <div
@@ -154,9 +152,6 @@ export default function Gallerie() {
           </span>
         </h1>
 
-        <p className="mt-4 max-w-2xl text-white/60">
-        {t("gallery.no_display")}
-        </p>
       </section>
 
       {/* Filters in a nice panel */}
