@@ -13,22 +13,25 @@ import { useEffect, useState } from "react";
     const { id } = useParams();
     const [event, setEvent] = useState(null);
 
-  useEffect(() => {
-    fetch(`http://localhost:3000/events/${id}`)
-      .then(res => {
-        if (!res.ok) throw new Error("Erreur lors du chargement de l'événement");
-        return res.json();
-      })
-      .then(data => setEvent(data))
-      .catch(err => console.error(err));
-  }, [id]);
+useEffect(() => {
+  fetch("http://localhost:3000/events")
+    .then(res => res.json())
+    .then(data => {
+      const selectedEvent = data.find(e => e.id == id);
+      setEvent(selectedEvent);
+    })
+    .catch(err => console.error(err));
+}, [id]);
+
+
+
 
 
 
 const eventDetails = [
   {
     title: "Lieu",
-    value: event?.location || "À définir",
+    value: event?.location.name || event?.location || "À définir",
     icon: LocationIcon,
   },
   {
@@ -66,7 +69,7 @@ const eventDetails = [
 </h6>
 <h5 className="text-base sm:text-lg uppercase text-gray-200 tracking-wider">
 
- {t("reservation.generated_video")}
+ {event?.title}
 </h5>
   {eventDetails.map((detail, index) => (
     
