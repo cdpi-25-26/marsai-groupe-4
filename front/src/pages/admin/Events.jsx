@@ -3,6 +3,7 @@ import { getEvents, createEvent, updateEvent, deleteEvent, getTypes } from "../.
 import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import {CircleX, Pencil } from "lucide-react";
 import * as z from "zod";
 import { 
   flexRender, 
@@ -162,7 +163,7 @@ function Events(){
             accessorKey: "type",
             header: "Type",
             cell: ({ row }) => (
-                <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                <span className="px-3 py-1 bg-[var(--table-producer)] text-[var(--table-producer-text)] rounded-full text-sm font-medium">
                     {row.getValue("type")}
                 </span>
             ),
@@ -190,14 +191,14 @@ function Events(){
                             size="sm"
                             onClick={() => handleEdit(event)}
                         >
-                            Modifier
+                            <Pencil />
                         </Button>
                         <Button 
                             variant="destructive"
                             size="sm"
                             onClick={() => handleDelete(event.id)}
                         >
-                            Supprimer
+                            <CircleX />
                         </Button>
                     </div>
                 );
@@ -219,7 +220,7 @@ function Events(){
     return (
         <section className="container mx-auto px-4 py-8">
 
-            <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+            <div className="bg-background rounded-lg shadow-md p-6 mb-6">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-bold text-gray-800">Liste des Evennements</h2>
                     <Dialog open={isDialogOpen && !modeEdit} onOpenChange={(open) => {
