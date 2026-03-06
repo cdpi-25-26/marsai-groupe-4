@@ -78,11 +78,16 @@ const Film = sequelize.define(
       allowNull: true,
     },
 
+    phase_status: {
+      type: DataTypes.ENUM("phase1", "phase2", "phase3", "rejected"),
+      allowNull: false,
+      defaultValue: "phase1",
+    },
+
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-
 
   },
   {

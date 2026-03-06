@@ -12,6 +12,7 @@ import juryRouter from "./admin/Jury.route.js";
 import evaluationRouter from "./admin/Evaluation.route.js";
 import profileRouter from "./Profile.route.js";
 import awardRouter from "./Award.route.js";
+import Phaserouter from "./admin/Phase.route.js"
 
 const router = express.Router();
 
@@ -28,5 +29,5 @@ router.use("/jury", juryRouter);
 router.use("/admin/evaluations", evaluationRouter);
 router.use("/profile",profileRouter);
 router.use("/awards", awardRouter);
-
+router.use("/phase",Phaserouter);
 export default router;
