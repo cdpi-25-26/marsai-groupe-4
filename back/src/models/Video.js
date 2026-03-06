@@ -78,16 +78,6 @@ const Film = sequelize.define(
       allowNull: true,
     },
 
-    average_score: {
-      type: DataTypes.DECIMAL(4, 2),
-      allowNull: false,
-      defaultValue: 0.00,
-    },
-    jury_votes_count:{
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 0,
-    },
     phase_status: {
       type: DataTypes.ENUM("phase1", "phase2", "phase3", "rejected"),
       allowNull: false,

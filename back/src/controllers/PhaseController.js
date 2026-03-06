@@ -7,7 +7,7 @@ import { Op } from "sequelize";
 async function getPhases1Video(req,res){
     try {
         const videos = await Upload.findAll({
-            where: { status:"selected" , phase_status: 'phase1' },
+            where: { status:"submitted" , phase_status: 'phase1' },
             include: [
                 {model: User, as: 'producer', attributes:['first_name','last_name']},
                     
@@ -30,6 +30,7 @@ async function getTop50(req, res) {
         "title",
         "thumbnail",
         "created_at",
+        "phase_status"
       ],
       include: [
         {
@@ -55,6 +56,7 @@ async function getTop50(req, res) {
       thumbnail: film.thumbnail,
       created_at: film.created_at,
       producer: film.producer,
+      phase_status: film.phase_status,
       yes_count: film.evaluations.length || 0, 
     }));
 
@@ -74,7 +76,7 @@ async function getTop50(req, res) {
     const ids = top50.map(video => video.id);
 
     await Upload.update(
-      { phase_status: "phase2" },
+      { status:"selected" , phase_status: "phase2" },
       { where: { id: { [Op.in]: ids } } }
     );
 

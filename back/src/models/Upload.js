@@ -94,6 +94,11 @@ youtube_status: {
   defaultValue: "pending",
   allowNull: false,
 },
+phase_status: {
+      type: DataTypes.ENUM("phase1", "phase2", "phase3", "rejected"),
+      allowNull: false,
+      defaultValue: "phase1",
+    },
 }, {
   timestamps: true,
   tableName: "films",
