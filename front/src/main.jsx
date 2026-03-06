@@ -1,4 +1,4 @@
-import i18n from  "./utils/i18n.js";
+import "./utils/i18n.js";
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -23,9 +23,10 @@ import Palmares from "./pages/public/Palmares.jsx";
 import Evennements from "./pages/public/Evennements.jsx";
 import Cms from "./pages/admin/Cms.jsx";
 import Reservation from "./pages/public/Reservation.jsx";
-import JuryVote from "./pages/JuryVote.jsx";
+import JuryVote from "./pages/jury/JuryVote.jsx";
 import Gallerie from "./pages/public/Gallerie.jsx";
 import Profile from "./pages/public/Profile.jsx";
+import { UploadRoleGuard } from "./middlewares/Upload.jsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -49,23 +50,24 @@ createRoot(document.getElementById("root")).render(
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/register" element={<Register />} />
             <Route path="/films/:id" element={<Film />} />
-            <Route path="/upload" element={<RoleGuard allowedRoles={["ADMIN", "PRODUCER"]}>
+            <Route path="/upload" element={<UploadRoleGuard allowedRoles={["Producer", "ADMIN"]}>
              <Upload />
-            </RoleGuard>} />
+            </UploadRoleGuard>} />
             <Route path="/palmares" element={<Palmares />} />
             <Route path="/agenda" element={<Evennements />} />
             <Route path="/reservation" element={<Reservation />} />
             <Route path="/profile/:id" element={<Profile />} />
+            <Route
+              path="/jury"
+              element={
+                <RoleGuard allowedRoles={["JURY", "ADMIN"]}>
+                  <JuryVote />
+                </RoleGuard>
+              }
+            />
 
             
           </Route>
-
-          {/* Route jury */}
-          <Route path="/jury" element={
-            <RoleGuard allowedRoles={["JURY", "ADMIN"]}>
-              <JuryVote />
-            </RoleGuard>
-          } />
 
           {/* Routes privées */}
           <Route path="admin" element={ <RoleGuard allowedRoles={["ADMIN"]}>

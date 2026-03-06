@@ -93,7 +93,7 @@ async function googleAuthCallback(req, res) {
 
     await saveTokens(tokens);
 
-    res.redirect("/admin"); 
+    res.redirect("http://localhost:5173/admin"); 
   } catch (error) {
     console.error("Erreur auth callback:", error);
     res.status(500).send("Erreur lors de l'authentification");
