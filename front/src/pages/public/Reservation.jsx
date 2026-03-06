@@ -2,24 +2,72 @@ import ClockIcon from "../../assets/reservation_svg/Clock.svg";
 import LocationIcon from "../../assets/reservation_svg/Location.svg";
 import UserIcon from "../../assets/reservation_svg/User.svg";
 import { useTranslation } from "react-i18next";
+import { useParams } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+
 
 
 
    
  export default function EventReservation() {
   const { t } = useTranslation();
-      const eventDetails = [
-    { title: "Lieu", value: "STUDIO 1 - LA PLATEFORME_", icon: LocationIcon },
-    { title: "Horaires", value: "14H30 — 13 JUIN", icon: ClockIcon },
-    { title: "Coach expert", value: "THOMAS AUBERT", icon: UserIcon },
-  ];
+    const { id } = useParams();
+    const [event, setEvent] = useState(null);
+
+useEffect(() => {
+  fetch("http://localhost:3000/events")
+    .then(res => res.json())
+    .then(data => {
+      const selectedEvent = data.find(e => e.id == id);
+      setEvent(selectedEvent);
+    })
+    .catch(err => console.error(err));
+}, [id]);
+
+
+
+
+
+
+const eventDetails = [
+  {
+    title: "Lieu",
+    value: event?.location.name || event?.location || "À définir",
+    icon: LocationIcon,
+  },
+  {
+    title: "Horaires",
+    value: event?.event_date
+      ? `${event?.time_start?.slice(0, 5) || "??:??"} — ${new Date(
+          event.event_date
+        ).toLocaleDateString("fr-FR")}`
+      : "Date à définir",
+    icon: ClockIcon,
+  },
+  {
+    title: "Coach expert",
+    value: event?.coach || "À définir",
+    icon: UserIcon,
+  },
+];
+
+const navigate = useNavigate(); // permet de rediriger
+
+const handleSubmit = (e) => {
+  e.preventDefault(); // empêche le formulaire de recharger la page
+  alert("Réservation effectuée avec succès !"); // popup
+  navigate("/evennements"); // redirige vers la page événements
+};
+
+
 
   return (
    
       <div className="flex flex-col items-center min-h-screen px-4 sm:px-6 lg:px-10 py-10 bg-black font-sans">
 
 
-      {/* Bloc événement     test test */}
+      {/* Bloc événement    */}
      
 
 
@@ -30,7 +78,7 @@ import { useTranslation } from "react-i18next";
 </h6>
 <h5 className="text-base sm:text-lg uppercase text-gray-200 tracking-wider">
 
- {t("reservation.generated_video")}
+ {event?.title}
 </h5>
   {eventDetails.map((detail, index) => (
     
@@ -50,7 +98,7 @@ import { useTranslation } from "react-i18next";
 
 
      {/* Formulaire */}
-      <form className="flex flex-wrap gap-5 w-full max-w-[800px] p-5 mt-8 mb-5 rounded-xl border border-white bg-[#262424]">
+      <form onSubmit={handleSubmit} className="flex flex-wrap gap-5 w-full max-w-[800px] p-5 mt-8 mb-5 rounded-xl border border-white bg-[#262424]">
 
     <div className="flex flex-row-reverse items-center mt-4 w-11/12 mx-auto">
       <h4 className="text-sm text-gray-400">{t("reservation_title")}</h4>
@@ -88,7 +136,7 @@ import { useTranslation } from "react-i18next";
         <div className="flex items-start gap-2 w-full text-xs mb-5">
           <input type="checkbox" className="w-4 h-4"/>
           <span className="text-[#602be6]">
-            {t("reservation.publish")}
+          {t("reservation.certificat_text")}
           </span>
         </div>
 

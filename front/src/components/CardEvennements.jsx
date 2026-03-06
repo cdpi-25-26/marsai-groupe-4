@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { MicVocal, Film, Wrench, Calendar, Clock, EllipsisVertical, MapPin, Pen } from "lucide-react";
+import { MicVocal, Film, Wrench } from "lucide-react";
+import { Calendar } from "lucide-react";
+import { Clock } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
+import { MapPin } from "lucide-react";
+import { Pen } from "lucide-react";
+import { Link } from "react-router";
 
 function CardEvennements({ data }) {
 
@@ -98,9 +104,40 @@ function CardEvennements({ data }) {
           </h2>
         </div>
 
-        <div className="flex items-center gap-[12px]">
-          <MapPin size={16} />
-          <h2 className="text-[14px]">{data.location}</h2>
+      <div className="h-[70px] flex items-center ">
+  <h2 className="text-[24px] w-full font-bold uppercase tracking-[-0.6] break-words">
+    {cardTitle}
+  </h2>
+</div>
+        
+
+        <div className="flex flex-col gap-[12px] mt-[18px]">
+          <div className="flex items-center gap-[12px]">
+            <Calendar size={16} className="mt-[-3px] text-white/50" />
+            <h2 className="text-[14px] text-white/50">
+
+            {new Date(data.event_date).toLocaleDateString('fr-FR', {
+              day: 'numeric',
+              month: 'long'
+            })}
+            
+            </h2>
+          </div>
+
+          <div className="flex items-center gap-[12px]">
+            <Clock size={16} className="mt-[-2px] text-white/50" />
+            <h2 className="text-[14px] text-white/50">{data.time_start?.slice(0,5)} - {data.time_end?.slice(0,5)}
+
+</h2>
+          </div>
+
+          <div className="flex items-center gap-[12px]">
+            <MapPin size={16} className="mt-[-3px] text-white/50" />
+           
+              <h2 className="text-[14px] text-white/50">{data.location}</h2>
+   
+           
+          </div>
         </div>
       </div>
 
@@ -114,22 +151,18 @@ function CardEvennements({ data }) {
           </h2>
         </div>
 
-        <div
-          className="h-[6px] w-full rounded-[16px] overflow-hidden"
-          style={{
-            background: "var(--evennements-card-bg)",
-            border: `1px solid var(--evennements-card-border)`,
-          }}
-        >
-          <div
-            style={{
-              width: `${percentage}%`,
-              background: `linear-gradient(to right, var(--evennements-progress-from), var(--evennements-progress-to))`,
-              height: "6px",
-            }}
-          />
-        </div>
-      </div>
+        <div className="flex gap-[8px]">
+            <Link
+    to={`/reservation/${data.id}`}
+    className="w-full"
+  >
+    <button className="w-full tracking-[1px] bg-gradient-to-r from-[#E60076] to-[#FF637E] rounded-[16px] h-[42px] flex items-center justify-center text-[10px] font-bold uppercase">
+      Réserver
+    </button>
+  </Link>
+          <button className="w-full tracking-[1px] bg-white/5 border border-white/10 rounded-[16px] h-[42px] flex items-center justify-center text-[10px] font-bold uppercase">
+            Details
+          </button>
 
       <div className="flex gap-[8px]">
         <button

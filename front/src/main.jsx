@@ -55,7 +55,8 @@ createRoot(document.getElementById("root")).render(
             </UploadRoleGuard>} />
             <Route path="/palmares" element={<Palmares />} />
             <Route path="/agenda" element={<Evennements />} />
-            <Route path="/reservation" element={<Reservation />} />
+           <Route path="/reservation/:id" element={<Reservation />} />
+
             <Route path="/profile/:id" element={<Profile />} />
             <Route
               path="/jury"
