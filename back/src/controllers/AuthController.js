@@ -19,12 +19,13 @@ async function login(req, res) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, {
+    const token = jwt.sign({id: user.id, email: user.email }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN || "1h",
     });
 
     return res.status(200).json({
       message: "Login successful",
+      id: user.id,
       email: user.email,
       first_name: user.first_name,
       role: user.role,
@@ -60,6 +61,7 @@ function checkToken(req, res) {
 
         return res.status(200).json({
           email: user.email,
+          id: user.id,
           first_name: user.first_name,
           role: user.role,
         });
