@@ -135,15 +135,7 @@ function CardEvennements({ data }) {
           >
             Details
           </button>
-          <div
-            className="w-[52px] h-[42px] flex items-center justify-center border rounded-[16px]"
-            style={{
-              background: "var(--evennements-card-bg)",
-              borderColor: "var(--evennements-card-border)",
-            }}
-          >
-            <Pen size={16} />
-          </div>
+          
         </div>
       </div>
     </div>
