@@ -265,6 +265,14 @@ export function Register() {
   </div>
 </form>
 
+         <button
+          type="submit"
+          disabled={registerMutation.isPending}
+          className="flex justify-center items-center gap-[17px] font-bold w-full bg-white text-black rounded-[28px] tracking-[2.75px] uppercase text-[11px] h-[76px] mb-[75px] disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <Send size={20} />
+          <h2>{registerMutation.isPending ? "Inscription en cours..." : t("register.register_button")}</h2>
+        </button>
 
     </>
   );

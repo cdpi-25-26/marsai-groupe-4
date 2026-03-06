@@ -17,10 +17,12 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [roleFallback, setRoleFallback] = useState("");
 
-  const token = localStorage.getItem("token");
-  const storedRole = localStorage.getItem("role") || "";
-  const isLoggedIn = !!token;
-  const effectiveRole = token ? storedRole || roleFallback : "";
+  const isLoggedIn = !!localStorage.getItem("token");
+  const userRole = localStorage.getItem("role");
+  const userPath = isLoggedIn ? "/admin" : "/auth/login";
+  const userId = localStorage.getItem("userId");
+  const profilePath = isLoggedIn && userId ? `/profile/${userId}` : '/auth/login';
+  const isJury = userRole === "JURY" || userRole === "ADMIN";
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -113,6 +115,7 @@ export default function Navbar() {
           <NavLink to="/agenda" className={iconLinkClass}>
             <Calendar size={20} />
           </NavLink>
+          <NavLink to={profilePath} className="text-white/70 hover:text-white transition">Profile</NavLink>
           {isJury && (
             <NavLink to="/jury" className={iconLinkClass}>
               <Gavel size={20} />
@@ -121,6 +124,7 @@ export default function Navbar() {
           <NavLink to={userPath} end className={iconLinkClass}>
             <User size={20} />
           </NavLink>
+
         </div>
 
         {/* RIGHT SIDE */}

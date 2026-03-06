@@ -32,6 +32,7 @@ export function Login() {
       localStorage.setItem("email", response.data?.email);
       localStorage.setItem("role", response.data?.role);
       localStorage.setItem("token", response.data?.token);
+      localStorage.setItem("userId", response.data?.id);
 
       switch (response.data?.role) {
         case "ADMIN":
