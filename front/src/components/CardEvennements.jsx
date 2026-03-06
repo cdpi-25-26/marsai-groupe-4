@@ -104,40 +104,9 @@ function CardEvennements({ data }) {
           </h2>
         </div>
 
-      <div className="h-[70px] flex items-center ">
-  <h2 className="text-[24px] w-full font-bold uppercase tracking-[-0.6] break-words">
-    {cardTitle}
-  </h2>
-</div>
-        
-
-        <div className="flex flex-col gap-[12px] mt-[18px]">
-          <div className="flex items-center gap-[12px]">
-            <Calendar size={16} className="mt-[-3px] text-white/50" />
-            <h2 className="text-[14px] text-white/50">
-
-            {new Date(data.event_date).toLocaleDateString('fr-FR', {
-              day: 'numeric',
-              month: 'long'
-            })}
-            
-            </h2>
-          </div>
-
-          <div className="flex items-center gap-[12px]">
-            <Clock size={16} className="mt-[-2px] text-white/50" />
-            <h2 className="text-[14px] text-white/50">{data.time_start?.slice(0,5)} - {data.time_end?.slice(0,5)}
-
-</h2>
-          </div>
-
-          <div className="flex items-center gap-[12px]">
-            <MapPin size={16} className="mt-[-3px] text-white/50" />
-           
-              <h2 className="text-[14px] text-white/50">{data.location}</h2>
-   
-           
-          </div>
+        <div className="flex items-center gap-[12px]">
+          <MapPin size={16} />
+          <h2 className="text-[14px]">{data.location}</h2>
         </div>
       </div>
 
@@ -152,37 +121,29 @@ function CardEvennements({ data }) {
         </div>
 
         <div className="flex gap-[8px]">
-            <Link
-    to={`/reservation/${data.id}`}
-    className="w-full"
-  >
-    <button className="w-full tracking-[1px] bg-gradient-to-r from-[#E60076] to-[#FF637E] rounded-[16px] h-[42px] flex items-center justify-center text-[10px] font-bold uppercase">
-      Réserver
-    </button>
-  </Link>
-          <button className="w-full tracking-[1px] bg-white/5 border border-white/10 rounded-[16px] h-[42px] flex items-center justify-center text-[10px] font-bold uppercase">
+          <Link to={`/reservation/${data.id}`} className="w-full">
+            <button className="w-full tracking-[1px] bg-gradient-to-r from-[#E60076] to-[#FF637E] rounded-[16px] h-[42px] flex items-center justify-center text-[10px] font-bold uppercase">
+              Réserver
+            </button>
+          </Link>
+          <button
+            className="w-full rounded-[16px] h-[42px] text-[10px] font-bold uppercase border"
+            style={{
+              background: "var(--evennements-card-bg)",
+              borderColor: "var(--evennements-card-border)",
+            }}
+          >
             Details
           </button>
-
-      <div className="flex gap-[8px]">
-        <button
-          className="w-full rounded-[16px] h-[42px] text-[10px] font-bold uppercase border"
-          style={{
-            background: "var(--evennements-card-bg)",
-            borderColor: "var(--evennements-card-border)",
-          }}
-        >
-          Details
-        </button>
-
-        <div
-          className="w-[52px] h-[42px] flex items-center justify-center border rounded-[16px]"
-          style={{
-            background: "var(--evennements-card-bg)",
-            borderColor: "var(--evennements-card-border)",
-          }}
-        >
-          <Pen size={16} />
+          <div
+            className="w-[52px] h-[42px] flex items-center justify-center border rounded-[16px]"
+            style={{
+              background: "var(--evennements-card-bg)",
+              borderColor: "var(--evennements-card-border)",
+            }}
+          >
+            <Pen size={16} />
+          </div>
         </div>
       </div>
     </div>
