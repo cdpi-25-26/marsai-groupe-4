@@ -1,11 +1,11 @@
 import instance from "./config.js";
 
 async function getVideos(page = 1, limit = 6) {
-  return await instance.get(`films?page=${page}&limit=${limit}`);
+  return await instance.get(`gallerie?page=${page}&limit=${limit}`);
 }
 
 async function getAllVideos() {
-  return await instance.get("films?limit=1000");
+  return await instance.get("gallerie?limit=1000");
 }
 
 async function deleteVideo(id) {
