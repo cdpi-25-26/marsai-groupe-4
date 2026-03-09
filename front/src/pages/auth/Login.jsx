@@ -5,9 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import handleLogout from "@/utils/helpers.js";
-import { LogOut } from "lucide-react";
-import { Send } from "lucide-react";
-import { LogIn } from "lucide-react";
+import { LogOut, Send, LogIn, Mail, Lock } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const loginSchema = z.object({
@@ -99,11 +97,7 @@ export function Login() {
         </h2>
 
         <div className="flex bg-[var(--login-input-bg)] border border-[var(--login-border-main)] rounded-[28px] w-full mb-[24px]">
-          <img
-            className="flex items-center px-[15px]"
-            src="/src/assets/login_svg/Icon (2).svg"
-            alt=""
-          />
+          <Mail className="flex items-center mx-[15px] my-auto text-[var(--login-text-muted)] shrink-0" size={18} />
           <input
             id="email"
             type="email"
@@ -118,11 +112,7 @@ export function Login() {
         </h2>
 
         <div className="flex bg-[var(--login-input-bg)] border border-[var(--login-border-main)] rounded-[28px] w-full">
-          <img
-            className="flex items-center px-[15px]"
-            src="/src/assets/login_svg/Icon (2).svg"
-            alt=""
-          />
+          <Lock className="flex items-center mx-[15px] my-auto text-[var(--login-text-muted)] shrink-0" size={18} />
           <input
             id="password"
             type="password"
@@ -150,9 +140,9 @@ export function Login() {
           </label>
 
           <h2 className="mr-auto tracking-[1px]">{t("login.hold")}</h2>
-          <h2 className="text-[#51A2FF] tracking-[2px] cursor-pointer">
+          <Link to="/auth/forgot-password" className="text-[#51A2FF] tracking-[2px] cursor-pointer hover:underline">
             Reset ?
-          </h2>
+          </Link>
         </div>
 
         <button

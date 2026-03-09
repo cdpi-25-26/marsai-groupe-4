@@ -149,7 +149,7 @@ function Home() {
               <Link to={`/films/${film.id}`} key={film.id} className="film-card" style={{ textDecoration: "none", color: "inherit" }}>
                 <div className="film-image">
                   {film.thumbnail ? (
-                    <img src={`${API_URL}/uploads/images/${film.thumbnail}`} alt={film.title} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "inherit" }} />
+                    <img src={`${API_URL}/uploads/images/${film.thumbnail}`} alt={film.title} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "inherit" }} />
                   ) : (
                     <div className="film-placeholder film-placeholder-1"></div>
                   )}

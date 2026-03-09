@@ -56,7 +56,7 @@ function Evennements() {
         <div className="flex items-center bg-white/5 text-[14px] border border-white/10 rounded-[16px] text-white/40 h-[54px] px-[20px]">
           <Search size={20} className="text-white/20 mr-[20px]" />
           <input
-            className="w-[200px] placeholder-white/30 outline-none bg-transparent"
+            className="w-full sm:w-[200px] placeholder-white/30 outline-none bg-transparent"
             placeholder={t("event.search_placeholder")}
             type="search"
             value={search}

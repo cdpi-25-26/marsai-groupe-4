@@ -29,6 +29,7 @@ import Profile from "./pages/public/Profile.jsx";
 import JuryVote from "./pages/jury/JuryVote.jsx";
 import Gallerie from "./pages/public/Gallerie.jsx";
 import { UploadRoleGuard } from "./middlewares/Upload.jsx";
+import ForgotPassword from "./pages/auth/ForgotPassword.jsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -51,6 +52,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/contact" element={<Contact />} />
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/register" element={<Register />} />
+            <Route path="/auth/forgot-password" element={<ForgotPassword />} />
             <Route path="/films/:id" element={<Film />} />
             <Route path="/upload" element={<UploadRoleGuard allowedRoles={["PRODUCER", "ADMIN"]}>
              <Upload />

@@ -4,6 +4,7 @@ import { listFilms } from "../../api/films";
 import FilmCard from "../../components/FilmCard";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
+import { Search } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -19,6 +20,7 @@ export default function Gallerie() {
   const [typeIA, setTypeIA] = useState("");
   const [pays, setPays] = useState("");
   const [statut, setStatut] = useState("");
+  const [search, setSearch] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 9;
@@ -117,6 +119,7 @@ export default function Gallerie() {
   const videos = rawVideos.filter((v) => {
     if (typeIA && !(v.ai_tools || "").toLowerCase().includes(typeIA.toLowerCase())) return false;
     if (statut && v.status !== statut) return false;
+    if (search && !(v.title || "").toLowerCase().includes(search.toLowerCase())) return false;
     return true;
   });
 
@@ -157,7 +160,17 @@ export default function Gallerie() {
       {/* Filters in a nice panel */}
       <section className="mb-10">
         <div className="mb-12">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="flex items-center gap-3 h-12 rounded-2xl px-4 bg-white/10 border border-white/20">
+              <Search size={16} className="text-white/50 shrink-0" />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
+                placeholder={t("event.search_placeholder")}
+                className="w-full bg-transparent outline-none text-sm text-white placeholder-white/40"
+              />
+            </div>
             <select
               className="h-12 rounded-2xl px-4 pr-10 text-sm font-bold text-white outline-none
                          bg-gradient-to-r from-[#7b2cff] to-[#FF2B7F]

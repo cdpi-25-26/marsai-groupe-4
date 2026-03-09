@@ -88,7 +88,7 @@ export default function Palmares() {
             {t("palmares.winners")}
           </h2>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {topWinners.map((award, idx) => (
               <div
                 key={award.id}
@@ -104,7 +104,7 @@ export default function Palmares() {
                   <img
                     src={`${API_URL}/uploads/images/${award.film.thumbnail}`}
                     alt={award.film.title}
-                    className="h-40 w-full object-cover rounded-xl mb-4"
+                    loading="lazy" className="h-40 w-full object-cover rounded-xl mb-4"
                   />
                 ) : (
                   <div className="h-40 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl mb-4" />
@@ -132,7 +132,7 @@ export default function Palmares() {
             <Sparkles className="text-pink-400" /> {t("palmares.honorable_mention")}
           </h2>
 
-          <div className="grid md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {otherWinners.map((award) => (
               <div
                 key={award.id}

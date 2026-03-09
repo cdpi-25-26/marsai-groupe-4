@@ -1,12 +1,16 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import btn0 from '../assets/footer_svg/Button.svg'
+import btn1 from '../assets/footer_svg/Button (1).svg'
+import btn2 from '../assets/footer_svg/Button (2).svg'
+import btn3 from '../assets/footer_svg/Button (3).svg'
 
 function Footer() {
   const { t } = useTranslation()
   return (
     <div className="bg-black py-[96px] px-[40px] w-full">
         <section className="max-w-[1000px] m-0 mx-auto">
-          <div className="grid grid-cols-3 gap-6  ">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="flex flex-col gap-8">
               <h1 className="text-white text-[36px] font-bold tracking-[-1.8px]">
                 MARS <span className="text-[#AD46FF]">AI</span>
@@ -17,26 +21,10 @@ function Footer() {
               </h1>
 
               <div className="grid grid-cols-4 max-w-[250px] gap-2">
-                <img
-                  className=""
-                  src="src/assets/login_png/Button.svg"
-                  alt=""
-                />
-                <img
-                  className=""
-                  src="src/assets/login_png/Button (1).svg"
-                  alt=""
-                />
-                <img
-                  className=""
-                  src="src/assets/login_png/Button (2).svg"
-                  alt=""
-                />
-                <img
-                  className=""
-                  src="src/assets/login_png/Button (3).svg"
-                  alt=""
-                />
+                <img className="" src={btn0} alt="" />
+                <img className="" src={btn1} alt="" />
+                <img className="" src={btn2} alt="" />
+                <img className="" src={btn3} alt="" />
               </div>
             </div>
 
@@ -61,7 +49,7 @@ function Footer() {
               </div>
             </div>
             <div>
-              <div className="flex flex-col w-[330px] rounded-[36px] border border-white/5  bg-[linear-gradient(45deg,rgba(13,13,13,1)_60%,rgba(173,70,255,0.2)_100%)] p-[40px] gap-[20px]">
+              <div className="flex flex-col w-full rounded-[36px] border border-white/5  bg-[linear-gradient(45deg,rgba(13,13,13,1)_60%,rgba(173,70,255,0.2)_100%)] p-[40px] gap-[20px]">
                 <h2 className="text-start text-white font-bold text-[24px] tracking-[-0.6px]">
                   RESTEZ <br />
                   CONNECTÉ
@@ -71,7 +59,7 @@ function Footer() {
                   <input
                     placeholder="Email Signal"
                     type="text"
-                    className="w-full rounded-[14px] placeholder-white/10 text-[14px] border border-white/5 runded bg-white/3 p-[25px] h-[56px]"
+                    className="w-full rounded-[14px] placeholder-white/10 text-[14px] border border-white/5 bg-white/5 p-[25px] h-[56px]"
                   />{" "}
                   <button className="text-center py-0 px-[20px] bg-white rounded-[14px] font-bold text-[11px] tracking-[1.1px]">
                     OK

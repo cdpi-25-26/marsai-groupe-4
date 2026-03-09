@@ -90,4 +90,28 @@ function checkToken(req, res) {
   }
 }
 
-export default { login, register, checkToken };
+async function forgotPassword(req, res) {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({ error: "Email requis" });
+  }
+  try {
+    const user = await User.findOne({ where: { email } });
+    if (user) {
+      sendMail(
+        email,
+        "Réinitialisation de mot de passe — MARS.AI",
+        `<p>Bonjour ${user.first_name},</p>
+         <p>Vous avez demandé une réinitialisation de mot de passe.</p>
+         <p>Veuillez contacter l'administrateur du festival pour obtenir un nouveau mot de passe.</p>
+         <p>— L'équipe MARS.AI</p>`
+      );
+    }
+    // Always return success to not reveal if email exists
+    return res.status(200).json({ message: "Si cet email existe, un message a été envoyé." });
+  } catch (error) {
+    return res.status(500).json({ error: "Server error" });
+  }
+}
+
+export default { login, register, checkToken, forgotPassword };

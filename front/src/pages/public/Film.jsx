@@ -40,12 +40,6 @@ export default function Film() {
         setError("");
         setFilm(null);
 
-        const token = localStorage.getItem("token");
-        if (!token) {
-          setError('Pas de token dans le localStorage. Il faut se connecter (clé « token »).');
-          return;
-        }
-
         const targetId = Number(id);
         const limit = 50;
 
@@ -164,7 +158,7 @@ export default function Film() {
         ) : null}
 
         {/* INFO */}
-        <div className="grid grid-cols-5 gap-8 mt-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 mt-6">
           {director ? (
             <div>
               <span className="text-slate-400 font-black uppercase">Réalisateur </span>

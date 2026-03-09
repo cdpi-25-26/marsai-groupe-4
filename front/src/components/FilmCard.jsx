@@ -63,6 +63,7 @@ export default function FilmCard({ film }) {
               <img
                 src={coverUrl}
                 alt={title}
+                loading="lazy"
                 className="h-full w-full object-cover"
                 onError={(e) => {
                   e.currentTarget.style.display = "none";
