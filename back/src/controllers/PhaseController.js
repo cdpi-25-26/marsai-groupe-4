@@ -38,7 +38,7 @@ async function getTop50(req, res) {
           as: "evaluations",
           where: { decision: "YES" },
           attributes: ["id"], 
-          required: false,
+          required: true,
         },
         { 
           model: User, 
