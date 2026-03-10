@@ -5,11 +5,45 @@ import {Instagram} from "lucide-react"
 import {Youtube} from "lucide-react"
 import {Twitter} from "lucide-react"
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
+
 
 export default function PublicLayout() {
 
   
     const { t } = useTranslation()
+
+    const [email, setEmail] = useState("");
+const [message, setMessage] = useState("");
+const handleNewsletter = async () => {
+
+  if (!email.includes("@")) {
+    setMessage("Email invalide");
+    return;
+  }
+
+  try {
+    const res = await fetch("http://localhost:3000/newsletter", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      setMessage("Inscription réussie !");
+      setEmail("");
+    } else {
+      setMessage("Email déjà inscrit");
+    }
+
+  } catch (error) {
+    setMessage("Erreur serveur");
+  }
+};
   
   return (
     <div className="min-h-screen flex flex-col">
@@ -89,20 +123,25 @@ export default function PublicLayout() {
 
                 <div className="flex gap-[10px]">
                   <input
-                    placeholder="Email Signal"
-                    type="email"
-                    className="
-                      w-full h-[52px]
-                      rounded-[14px]
-                      bg-white/5
-                      border border-white/5
-                      px-[18px]
-                      text-[14px]
-                      text-white
-                      placeholder-white/20
-                    "
-                  />
+                  
+  placeholder="Email Signal"
+  type="email"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  className="
+    w-full h-[52px]
+    rounded-[14px]
+    bg-white/5
+    border border-white/5
+    px-[18px]
+    text-[14px]
+    text-white
+    placeholder-white/20
+  "
+/>
+                  
                   <button
+                   onClick={handleNewsletter}
                     className="
                       px-[18px]
                       bg-white
@@ -115,6 +154,11 @@ export default function PublicLayout() {
                   >
                     OK
                   </button>
+                  {message && (
+  <p className="text-green-400 text-xs mt-2">
+    {message}
+  </p>
+)}
                 </div>
               </div>
             </div>
