@@ -103,9 +103,9 @@ export default function Palmares() {
       }}
     >
 
-      <section className="text-center py-20">
+      <section className="text-center py-20 ">
 
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-6 pt-14 md:pt-24">
 
           <div
             className="p-4 rounded-2xl"

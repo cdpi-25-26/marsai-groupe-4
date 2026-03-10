@@ -108,7 +108,7 @@ function CardEvennements({ data }) {
 
         <div className="flex gap-[8px]">
           <Link to={`/reservation/${data.id}`} className="w-full">
-            <button className="w-full tracking-[1px] bg-gradient-to-r from-[#E60076] to-[#FF637E] rounded-[16px] h-[42px] flex items-center justify-center text-[10px] font-bold uppercase">
+            <button className="w-full tracking-[1px] text-white bg-gradient-to-r from-[#E60076] to-[#FF637E] rounded-[16px] h-[42px] flex items-center justify-center text-[10px] font-bold uppercase">
               Réserver
             </button>
           </Link>

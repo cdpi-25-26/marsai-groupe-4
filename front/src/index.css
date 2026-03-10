@@ -273,13 +273,13 @@
 /* NAVBAR */
 
 :root {
-  --navbar-background: rgba(0, 0, 0, 0.5);
-  --navbar-background2: rgba(255, 255, 255, 1);
+  --navbar-background: rgba(0, 0, 0, 0);
+  --navbar-primary: rgb(0, 0, 0);
 }
 
 .dark {
-  --navbar-background: rgba(255, 255, 255, 0.2);
-  --navbar-background2: rgba(0, 0, 0, 1);
+  --navbar-background: rgba(255, 255, 255, 0);
+  --navbar-primary: rgba(255, 255, 255, 1);
 }
 *
 

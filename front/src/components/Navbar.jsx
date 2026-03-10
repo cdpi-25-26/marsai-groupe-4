@@ -37,10 +37,10 @@ export default function Navbar() {
      }`;
 
 const navbarClass = scrolled
-  ? "bg-[var(--navbar-background)] text-white border-white/0 backdrop-blur-[13px] px-6 shadow-2xl"
+  ? "bg-[var(--navbar-background)] text-[var(--navbar-primary)] border-white/0 backdrop-blur-[13px] px-6 shadow-2xl"
   : isHome
-  ? "bg-[transparent] text-white border-white/0 backdrop-blur-[0px] "
-  : "bg-[transparent] text-[var(--primary)] border-white/0 backdrop-blur-[0px]";
+  ? "bg-[transparent] text-white border-white/0 backdrop-blur-[0px] px-6"
+  : "bg-[transparent] text-[var(--navbar-primary)] border-white/0 backdrop-blur-[0px] px-6";
 
     
 

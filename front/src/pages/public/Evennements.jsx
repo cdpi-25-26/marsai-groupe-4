@@ -34,7 +34,7 @@ function Evennements() {
   return (
     <section
       style={{ backgroundColor: "var(--evennements-bg)", color: "var(--evennements-text)" }}
-      className="py-[154px]"
+      className="pt-14 sm:pt-24 px-4 sm:px-6"
     >
       <div className="flex flex-col items-start justify-between p-6 gap-4">
         <div className="w-full">
