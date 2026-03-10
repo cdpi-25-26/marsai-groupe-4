@@ -1,20 +1,21 @@
-import { NavLink } from "react-router";
+import { NavLink, useLocation } from "react-router";
 import { ThemeToggle } from "./ThemeToggle";
 import { useState, useEffect } from "react";
 import { Trophy, House, Search, Calendar, User, Gavel } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import LanguageSwitcher from '@/components/LanguageSwitcher';
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function Navbar() {
   const { t } = useTranslation();
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const isLoggedIn = !!localStorage.getItem("token");
   const userRole = localStorage.getItem("role");
   const userPath = isLoggedIn ? "/admin" : "/auth/login";
-  const userId = localStorage.getItem("userId");
-  const profilePath = isLoggedIn && userId ? `/profile/${userId}` : '/auth/login';
   const isJury = userRole === "JURY" || userRole === "ADMIN";
 
   useEffect(() => {
@@ -28,35 +29,38 @@ export default function Navbar() {
   }, [open]);
 
   const iconLinkClass = ({ isActive }) =>
-    `flex items-center justify-center transition-all duration-300
+    `flex items-center justify-center transition-all duration-0
      ${
        isActive
-         ? "opacity-100 drop-shadow-[0_0_8px_rgba(123,44,255,0.9)] scale-110"
+         ? "opacity-100 drop-shadow-[0_0_5px_rgba(0,0,0,0.2)] scale-110"
          : "opacity-60 hover:opacity-100"
      }`;
 
-     
+  const navbarClass = isHome
+    ? scrolled
+      ? "bg-[var(--navbar-background)] text-white border-white/10 backdrop-blur-[13px] shadow-2xl"
+      : "bg-[transparent] text-white border-white/0 backdrop-blur-[0px]"
+    : "bg-[var(--navbar-background2)] text-[var(--primary)] border-white/5 backdrop-blur-[13px] shadow-2xl";
+
+
+
+
   return (
     <section className="fixed top-0 left-0 w-full z-30 p-4 sm:p-6">
       {/* MAIN NAVBAR */}
       <div
-        className={`flex items-center justify-between w-full rounded-full px-6 sm:px-6 h-16 transition-all duration-500 border
-        ${
-          scrolled
-            ? "bg-black/30 text-white border-white/5 backdrop-blur-[13px] shadow-2xl"
-            : "bg-white/1 text-white border-white/5 backdrop-blur-[5px]"
-        }`}
+        className={`flex items-center justify-between w-full rounded-full px-6 h-16 transition-all duration-500 border ${navbarClass}`}
       >
         {/* LOGO */}
         <NavLink to="/" className="flex items-center gap-1 font-bold text-xl min-w-0">
-          <span className="truncate text-white">MARS</span>
+          <span className={`truncate`}>MARS</span>
           <span className="bg-[linear-gradient(180deg,rgba(81,162,255,1)_0%,rgba(173,70,255,1)_50%,rgba(255,43,127,1)_100%)] bg-clip-text text-transparent truncate">
             AI
           </span>
         </NavLink>
 
-        {/* ICONS — desktop only */}
-        <div className="hidden sm:flex gap-6">
+        {/* ICONS — desktop */}
+        <div className="hidden md:flex gap-6">
           <NavLink to="/gallerie" className={iconLinkClass}>
             <Search size={20} />
           </NavLink>
@@ -69,7 +73,6 @@ export default function Navbar() {
           <NavLink to="/agenda" className={iconLinkClass}>
             <Calendar size={20} />
           </NavLink>
-          <NavLink to={profilePath} className="text-white/70 hover:text-white transition">Profile</NavLink>
           {isJury && (
             <NavLink to="/jury" className={iconLinkClass}>
               <Gavel size={20} />
@@ -78,7 +81,6 @@ export default function Navbar() {
           <NavLink to={userPath} end className={iconLinkClass}>
             <User size={20} />
           </NavLink>
-
         </div>
 
         {/* RIGHT SIDE */}
@@ -86,10 +88,10 @@ export default function Navbar() {
           <LanguageSwitcher />
           <ThemeToggle />
 
-          {/* BURGER — mobile only */}
+          {/* BURGER — mobile */}
           <button
             onClick={() => setOpen(true)}
-            className="sm:hidden text-white opacity-70 hover:opacity-100 transition"
+            className={`sm:hidden opacity-70 hover:opacity-100 transition`}
           >
             <svg
               width="28"
@@ -121,7 +123,6 @@ export default function Navbar() {
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* Header */}
         <div className="flex justify-between items-center">
           <div className="text-white font-bold text-xl">MARS AI</div>
           <button
@@ -132,7 +133,6 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Links */}
         <NavLink to="/gallerie" onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition">
           {t("navbar.gallery")}
         </NavLink>

@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { MicVocal, Film, Wrench } from "lucide-react";
-import { Calendar } from "lucide-react";
-import { Clock } from "lucide-react";
-import { EllipsisVertical } from "lucide-react";
-import { MapPin } from "lucide-react";
-import { Pen } from "lucide-react";
+import { MicVocal, Film, Wrench, Calendar, Clock, EllipsisVertical, MapPin } from "lucide-react";
 import { Link } from "react-router";
 
 function CardEvennements({ data }) {
-
   const typeIcons = {
     conference: <MicVocal size={16} style={{ color: "var(--evennements-accent)" }} />,
     masterclass: <Film size={16} style={{ color: "var(--evennements-accent)" }} />,
@@ -25,35 +19,29 @@ function CardEvennements({ data }) {
       else if (width >= 868) setMaxLength(15);
       else setMaxLength(20);
     };
-
     updateMaxLength();
     window.addEventListener("resize", updateMaxLength);
     return () => window.removeEventListener("resize", updateMaxLength);
   }, []);
 
-  const cardTitle =
-    data.title.length > maxLength
-      ? data.title.slice(0, maxLength) + "..."
-      : data.title;
-
-  const percentage = Math.round((data.enrolled / data.capacity) * 100);
+  const cardTitle = data.title.length > maxLength ? data.title.slice(0, maxLength) + "..." : data.title;
 
   return (
     <div
-      className="p-[30px] w-full border rounded-[32px]"
+      className="p-[30px] w-full rounded-[32px] border"
       style={{
-        background: "var(--evennements-card-bg)",
+        backgroundColor: "var(--evennements-card-bg)",
         borderColor: "var(--evennements-card-border)",
-        color: "var(--evennements-text)",
+        color: "var(--evennements-text)"
       }}
     >
       <div className="flex justify-between items-center mb-[26px]">
         <h2
           className="text-[10px] uppercase tracking-[1px] w-[90px] h-[30px] flex items-center justify-center rounded-[14px] border"
           style={{
-            background: "var(--evennements-accent-bg)",
+            backgroundColor: "var(--evennements-accent-bg)",
             borderColor: "var(--evennements-accent-border)",
-            color: "var(--evennements-accent)",
+            color: "var(--evennements-accent)"
           }}
         >
           {data.status}
@@ -62,8 +50,8 @@ function CardEvennements({ data }) {
         <div
           className="w-[35px] h-[35px] flex items-center justify-center border rounded-[14px]"
           style={{
-            background: "var(--evennements-card-bg)",
-            borderColor: "var(--evennements-card-border)",
+            backgroundColor: "var(--evennements-card-bg)",
+            borderColor: "var(--evennements-card-border)"
           }}
         >
           <EllipsisVertical size={16} />
@@ -92,7 +80,7 @@ function CardEvennements({ data }) {
           <h2 className="text-[14px]">
             {new Date(data.event_date).toLocaleDateString("fr-FR", {
               day: "numeric",
-              month: "long",
+              month: "long"
             })}
           </h2>
         </div>
@@ -112,9 +100,7 @@ function CardEvennements({ data }) {
 
       <div className="mt-[30px] mb-[32px] flex gap-[8px] flex-col">
         <div className="flex justify-between text-[10px] font-bold uppercase">
-          <h2 style={{ color: "var(--evennements-text-soft)" }}>
-            remplissage
-          </h2>
+          <h2 style={{ color: "var(--evennements-text-soft)" }}>remplissage</h2>
           <h2 style={{ color: "var(--evennements-progress-from)" }}>
             {data.enrolled}/{data.capacity}
           </h2>
@@ -126,16 +112,16 @@ function CardEvennements({ data }) {
               Réserver
             </button>
           </Link>
+
           <button
             className="w-full rounded-[16px] h-[42px] text-[10px] font-bold uppercase border"
             style={{
-              background: "var(--evennements-card-bg)",
-              borderColor: "var(--evennements-card-border)",
+              backgroundColor: "var(--evennements-card-bg)",
+              borderColor: "var(--evennements-card-border)"
             }}
           >
             Details
           </button>
-          
         </div>
       </div>
     </div>
