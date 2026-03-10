@@ -103,8 +103,8 @@ export function Register() {
 
       <Link to="/auth/login">Already have an account? Login</Link> */}
 
-      <form
-  onSubmit={handleSubmit(onSubmit)}
+      <div
+
   className="pt-[154px] pb-[90px] px-6 bg-[var(--login-bg-main)]"
   style={{ color: "var(--login-text-main)" }}
 >
@@ -136,6 +136,9 @@ export function Register() {
       {t("register.subtitle_title")}
     </h2>
 
+    
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full" >
+
     {/* FIRST NAME */}
     <h2 className="w-full text-[10px] mb-[12px] tracking-[2px]">
       {t("register.first_name")}
@@ -154,6 +157,7 @@ export function Register() {
         className="w-full h-[76px] pl-[15px] outline-none bg-transparent"
         style={{ color: "var(--login-text-main)" }}
         type="text"
+        autoComplete="given-name"
       />
     </div>
 
@@ -175,7 +179,9 @@ export function Register() {
         className="w-full h-[76px] pl-[15px] outline-none bg-transparent"
         style={{ color: "var(--login-text-main)" }}
         type="text"
+         autoComplete="family-name"
       />
+
     </div>
 
     {/* EMAIL */}
@@ -196,6 +202,7 @@ export function Register() {
         className="w-full h-[76px] pl-[15px] outline-none bg-transparent"
         style={{ color: "var(--login-text-main)" }}
         type="email"
+        autoComplete="email"
       />
     </div>
 
@@ -219,6 +226,7 @@ export function Register() {
             className="w-full h-[76px] pl-[15px] outline-none bg-transparent"
             style={{ color: "var(--login-text-main)" }}
             type="password"
+            autoComplete="new-password"
           />
         </div>
       </div>
@@ -241,6 +249,7 @@ export function Register() {
             className="w-full h-[76px] pl-[15px] outline-none bg-transparent"
             style={{ color: "var(--login-text-main)" }}
             type="password"
+            autoComplete="new-password"
           />
         </div>
       </div>
@@ -262,17 +271,11 @@ export function Register() {
         ? "Loading..."
         : t("register.register_button")}
     </button>
+    </form>
   </div>
-</form>
+</div>
 
-         <button
-          type="submit"
-          disabled={registerMutation.isPending}
-          className="flex justify-center items-center gap-[17px] font-bold w-full bg-white text-black rounded-[28px] tracking-[2.75px] uppercase text-[11px] h-[76px] mb-[75px] disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <Send size={20} />
-          <h2>{registerMutation.isPending ? "Inscription en cours..." : t("register.register_button")}</h2>
-        </button>
+         
 
     </>
   );

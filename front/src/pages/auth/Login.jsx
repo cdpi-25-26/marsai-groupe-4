@@ -62,14 +62,7 @@ export function Login() {
   if (isLoggedIn) {
     return (
       <>
-        <h1 className="text-2xl">
-          You are already logged in as {localStorage.getItem("first_name")}
-        </h1>
-        <button onClick={handleLogout} className="hover:cursor-pointer">
-          <LogOut className="size-4" />
-          <span>Log out</span>
-        </button>
-        <Link to="/">Return to homepage</Link>
+        
          <h1 className="text-2xl">
           You are already logged in as {localStorage.getItem("first_name")}
         </h1>
@@ -87,8 +80,7 @@ export function Login() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
+    <div
       className="bg-[var(--login-bg-main)] text-[var(--login-text-main)] pt-[154px] pb-[90px] px-6 transition-colors duration-300"
     >
       <div className="flex flex-col max-w-[500px] mx-auto p-8 sm:p-[56px] items-center uppercase bg-[var(--login-bg-card)] border border-[var(--login-border-main)] rounded-[24px] shadow-[0_0_30px_rgba(173,70,255,0.1)] transition-colors duration-300">
@@ -106,7 +98,7 @@ export function Login() {
         <h2 className="w-full text-[10px] mb-[12px] tracking-[2px]">
           {t("login.session_identity")}
         </h2>
-
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full">
         <div className="flex bg-[var(--login-input-bg)] border border-[var(--login-border-main)] rounded-[28px] w-full mb-[24px]">
           <img
             className="flex items-center px-[15px]"
@@ -144,7 +136,7 @@ export function Login() {
 
         <div className="flex text-[10px] items-center w-full py-[32px] gap-[10px] tracking-[1px]">
           <label className="relative inline-flex items-center cursor-pointer mb-[-1px]">
-            <input type="checkbox" className="peer sr-only" />
+            <input type="checkbox" {...register("remember")} className="peer sr-only" />
             <div className="w-5 h-5 rounded-full border border-[var(--login-border-main)] bg-[var(--login-input-bg)] flex items-center justify-center peer-checked:bg-blue-500 transition-colors duration-200">
               <svg
                 className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity"
@@ -159,9 +151,9 @@ export function Login() {
           </label>
 
           <h2 className="mr-auto tracking-[1px]">{t("login.hold")}</h2>
-          <h2 className="text-[#51A2FF] tracking-[2px] cursor-pointer">
+          <button type="button" className="text-[#51A2FF] tracking-[2px] cursor-pointer">
             Reset ?
-          </h2>
+          </button>
         </div>
 
         <button
@@ -176,7 +168,7 @@ export function Login() {
               : t("login.login_button")}
           </h2>
         </button>
-
+</form>
         <div className="flex items-center sm:items-end flex-col sm:flex-row w-full gap-[15px] justify-center">
           <h2 className="text-[11px] text-[var(--login-text-muted)] tracking-[2.2px]">
             {t("login.register_text")}
@@ -186,6 +178,8 @@ export function Login() {
           </h2>
         </div>
       </div>
-    </form>
+    </div>
+
+    
   );
 }

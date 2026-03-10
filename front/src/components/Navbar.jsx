@@ -36,12 +36,13 @@ export default function Navbar() {
          : "opacity-60 hover:opacity-100"
      }`;
 
-  const navbarClass = isHome
-    ? scrolled
-      ? "bg-[var(--navbar-background)] text-white border-white/10 backdrop-blur-[13px] shadow-2xl"
-      : "bg-[transparent] text-white border-white/0 backdrop-blur-[0px]"
-    : "bg-[var(--navbar-background2)] text-[var(--primary)] border-white/5 backdrop-blur-[13px] shadow-2xl";
+const navbarClass = scrolled
+  ? "bg-[var(--navbar-background)] text-white border-white/0 backdrop-blur-[13px] px-6 shadow-2xl"
+  : isHome
+  ? "bg-[transparent] text-white border-white/0 backdrop-blur-[0px] "
+  : "bg-[transparent] text-[var(--primary)] border-white/0 backdrop-blur-[0px]";
 
+    
 
 
 
@@ -49,7 +50,7 @@ export default function Navbar() {
     <section className="fixed top-0 left-0 w-full z-30 p-4 sm:p-6">
       {/* MAIN NAVBAR */}
       <div
-        className={`flex items-center justify-between w-full rounded-full px-6 h-16 transition-all duration-500 border ${navbarClass}`}
+        className={`flex items-center justify-between w-full rounded-full  h-16 transition-all duration-500 border ${navbarClass}`}
       >
         {/* LOGO */}
         <NavLink to="/" className="flex items-center gap-1 font-bold text-xl min-w-0">

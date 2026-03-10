@@ -64,14 +64,14 @@ export default function Gallerie() {
   const Shell = ({ children }) => (
 
     <div
-      className="min-h-screen font-sans"
+      className="min-h-screen font-sans pt-20"
       style={{
         backgroundColor: "var(--gallerie-bg)",
         color: "var(--gallerie-text)"
       }}
     >
 
-      <div className="pointer-events-none relative inset-0 opacity-40">
+      <div className="pointer-events-none relative inset-0 opacity-40 ">
 
         <div className="absolute -top-40 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[#7b2cff]/30 blur-3xl" />
 
@@ -92,7 +92,7 @@ export default function Gallerie() {
     return (
       <Shell>
 
-        <section className="mb-10">
+        <section className="mb-10 ">
 
           <h1 className="m-0 text-[44px] md:text-[56px] leading-[0.95] font-black tracking-[-1.5px]">
             {t("gallery.title")} <br />
@@ -104,7 +104,7 @@ export default function Gallerie() {
 
         </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ">
 
           {Array.from({ length: limit }).map((_, i) => (
 
