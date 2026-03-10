@@ -23,8 +23,9 @@ async function getPhases1Video(req,res){
 
 async function getTop50(req, res) {
   try {
+    const editionYear = parseInt(req.body.edition_year) || 2026;
     const films = await Upload.findAll({
-      where: { phase_status: "phase1" },
+      where: { phase_status: "phase1",edition_year: editionYear },
       attributes: [
         "id",
         "title",
@@ -58,6 +59,7 @@ async function getTop50(req, res) {
       producer: film.producer,
       phase_status: film.phase_status,
       yes_count: film.evaluations.length || 0, 
+      edition_year: editionYear,
     }));
 
     
@@ -67,7 +69,7 @@ async function getTop50(req, res) {
 
     if (top50.length === 0) {
       return res.status(200).json({ 
-        message: "Aucune vidéo éligible en phase 1",
+        message: `Aucune vidéo éligible en phase 1 pour l'édition ${editionYear}`,
         top50: []
       });
     }
@@ -77,11 +79,11 @@ async function getTop50(req, res) {
 
     await Upload.update(
       { status:"selected" , phase_status: "phase2" },
-      { where: { id: { [Op.in]: ids } } }
+      { where: { id: { [Op.in]: ids }, edition_year: editionYear } }
     );
 
     res.json({
-      message: `Top ${top50.length} promu en phase 2 (basé sur nombre de YES)`,
+      message: `Top ${top50.length} promu en phase 2 pour l'édition ${editionYear}(basé sur nombre de YES)`,
       top50
     });
   } catch (error) {
