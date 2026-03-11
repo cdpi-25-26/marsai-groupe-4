@@ -7,10 +7,9 @@ import heroVideo from "../../assets/grokShowtime3.mp4"
 function Home() {
   const { t } = useTranslation();
 
-  // Настройка фона: "image" или "video"
   const heroBackground = {
-    type: "video", // "image" или "video"
-    src: heroVideo, // путь к видео или картинке
+    type: "video",
+    src: heroVideo,
   };
 
   return (
@@ -19,7 +18,6 @@ function Home() {
       <section className="hero">
         <div className="hero-overlay"></div>
 
-        {/* Фон: видео или картинка */}
         {heroBackground.type === "video" ? (
           <video className="hero-bg-video" autoPlay loop muted playsInline>
             <source src={heroBackground.src} type="video/mp4" />

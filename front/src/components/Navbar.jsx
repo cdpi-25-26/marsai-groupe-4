@@ -42,16 +42,24 @@ const navbarClass = scrolled
   ? "bg-[transparent] text-white border-white/0 backdrop-blur-[0px] px-6"
   : "bg-[transparent] text-[var(--navbar-primary)] border-white/0 backdrop-blur-[0px] px-6";
 
+
     
 
+  
 
 
   return (
     <section className="fixed top-0 left-0 w-full z-30 p-4 sm:p-6">
+      {/* <div className="h-[0px]">
+        <div className={`relative filter bottom-[200px] bg-[rgba(123,39,175,0.1)] rounded-full w-1/1 aspect-square blur-[200px]`}></div>
+      </div> */}
+
+      
       {/* MAIN NAVBAR */}
       <div
         className={`flex items-center justify-between w-full rounded-full  h-16 transition-all duration-500 border ${navbarClass}`}
       >
+        
         {/* LOGO */}
         <NavLink to="/" className="flex items-center gap-1 font-bold text-xl min-w-0">
           <span className={`truncate`}>MARS</span>

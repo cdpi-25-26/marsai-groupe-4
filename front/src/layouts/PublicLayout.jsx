@@ -14,12 +14,13 @@ export default function PublicLayout() {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
+      
 
       <main className="flex-1">
         <Outlet />
       </main>
 
-      <footer className="bg-background py-[64px] sm:py-[96px] px-[20px] sm:px-[40px] w-full">
+      <footer className="bg-[var(--background-2)] py-[64px] sm:py-[96px] px-[20px] sm:px-[40px] w-full">
         <section className="max-w-[1000px] mx-auto">
 
           {/* TOP */}
