@@ -156,6 +156,7 @@ const BASE_FOLDER = "grp4";
   try {
     const fileContent = fs.readFileSync(localFilePath);
     const fileName = path.basename(localFilePath);
+    
 
     // Clé S3 : on garde la même structure que local + prefix grp4
 const s3Key = `${BASE_FOLDER}/${subFolder}/${fileName}`;
