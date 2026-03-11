@@ -120,7 +120,7 @@ async function uploadVideoToYoutubeInternal(filePath, metadata = {}) {
           categoryId: "22", // People & Blogs
         },
         status: {
-          privacyStatus: "private", // ou "public" / "unlisted" si tu veux
+          privacyStatus: "public", // ou "public" / "unlisted" si tu veux
         },
       },
       media: {
