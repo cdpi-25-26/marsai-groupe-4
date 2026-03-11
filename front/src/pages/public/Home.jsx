@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import "./Home.css";
 import { useTranslation } from "react-i18next";
 import { Sparkles } from "lucide-react";
-import heroVideo from "../../assets/grokShowtime3.mp4"
+import heroVideo from "../../assets/grokShowtime4.mp4"
 
 function Home() {
   const { t } = useTranslation();
