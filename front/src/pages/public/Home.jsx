@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import "./Home.css";
 import { useTranslation } from "react-i18next";
+import { Sparkles } from "lucide-react";
 
 
   
@@ -13,6 +14,11 @@ function Home() {
       <section className="hero">
         <div className="hero-overlay"></div>
         <div className="hero-content">
+            <div class="btn-protocole">
+              <Sparkles class="btn-sparkle"/>
+              <h2>Le Protocole Temporel 2026</h2>
+              </div>
+
           <h1 className="logo-title">
             MARS<span className="gradient-text">AI</span>
           </h1>

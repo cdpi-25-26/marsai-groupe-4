@@ -93,7 +93,7 @@ function Cms() {
 
   return (
     <section className="container mx-auto px-4 py-8">
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div className="bg-background rounded-lg shadow-md p-6 mb-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-gray-800">Translation CMS</h2>
           <Button 
@@ -129,7 +129,7 @@ function Cms() {
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="bg-background rounded-lg shadow-md overflow-hidden">
         <div className="grid grid-cols-[200px_1fr_1fr] gap-4 p-4 bg-gray-800 text-white font-semibold">
           <div>Key</div>
           <div className="flex items-center gap-2">

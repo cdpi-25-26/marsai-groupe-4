@@ -172,7 +172,7 @@ function Jury() {
 
   return (
     <section className="container mx-auto px-4 py-8">
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div className="bg-background rounded-lg shadow-md p-6 mb-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800">Membres du Jury</h2>
         </div>

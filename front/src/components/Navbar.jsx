@@ -13,6 +13,8 @@ export default function Navbar() {
   const isLoggedIn = !!localStorage.getItem("token");
   const userRole = localStorage.getItem("role");
   const userPath = isLoggedIn ? "/admin" : "/auth/login";
+  const userId = localStorage.getItem("userId");
+  const profilePath = isLoggedIn && userId ? `/profile/${userId}` : '/auth/login';
   const isJury = userRole === "JURY" || userRole === "ADMIN";
 
   useEffect(() => {
@@ -33,6 +35,7 @@ export default function Navbar() {
          : "opacity-60 hover:opacity-100"
      }`;
 
+     
   return (
     <section className="fixed top-0 left-0 w-full z-30 p-4 sm:p-6">
       {/* MAIN NAVBAR */}
@@ -66,6 +69,7 @@ export default function Navbar() {
           <NavLink to="/agenda" className={iconLinkClass}>
             <Calendar size={20} />
           </NavLink>
+          <NavLink to={profilePath} className="text-white/70 hover:text-white transition">Profile</NavLink>
           {isJury && (
             <NavLink to="/jury" className={iconLinkClass}>
               <Gavel size={20} />
@@ -74,6 +78,7 @@ export default function Navbar() {
           <NavLink to={userPath} end className={iconLinkClass}>
             <User size={20} />
           </NavLink>
+
         </div>
 
         {/* RIGHT SIDE */}

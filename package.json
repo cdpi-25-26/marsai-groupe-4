@@ -9,7 +9,7 @@
     "install": "cd back && npm install && cd ../front && npm install"
   },
   "keywords": [],
-  "author": "",
+  "author": "", 
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {

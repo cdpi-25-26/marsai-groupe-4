@@ -16,7 +16,7 @@ const registerSchema = z
     email: z.string().email("Email invalide"),
     password: z
       .string()
-      .min(6, "Le mot de passe doit contenir au moins 6 caractères"),
+      .min(8, "Le mot de passe doit contenir au moins 8 caractères"),
     confirmpassword: z.string(),
   })
   .refine((data) => data.password === data.confirmpassword, {
@@ -104,169 +104,176 @@ export function Register() {
       <Link to="/auth/login">Already have an account? Login</Link> */}
 
       <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="bg-black text-white pt-[154px] pb-[90px] px-6"
-      >
-        
+  onSubmit={handleSubmit(onSubmit)}
+  className="pt-[154px] pb-[90px] px-6 bg-[var(--login-bg-main)]"
+  style={{ color: "var(--login-text-main)" }}
+>
+  <div
+    className="flex flex-col w-fit my-0 mx-auto p-8 sm:p-[56px] items-center uppercase rounded-[24px] backdrop-blur-xl shadow-xl"
+    style={{
+      background: "var(--login-bg-card)",
+      border: "1px solid var(--login-border-main)",
+    }}
+  >
+    <UserPlus
+      className="mb-[24px] p-6 w-[96px] h-[96px] rounded-[32px]"
+      style={{
+        background: "var(--login-input-bg)",
+        border: "1px solid var(--login-border-main)",
+      }}
+    />
 
-        <div className="flex flex-col w-fit my-0 mx-auto p-8 sm:p-[56px] items-center uppercase bg-black/70 border border-white/10 rounded-[24px] shadow-[0_0_30px_rgba(173,70,255,0.1)]">
-          <UserPlus className="bg-white/5 mb-[24px] border border-white/10 p-6 w-[96px] h-[96px] rounded-[32px] "/>
+    <h2 className="text-center text-[36px] sm:text-[48px] mb-[11px] font-bold inline-block 
+    bg-[linear-gradient(to_top,rgba(152,16,250,0.6)_35%,rgba(43,127,255,1)_60%)] 
+    bg-clip-text text-transparent tracking-[-2.4px]">
+      {t("register.register_title")}
+    </h2>
 
-          <h2 className="text-center text-[36px] sm:text-[48px] mb-[11px] font-bold inline-block bg-[linear-gradient(to_top,rgba(152,16,250,0.6)_35%,rgba(43,127,255,1)_60%)] bg-clip-text text-transparent tracking-[-2.4px]">
-            {t("register.register_title")}
-          </h2>
-          <h2 className="text-center text-[10px] mb-[44px] tracking-[3px] text-white/50 font-bold">
-            {t("register.subtitle_title")}
-          </h2>
+    <h2
+      className="text-center text-[10px] mb-[44px] tracking-[3px] font-bold"
+      style={{ color: "var(--login-text-muted)" }}
+    >
+      {t("register.subtitle_title")}
+    </h2>
 
-          <h2 className="w-full text-[10px] mb-[12px] tracking-[2px]">
-            {t("register.first_name")}
-          </h2>
+    {/* FIRST NAME */}
+    <h2 className="w-full text-[10px] mb-[12px] tracking-[2px]">
+      {t("register.first_name")}
+    </h2>
 
-          <div className="flex bg-black/40 border border-white/10 rounded-[28px] w-full mb-[24px]">
-            <img
-              className="flex items-center px-[15px]"
-              src="/src/assets/login_svg/Icon (2).svg"
-              alt=""
-            />
-            <input
-              placeholder="John"
-              {...register("first_name")}
-              className="w-full h-[76px] outline-none  placeholder-white/40"
-              type="text"
-              required
-            />
-          </div>
-
-          <h2 className="w-full text-[10px] mb-[12px] tracking-[2px]">{t("register.last_name")}</h2>
-
-          <div className="flex bg-black/40 border border-white/10 rounded-[28px] w-full mb-[24px]">
-            <img
-              className="flex items-center px-[15px]"
-              src="/src/assets/login_svg/Icon (2).svg"
-              alt=""
-            />
-            <input
-              placeholder="Doe"
-              {...register("last_name")}
-              className="w-full h-[76px] outline-none  placeholder-white/40"
-              type="text"
-              required
-            />
-          </div>
-
-          <h2 className="w-full text-[10px] mb-[12px] tracking-[2px]">
-            {t("register.email")}
-          </h2>
-
-          <div className="flex bg-black/40 border border-white/10 rounded-[28px] w-full mb-[24px]">
-            <img
-              className="flex items-center px-[15px]"
-              src="/src/assets/login_svg/Icon (2).svg"
-              alt=""
-            />
-            <input
-              placeholder="nom@exemple.com"
-              {...register("email")}
-              className="w-full h-[76px] outline-none  placeholder-white/40"
-              type="email"
-              required
-            />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-[24px] w-full">
-            <div className="w-full">
-              <h2 className=" tracking-[2px] text-[10px] mb-[12px]">
-                {t("register.password")}
-              </h2>
-              <div className="flex bg-black/40 border border-white/10 rounded-[28px] w-full">
-                <input
-                  placeholder="●●●●●●"
-                  {...register("password")}
-                  className="w-full h-[76px] w-full pl-[15px] outline-none  placeholder-white/40"
-                  type="password"
-                  required
-                />
-                <img
-                  className="flex items-center"
-                  src="/src/assets/login_svg/Icon (2).svg"
-                  alt=""
-                />
-              </div>
-            </div>
-
-            <div>
-              <h2 className="tracking-[2px] text-[10px] mb-[12px]">
-                {t("register.confirm_pasword")}
-              </h2>
-
-              <div className="flex bg-black/40 border border-white/10 rounded-[28px] w-full">
-                <input
-                  placeholder="●●●●●●"
-                  {...register("confirmpassword")}
-                  className=" pl-[15px] w-full h-[76px] outline-none  placeholder-white/40"
-                  type="password"
-                  required
-                />
-                <img
-                  className="flex items-center "
-                  src="/src/assets/login_svg/Icon (2).svg"
-                  alt=""
-                />
-
-              </div>
-
-            </div>
-          </div>
-
-          <div className="flex text-[10px] items-center w-full py-[32px] gap-[10px] tracking-[1px]">
-  <label className="relative inline-flex items-center cursor-pointer mb-[1px]">
-
-    <input type="checkbox" className="peer sr-only" />
-
-   
-    <div className="w-5 h-5 rounded-full border-2 border-white bg-black/40 flex items-center justify-center transition-colors duration-200 peer-checked:bg-[rgb(0,79,198)]">
-      {/* SVG галочка */}
-      <svg
-        className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        viewBox="0 0 24 24"
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-      </svg>
+    <div
+      className="flex rounded-[28px] w-full mb-[24px]"
+      style={{
+        background: "var(--login-input-bg)",
+        border: "1px solid var(--login-border-main)",
+      }}
+    >
+      <input
+        placeholder="John"
+        {...register("first_name")}
+        className="w-full h-[76px] pl-[15px] outline-none bg-transparent"
+        style={{ color: "var(--login-text-main)" }}
+        type="text"
+      />
     </div>
-  </label>
 
+    {/* LAST NAME */}
+    <h2 className="w-full text-[10px] mb-[12px] tracking-[2px]">
+      {t("register.last_name")}
+    </h2>
 
-  <h2 className="mr-auto tracking-[1px]">
-    {t("register.condition")}
-  </h2>
-</div>
+    <div
+      className="flex rounded-[28px] w-full mb-[24px]"
+      style={{
+        background: "var(--login-input-bg)",
+        border: "1px solid var(--login-border-main)",
+      }}
+    >
+      <input
+        placeholder="Doe"
+        {...register("last_name")}
+        className="w-full h-[76px] pl-[15px] outline-none bg-transparent"
+        style={{ color: "var(--login-text-main)" }}
+        type="text"
+      />
+    </div>
 
-          <button
-            type="submit"
-            disabled={registerMutation.isPending}
-            className="flex justify-center items-center gap-[17px] font-bold w-full bg-white text-black rounded-[28px] tracking-[2.75px] uppercase text-[11px] h-[76px] trackincg-[2.75px] mb-[75px]"
-          >
-            {" "}
-            <Send size={20} />{" "}
-            <h2>
-              {registerMutation.isPending ? "Loading..." : t("register.register_button")}
-            </h2>
-          </button>
+    {/* EMAIL */}
+    <h2 className="w-full text-[10px] mb-[12px] tracking-[2px]">
+      {t("register.email")}
+    </h2>
 
-          <div className="flex w-full gap-[15px] justify-center items-center sm:items-end flex-col sm:flex-row ">
-            <h2 className="text-[11px] white-[80px] tracking-[2.2px]">
-              {t("register.login_text")}
-            </h2>
-            <h2 className="text-[16px] capitalize tracking-[2.2px] mb-[-3px]">
-              {t("register.login_button")}
-            </h2>
-          </div>
+    <div
+      className="flex rounded-[28px] w-full mb-[24px]"
+      style={{
+        background: "var(--login-input-bg)",
+        border: "1px solid var(--login-border-main)",
+      }}
+    >
+      <input
+        placeholder="nom@exemple.com"
+        {...register("email")}
+        className="w-full h-[76px] pl-[15px] outline-none bg-transparent"
+        style={{ color: "var(--login-text-main)" }}
+        type="email"
+      />
+    </div>
+
+    {/* PASSWORDS */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-[24px] w-full">
+      <div>
+        <h2 className="tracking-[2px] text-[10px] mb-[12px]">
+          {t("register.password")}
+        </h2>
+
+        <div
+          className="flex rounded-[28px] w-full"
+          style={{
+            background: "var(--login-input-bg)",
+            border: "1px solid var(--login-border-main)",
+          }}
+        >
+          <input
+            placeholder="●●●●●●"
+            {...register("password")}
+            className="w-full h-[76px] pl-[15px] outline-none bg-transparent"
+            style={{ color: "var(--login-text-main)" }}
+            type="password"
+          />
         </div>
-      </form>
+      </div>
+
+      <div>
+        <h2 className="tracking-[2px] text-[10px] mb-[12px]">
+          {t("register.confirm_pasword")}
+        </h2>
+
+        <div
+          className="flex rounded-[28px] w-full"
+          style={{
+            background: "var(--login-input-bg)",
+            border: "1px solid var(--login-border-main)",
+          }}
+        >
+          <input
+            placeholder="●●●●●●"
+            {...register("confirmpassword")}
+            className="w-full h-[76px] pl-[15px] outline-none bg-transparent"
+            style={{ color: "var(--login-text-main)" }}
+            type="password"
+          />
+        </div>
+      </div>
+    </div>
+
+    {/* SUBMIT */}
+    <button
+      type="submit"
+      disabled={registerMutation.isPending}
+      className="flex justify-center items-center gap-[17px] font-bold w-full 
+      rounded-[28px] tracking-[2.75px] uppercase text-[11px] h-[76px] mt-[40px]"
+      style={{
+        background: "var(--login-btn-bg)",
+        color: "var(--login-bg-main)",
+      }}
+    >
+      <Send size={20} />
+      {registerMutation.isPending
+        ? "Loading..."
+        : t("register.register_button")}
+    </button>
+  </div>
+</form>
+
+         <button
+          type="submit"
+          disabled={registerMutation.isPending}
+          className="flex justify-center items-center gap-[17px] font-bold w-full bg-white text-black rounded-[28px] tracking-[2.75px] uppercase text-[11px] h-[76px] mb-[75px] disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <Send size={20} />
+          <h2>{registerMutation.isPending ? "Inscription en cours..." : t("register.register_button")}</h2>
+        </button>
+
     </>
   );
 }

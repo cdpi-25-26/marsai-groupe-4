@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getVideos, deleteVideo, updateVideo } from "../../api/videos.js";
 import { useState, Fragment } from "react";
+import {CircleX, Pencil } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { 
   flexRender, 
@@ -191,14 +192,14 @@ function Videos() {
               size="sm"
               onClick={() => handleEdit(video)} className="hover:cursor-pointer"
             >
-              Modifier
+              <Pencil />
             </Button>
             <Button 
               variant="destructive"
               size="sm"
               onClick={() => handleDelete(video.id)} className="hover:cursor-pointer"
             >
-              Supprimer
+              <CircleX />
             </Button>
           </div>
         );
@@ -228,7 +229,7 @@ function Videos() {
 
   return (
     <section className="container mx-auto px-4 py-8">
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div className="bg-background rounded-lg shadow-md p-6 mb-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800">Liste des vidéos</h2>
         </div>

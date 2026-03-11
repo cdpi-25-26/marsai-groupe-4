@@ -53,7 +53,7 @@ const handleNewsletter = async () => {
         <Outlet />
       </main>
 
-      <footer className="bg-black py-[64px] sm:py-[96px] px-[20px] sm:px-[40px] w-full">
+      <footer className="bg-background py-[64px] sm:py-[96px] px-[20px] sm:px-[40px] w-full">
         <section className="max-w-[1000px] mx-auto">
 
           {/* TOP */}
@@ -62,20 +62,21 @@ const handleNewsletter = async () => {
               grid gap-[48px]
               grid-cols-1
               md:grid-cols-2
+              md:grid-rows-2
               lg:grid-cols-3
             "
           >
             {/* BRAND */}
             <div className="flex flex-col gap-[32px]">
-              <h1 className="text-white text-[32px] sm:text-[36px] font-bold tracking-[-1.8px]">
+              <h1 className="text-[var(--footer-text)]  text-[32px] sm:text-[36px] font-bold tracking-[-1.8px]">
                 MARS <span className="text-[#AD46FF]">AI</span>
               </h1>
 
-              <p className="text-white/30 text-[16px] sm:text-[18px] italic max-w-[300px]">
+              <p className="text-[var(--footer-subtitle)] text-[16px] sm:text-[18px] italic max-w-[300px]">
                 {t("footer.subtitle")}
               </p>
 
-              <div className="grid grid-cols-4 max-w-[220px] gap-2">
+              <div className="grid grid-cols-4 max-w-[220px] gap-2 text-[var(--footer-text)]">
                 <Facebook />
                 <Instagram />
                 <Youtube />
@@ -85,7 +86,7 @@ const handleNewsletter = async () => {
 
             {/* LINKS */}
             <div className="grid grid-cols-2 gap-[40px] text-[15px]">
-              <div className="flex flex-col gap-[18px] text-white/40">
+              <div className="flex flex-col gap-[18px] text-[var(--footer-credit)]">
                 <h2 className="text-[#AD46FF] uppercase text-[11px] tracking-[4.4px] mb-[12px]">
                   Navigation
                 </h2>
@@ -95,7 +96,7 @@ const handleNewsletter = async () => {
                 <span>{t("footer.ticket")}</span>
               </div>
 
-              <div className="flex flex-col gap-[18px] text-white/40">
+              <div className="flex flex-col gap-[18px] text-[var(--footer-credit)]">
                 <h2 className="text-[#F6339A] uppercase text-[11px] tracking-[4.4px] mb-[12px]">
                   {t("footer.legal")}
                 </h2>
@@ -108,16 +109,17 @@ const handleNewsletter = async () => {
             {/* NEWSLETTER */}
             <div className="flex md:col-span-2 lg:col-span-1 md:justify-start lg:justify-end">
               <div
+               style={{ background: "var(--email-gradient)" }}
                 className="
-                  w-full md:w-[330px]
+                  w-full
+                  md:w-auto 
                   rounded-[28px]
-                  border border-white/5
-                  bg-[linear-gradient(45deg,rgba(13,13,13,1)_60%,rgba(173,70,255,0.2)_100%)]
+                  border border-[var(--email-gradient-border)]
                   p-[28px] sm:p-[40px]
                   flex flex-col gap-[20px]
                 "
               >
-                <h2 className="text-white font-bold text-[22px] sm:text-[24px] tracking-[-0.6px]">
+                <h2 className="text-[var(--footer-text)] font-bold text-[22px] sm:text-[24px] tracking-[-0.6px]">
                  {t("footer.stay")} <br /> {t("footer.connected")}
                 </h2>
 
@@ -167,12 +169,13 @@ const handleNewsletter = async () => {
           {/* BOTTOM */}
           <div
             className="
-              mt-[64px] sm:mt-[96px]
+              mt-[60px] sm:mt-[96px]
               pt-[32px]
               border-t border-white/5
               flex flex-col gap-[12px]
               sm:flex-row sm:justify-between
-              text-[10px] tracking-[3px] text-white/20
+              
+              text-[10px] tracking-[3px] text-[var(--footer-subtitle)]
             "
           >
             <div>{t("footer.year")}</div>

@@ -23,7 +23,7 @@ export function ThemeToggle() {
   };
 
   return (
-    <Button variant="ghost" className="cursor-pointer" size="icon" onClick={toggleTheme}>
+    <Button variant="transparent" className="cursor-pointer " size="icon" onClick={toggleTheme}>
       {theme === 'light' ? <Moon className="h-5 w-5 hover:cursor-pointer" /> : <Sun className="h-5 w-5 hover:cursor-pointer" />}
     </Button>
   );

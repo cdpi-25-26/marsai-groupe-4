@@ -9,7 +9,7 @@ async function listFilms(req, res) {
     const offset = (page - 1) * limit;
 
     const { rows, count } = await Film.findAndCountAll({
-      where: { status: "submitted" },
+      where: { status: "selected" },
       include: [
         {
           model: User,

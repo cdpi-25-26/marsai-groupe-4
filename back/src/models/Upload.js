@@ -1,5 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../db/connection.js";
+import User from "./User.js"
+import Evaluation from "./Evaluation.js"
 
 const Upload = sequelize.define("Upload", {
   id: {
@@ -92,10 +94,32 @@ youtube_status: {
   defaultValue: "pending",
   allowNull: false,
 },
+phase_status: {
+      type: DataTypes.ENUM("phase1", "phase2", "phase3", "rejected"),
+      allowNull: false,
+      defaultValue: "phase1",
+    },
+    edition_year: {
+  type: DataTypes.INTEGER,
+  allowNull: false,
+  defaultValue: 2026,  
+},
 }, {
   timestamps: true,
   tableName: "films",
   underscored: true,
 });
+
+Upload.belongsTo(User, { 
+  foreignKey: "user_id", 
+  as: "producer" 
+});
+
+Upload.hasMany(Evaluation, {
+  foreignKey: "film_id",
+  as: "evaluations",          
+  sourceKey: "id"
+});
+
 
 export default Upload;
