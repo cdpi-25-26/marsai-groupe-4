@@ -8,5 +8,5 @@ const Phaserouter = express.Router();
 Phaserouter.get("/phase1", (req, res, next) => {  AuthMiddleware(req, res, next, ["ADMIN", "JURY","PRODUCER"]);}, PhaseController.getPhases1Video);
 Phaserouter.post("/top50",  PhaseController.getTop50);
 Phaserouter.put("/prize/:id", PhaseController.assignPrize);
-
+Phaserouter.get("/status", PhaseController.getContestStatus);
 export default Phaserouter;

@@ -3,6 +3,7 @@ import User from "../models/User.js";
 import Evaluation from "../models/Evaluation.js";
 import Award from "../models/Award.js"
 import { Op } from "sequelize";
+import sequelize from "../db/connection.js";
 
 async function getPhases1Video(req,res){
     try {
@@ -120,7 +121,67 @@ async function assignPrize(req,res){
     }
 }
 
+// Retourne l’état actuel du concours (phase + édition)
+async function getContestStatus(req, res) {
+  try {
+    // Dernière édition (max edition_year)
+    const latestEdition = await Upload.findOne({
+      attributes: [[sequelize.fn('MAX', sequelize.col('edition_year')), 'edition_year']],
+      raw: true,
+    });
+
+    const currentEdition = latestEdition?.edition_year || 2026;
+
+    // Stats par phase
+    const phaseStats = await Upload.findAll({
+      attributes: [
+        'phase_status',
+        [sequelize.fn('COUNT', sequelize.col('id')), 'count'],
+      ],
+      group: ['phase_status'],
+      raw: true,
+    });
+
+    const status = {
+      currentEdition,
+      phases: {
+        phase1: 0,
+        phase2: 0,
+        phase3: 0,
+        rejected: 0,
+      },
+      currentPhase: "idle",
+      phaseName: "Aucun concours en cours",
+      message: `Concours édition ${currentEdition} – Aucun concours en cours`,
+    };
+
+    phaseStats.forEach(stat => {
+      status.phases[stat.phase_status] = parseInt(stat.count);
+    });
+
+    // Détermine la phase actuelle (la plus avancée qui a des vidéos)
+    if (status.phases.phase3 > 0) {
+      status.currentPhase = "phase3";
+      status.phaseName = "Palmarès & Attribution des prix";
+      status.message = `Concours édition ${currentEdition} – Palmarès en cours`;
+    } else if (status.phases.phase2 > 0) {
+      status.currentPhase = "phase2";
+      status.phaseName = "Top 50 - Sélection finale";
+      status.message = `Concours édition ${currentEdition} – Top 50 en cours`;
+    } else if (status.phases.phase1 > 0) {
+      status.currentPhase = "phase1";
+      status.phaseName = "Soumissions ouvertes";
+      status.message = `Concours édition ${currentEdition} – Soumissions en cours`;
+    }
+
+    res.json(status);
+  } catch (error) {
+    console.error("Erreur getContestStatus :", error);
+    res.status(500).json({ error: "Erreur récupération état concours" });
+  }
+}
 
 
-export default { getPhases1Video, getTop50, assignPrize}
+
+export default { getPhases1Video, getTop50, assignPrize,getContestStatus}
 

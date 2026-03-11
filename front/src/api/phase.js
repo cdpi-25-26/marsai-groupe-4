@@ -13,4 +13,9 @@ async function assignPrize(videoId, prizeData){
     return await instance.put(`/phase/prize/${videoId}`, prizeData);
 }
 
-export {getPhase1Videos, getTop50,assignPrize}
+async function getContestStatus(){
+  return await instance.get("/phase/status");
+}
+
+
+export {getPhase1Videos, getTop50,assignPrize,getContestStatus}
