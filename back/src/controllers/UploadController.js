@@ -113,11 +113,13 @@ async function createUpload(req, res) {
       });
 
       if (youtubeResult.success) {
+        const youtubeFullLink = `https://www.youtube.com/watch?v=${youtubeResult.videoId}`;
         await newFilm.update({
           youtube_video_id: youtubeResult.videoId,
           youtube_status: "uploaded",
+          youtube_link: youtubeFullLink,
         });
-        console.log(`[AUTO] Upload YouTube réussi → ID: ${youtubeResult.videoId}`);
+       console.log(`[AUTO] Upload YouTube réussi → ID: ${youtubeResult.videoId} → Lien: ${youtubeFullLink}`);
       }
     } catch (youtubeError) {
       console.error("[AUTO] Échec upload YouTube :", youtubeError);
