@@ -47,7 +47,7 @@ function Evennements() {
       <div className="flex flex-col items-start justify-between p-6 gap-4">
         <div className="w-full">
           <h2 className="font-bold tracking-[-2.4px] text-4xl sm:text-5xl uppercase">
-            {t("evennements.management")}
+            {t("event.management")}
           </h2>
 
           <h2

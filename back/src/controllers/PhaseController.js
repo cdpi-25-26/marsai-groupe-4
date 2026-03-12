@@ -92,36 +92,62 @@ async function getTop50(req, res) {
     res.status(500).json({ error: error.message });
   }
 }
+async function assignPrize(req, res) {
+  try {
+    const { id } = req.params;
+    const { name, prize, description, edition_year } = req.body;
 
-async function assignPrize(req,res){
-    try{
-        const {id} = req.params;
-        const {name, prize,description,edition_year} = req.body;
-        const video = await Upload.findByPk(id);
-        if(!video)return res.status(404).json({error:"Video non trouvée"});
-        await video.update({ phase_status :"phase3"});
+    const video = await Upload.findByPk(id);
+    if (!video) return res.status(404).json({ error: "Vidéo non trouvée" });
 
-        const award = await Award.create({
-            name: name,
-            prize,
-            description: description || null,
-            edition_year: edition_year || null,
-            film_id: id
-
-        });
-        res.json ({
-            message: "prix attribué avec succès",
-            award,
-            video
-        });
-    }catch(error){
-        console.error("Erreur assignPrize :",error);
-        res.status(500).json({error: error.message});
-
+    // Autorise phase 2 (premier prix) et phase 3 (modification)
+    if (video.phase_status !== "phase2" && video.phase_status !== "phase3") {
+      return res.status(400).json({ 
+        error: "La vidéo doit être en phase 2 ou 3 pour attribuer/modifier un prix" 
+      });
     }
+
+    // Passe en phase 3 (si c'était encore phase 2)
+    await video.update({ phase_status: "phase3" });
+
+    // Upsert : crée si pas de prix, met à jour si existe
+    const [award, created] = await Award.findOrCreate({
+      where: { film_id: id },
+      defaults: {
+        name: name || "Prix spécial",
+        prize: prize || "Trophy",
+        description: description || null,
+        edition_year: edition_year || video.edition_year || new Date().getFullYear(),
+        film_id: id,
+      },
+    });
+
+    if (!created) {
+      await award.update({
+        name: name || award.name,
+        prize: prize || award.prize,
+        description: description || award.description,
+        edition_year: edition_year || award.edition_year,
+      });
+    }
+
+    res.json({
+      message: created ? "Prix créé" : "Prix mis à jour avec succès",
+      award,
+      video: {
+        id: video.id,
+        title: video.title,
+        phase_status: video.phase_status,
+      },
+    });
+  } catch (error) {
+    console.error("Erreur assignPrize :", error);
+    res.status(500).json({ error: error.message });
+  }
 }
 
-// Retourne l’état actuel du concours (phase + édition)
+
+
 async function getContestStatus(req, res) {
   try {
     // Dernière édition (max edition_year)
@@ -182,6 +208,23 @@ async function getContestStatus(req, res) {
 }
 
 
+async function getAvailablePrizes(req, res) {
+  try {
+    const names = await Award.findAll({
+      attributes: [[sequelize.fn('DISTINCT', sequelize.col('name')), 'name']],
+      raw: true,
+    });
 
-export default { getPhases1Video, getTop50, assignPrize,getContestStatus}
+    const nameList = names
+      .map(n => n.name)
+      .filter(n => n && n.trim() !== '');
+
+    res.json(nameList);
+  } catch (error) {
+    console.error("Erreur getAvailablePrizes :", error);
+    res.status(500).json({ error: "Erreur récupération des noms de prix" });
+  }
+}
+
+export default { getPhases1Video, getTop50, assignPrize,getContestStatus,getAvailablePrizes}
 
