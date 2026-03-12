@@ -45,7 +45,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { assignPrize, getAvailablePrizes } from "../../api/phase.js";
+import { assignPrize } from "../../api/phase.js";
 
 function Videos() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -57,10 +57,9 @@ function Videos() {
   const queryClient = useQueryClient();
   const [prizeDialogOpen, setPrizeDialogOpen] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
-  const { data: availablePrizeNames = [], isLoading: prizesLoading } = useQuery({
-  queryKey: ["availablePrizeNames"],
-  queryFn: getAvailablePrizes,
-  });
+
+
+ 
 
   const { isPending, isError, data, error } = useQuery({
     queryKey: ["films", currentPage, limit],
@@ -383,84 +382,140 @@ function Videos() {
           </div>
         )}
 
-        <Dialog open={prizeDialogOpen} onOpenChange={setPrizeDialogOpen}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>
-                Attribuer un prix à {selectedVideo?.title}
-              </DialogTitle>
-            </DialogHeader>
+    <Dialog open={prizeDialogOpen} onOpenChange={setPrizeDialogOpen}>
+  <DialogContent className="max-w-lg">
+    <DialogHeader>
+      <DialogTitle>
+        {selectedVideo?.phase_status === "phase3" 
+          ? "Modifier le prix de" 
+          : "Attribuer un prix à"} {selectedVideo?.title}
+      </DialogTitle>
+    </DialogHeader>
 
-            <form
-              onSubmit={async (e) => {
-                e.preventDefault();
-                const formData = new FormData(e.target);
-                const prizeData = {
-                 name: formData.get("name"),
-                  description: formData.get("description"),
-                  edition_year: selectedVideo?.edition_year || 2026,
-                };
+    <form
+      onSubmit={async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
 
-                try {
-                  await assignPrize(selectedVideo.id, prizeData);
-                  console.log("Prix attribué !");
-                  setPrizeDialogOpen(false);
-                  queryClient.invalidateQueries(["videos"]);
-                } catch (err) {
-                  console.log("Erreur : " + err.message);
-                }
-              }}
-              className="space-y-6"
-            >
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Type de prix *
-                </label>
-                <select
-                  name="name"
-                  required
-                  className="w-full p-3 bg-white/5 border border-white/20 rounded-xl text-white focus:outline-none appearance-none"
-                >
-                  <option value=""className="bg-gray-900 text-gray-400">Choisir...</option>
-                  {prizesLoading ? (
-    <option disabled>Chargement des noms de prix...</option>
-  ) : availablePrizeNames.length > 0 ? (
-    availablePrizeNames.map((prizeName) => (
-      <option className="bg-gray-900 text-gray-400" key={prizeName} value={prizeName}>
-        {prizeName}
-      </option>
-    ))
-  ) : (
-    <option disabled>Aucun nom de prix existant</option>
-  )}
-                </select>
-              </div>
+        const prizeData = {
+          name: formData.get("name")?.trim() || "Prix spécial",
+          prize: formData.get("prize")?.trim() || "Trophy",
+          description: formData.get("description")?.trim() || null,
+          edition_year: selectedVideo?.edition_year || 2026,
+        };
 
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Description (optionnel)
-                </label>
-                <textarea
-                  name="description"
-                  rows={4}
-                  className="w-full p-2 border rounded bg-white/5 text-white border-white/20"
-                  placeholder="Détails du prix..."
-                />
-              </div>
+        try {
+          await assignPrize(selectedVideo.id, prizeData);
+          console.log(
+            selectedVideo?.phase_status === "phase3" 
+              ? "Prix modifié avec succès !" 
+              : "Prix attribué avec succès !"
+          );
+          setPrizeDialogOpen(false);
+          queryClient.invalidateQueries(["videos"]);
+        } catch (err) {
+          console.log("Erreur : " + (err.response?.data?.error || err.message));
+        }
+      }}
+      className="space-y-6"
+    >
+      {/* Nom du prix */}
+      <div>
+        <label className="block text-sm font-medium mb-2">
+          Nom du prix / Catégorie *
+        </label>
+        <input
+          type="text"
+          name="name"
+          required
+          placeholder="Ex: Best AI Use, Grand Prix, Mention spéciale..."
+          defaultValue={selectedVideo?.awards?.[0]?.name || ""}
+          className="
+            w-full p-3 
+            bg-white/5 
+            border border-white/20 
+            rounded-xl 
+            text-white 
+            focus:outline-none 
+            focus:ring-2 
+            focus:ring-pink-500/50 
+            focus:border-pink-500/40
+          "
+        />
+        <p className="mt-1 text-xs text-gray-400">
+          Le nom du prix ou de la catégorie (ex: Best Film, Prix du Jury)
+        </p>
+      </div>
 
-              <div className="flex justify-end gap-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setPrizeDialogOpen(false)}
-                >
-                  Annuler
-                </Button>
-                <Button type="submit">Attribuer</Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
+      {/* Type de récompense (prize) */}
+      <div>
+        <label className="block text-sm font-medium mb-2">
+          Type de récompense *
+        </label>
+        <input
+          type="text"
+          name="prize"
+          required
+          placeholder="Ex: Trophy, Certificate, Médaille, Diplôme..."
+          defaultValue={selectedVideo?.awards?.[0]?.prize || "Trophy"}
+          className="
+            w-full p-3 
+            bg-white/5 
+            border border-white/20 
+            rounded-xl 
+            text-white 
+            focus:outline-none 
+            focus:ring-2 
+            focus:ring-pink-500/50 
+            focus:border-pink-500/40
+          "
+        />
+        <p className="mt-1 text-xs text-gray-400">
+          Le type de prix physique ou symbolique (ex: Trophy, Certificate)
+        </p>
+      </div>
+
+      {/* Description */}
+      <div>
+        <label className="block text-sm font-medium mb-2">
+          Description (optionnel)
+        </label>
+        <textarea
+          name="description"
+          rows={4}
+          defaultValue={selectedVideo?.awards?.[0]?.description || ""}
+          className="
+            w-full p-3 
+            bg-white/5 
+            border border-white/20 
+            rounded-xl 
+            text-white 
+            focus:outline-none 
+            focus:ring-2 
+            focus:ring-pink-500/50 
+            focus:border-pink-500/40
+            resize-y
+          "
+          placeholder="Détails du prix, contexte, justification..."
+        />
+      </div>
+
+      {/* Boutons */}
+      <div className="flex justify-end gap-4">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => setPrizeDialogOpen(false)}
+        >
+          Annuler
+        </Button>
+        <Button type="submit">
+          {selectedVideo?.phase_status === "phase3" ? "Modifier" : "Attribuer"}
+        </Button>
+      </div>
+    </form>
+  </DialogContent>
+</Dialog>
 
         {data.data.totalPages > 1 && (
           <Pagination className="mt-6">

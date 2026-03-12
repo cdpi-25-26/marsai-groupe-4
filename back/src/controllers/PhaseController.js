@@ -337,16 +337,14 @@ async function revertToPreviousPhase(req, res) {
 
     const videoIds = videosToRevert.map(v => v.id);
 
+    // 2. Supprime complètement les lignes de prix liées à ces vidéos
     if (videoIds.length > 0) {
-      await Award.update(
-        { film_id:  null }, 
-        {
-          where: {
-            film_id: { [Op.in]: videoIds },
-            edition_year,
-          },
-        }
-      );
+      await Award.destroy({
+        where: {
+          film_id: { [Op.in]: videoIds },
+          edition_year,
+        },
+      });
     }
 
     // 3. Si on revient en phase 1 → remet status à "submitted"
@@ -364,7 +362,7 @@ async function revertToPreviousPhase(req, res) {
     );
 
     res.json({
-      message: `Retour à ${previousPhase} effectué pour ${videoIds.length} vidéo(s) de l'édition ${edition_year}. Les prix liés ont été détachés (film_id vidé).`,
+      message: `Retour à ${previousPhase} effectué pour ${videoIds.length} vidéo(s) de l'édition ${edition_year}. Les prix attribués ont été supprimés.`,
       previousPhase,
       revertedVideoCount: videoIds.length,
     });
