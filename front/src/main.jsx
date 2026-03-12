@@ -57,7 +57,7 @@ createRoot(document.getElementById("root")).render(
             
             <Route path="/upload" element={
                 <ContestProvider>  
-                  <UploadRoleGuard allowedRoles={["Producer", "ADMIN"]}>
+                  <UploadRoleGuard allowedRoles={["PRODUCER", "ADMIN"]}>
                     <Upload />
                   </UploadRoleGuard>
                 </ContestProvider>
