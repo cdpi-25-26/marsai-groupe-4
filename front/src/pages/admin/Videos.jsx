@@ -199,44 +199,48 @@ function Videos() {
     },
     {
       id: "actions",
-      header: "",
-      cell: ({ row }) => {
-        const video = row.original;
-       if (video.phase_status !== "phase2" && video.phase_status !== "phase3")
-         return null;
-        
-        return (
-          <div className="flex gap-2 justify-end">
-            <Button
-        variant="outline"
-        size="sm"
-        onClick={() => {
-          setSelectedVideo(video);
-          setPrizeDialogOpen(true);
-        }}
-      >
-        {video.phase_status === "phase3" ? "Modifier le prix" : "Attribuer un prix"}
-      </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleEdit(video)}
-              className="hover:cursor-pointer"
-            >
-              <Pencil />
-            </Button>
+  header: "",
+  cell: ({ row }) => {
+    const video = row.original;
 
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => handleDelete(video.id)}
-              className="hover:cursor-pointer"
-            >
-              <CircleX />
-            </Button>
-          </div>
-        );
-      },
+    // Affiche le bouton en phase 2 (attribuer) ET phase 3 (modifier)
+    if (video.phase_status !== "phase2" && video.phase_status !== "phase3") {
+      return null;
+    }
+
+    return (
+      <div className="flex gap-2 justify-end">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            setSelectedVideo(video);
+            setPrizeDialogOpen(true);
+          }}
+        >
+          {video.phase_status === "phase3" ? "Modifier le prix" : "Attribuer un prix"}
+        </Button>
+
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handleEdit(video)}
+          className="hover:cursor-pointer"
+        >
+          <Pencil />
+        </Button>
+
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => handleDelete(video.id)}
+          className="hover:cursor-pointer"
+        >
+          <CircleX />
+        </Button>
+      </div>
+    );
+  },
     },
   ];
 

@@ -41,6 +41,7 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
+    <ContestProvider>
       <QueryClientProvider client={queryClient}>
         <Routes>
           {/* Routes publiques */}
@@ -95,6 +96,7 @@ createRoot(document.getElementById("root")).render(
           </Route>
         </Routes>
       </QueryClientProvider>
+      </ContestProvider>
     </BrowserRouter>
   </StrictMode>
 );
