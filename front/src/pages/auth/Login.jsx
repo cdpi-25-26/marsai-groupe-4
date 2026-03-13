@@ -181,9 +181,9 @@ export function Login() {
           <h2 className="text-[11px] text-[var(--login-text-muted)] tracking-[2.2px]">
             {t("login.register_text")}
           </h2>
-          <h2 className="text-[16px] capitalize tracking-[2.2px] mb-[-3px]">
+          <Link to="/auth/register" className="text-[16px] capitalize tracking-[2.2px] mb-[-3px]">
             {t("login.register_button")}
-          </h2>
+          </Link>
         </div>
       </div>
     </form>
