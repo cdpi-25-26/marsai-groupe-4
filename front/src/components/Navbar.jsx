@@ -1,9 +1,10 @@
 import { NavLink } from "react-router";
 import { ThemeToggle } from "./ThemeToggle";
 import { useState, useEffect } from "react";
-import { Trophy, House, Search, Calendar, User, Gavel } from "lucide-react";
+import { Trophy, House, Search, Calendar, User, Gavel, LogOut } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import handleLogout from "../utils/helpers";
 
 export default function Navbar() {
   const { t } = useTranslation();
@@ -85,6 +86,10 @@ export default function Navbar() {
         <div className="flex items-center gap-4">
           <LanguageSwitcher />
           <ThemeToggle />
+
+          {isLoggedIn && (
+            <LogOut onClick={handleLogout} className="cursor-pointer"/>
+          )}
 
           {/* BURGER — mobile only */}
           <button
