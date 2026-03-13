@@ -125,6 +125,64 @@
   --evennements-progress-to: #ff637e;
 }
 
+
+/* JURY VOTE */
+
+:root {
+
+  --jury-bg: #ffffff;
+  --jury-text: #000000;
+
+  --jury-card-bg: rgba(0,0,0,0.04);
+  --jury-card-border: rgba(0,0,0,0.1);
+
+  --jury-muted: rgba(0,0,0,0.6);
+  --jury-soft: rgba(0,0,0,0.45);
+
+  --jury-progress-bg: rgba(0,0,0,0.1);
+
+  --jury-input-bg: rgba(0,0,0,0.03);
+  --jury-input-border: rgba(0,0,0,0.15);
+
+  --jury-danger-bg: rgba(239,68,68,0.15);
+  --jury-danger-border: rgba(239,68,68,0.3);
+  --jury-danger-text: #b91c1c;
+
+  --jury-success-bg: rgba(16,185,129,0.15);
+  --jury-success-border: rgba(16,185,129,0.3);
+  --jury-success-text: #047857;
+
+}
+
+.dark {
+
+  --jury-bg: #000000;
+  --jury-text: #ffffff;
+
+  --jury-card-bg: rgba(255,255,255,0.05);
+  --jury-card-border: rgba(255,255,255,0.1);
+
+  --jury-muted: rgba(255,255,255,0.7);
+  --jury-soft: rgba(255,255,255,0.45);
+
+  --jury-progress-bg: rgba(255,255,255,0.1);
+
+  --jury-input-bg: rgba(255,255,255,0.05);
+  --jury-input-border: rgba(255,255,255,0.2);
+
+  --jury-danger-bg: rgba(239,68,68,0.2);
+  --jury-danger-border: rgba(239,68,68,0.35);
+  --jury-danger-text: #fecaca;
+
+  --jury-success-bg: rgba(16,185,129,0.2);
+  --jury-success-border: rgba(16,185,129,0.35);
+  --jury-success-text: #a7f3d0;
+
+}
+
+
+
+
 /* test commit*/
 
 :root {
