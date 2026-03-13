@@ -37,7 +37,7 @@ module.exports = {
         youtube_link: youtubeLinks[i % youtubeLinks.length],
         subtitles: null,
         ai_tools: null,
-        thumbnail: "thumbnail-placeholder.png",
+        thumbnail: "uploads/images/thumbnail-placeholder.png",
         image_2: null,
         image_3: null,
         video_path: null,
