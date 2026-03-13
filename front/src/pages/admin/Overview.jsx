@@ -30,6 +30,7 @@ let test3 = 10000
   }
 
   const stats = data.data;
+  console.log(stats)
 
   return (
     <div className="p-5">
@@ -43,14 +44,14 @@ let test3 = 10000
             <h3 className="text-[16px] mb-[-30px] font-bold uppercase text-gray-350 tracking-[1.4px]">
               Total Utilisateurs
             </h3>
-            <p className="">{formatCompact(test3)}</p>
+            <p className="">{formatCompact(stats.totalUsers)}</p>
           </div>
 
           <div>
             <h3 className="text-[16px] mb-[-30px] font-bold uppercase text-gray-350 tracking-[1.4px]">
-              Total Vidéos
+              Total Vidéos Edition: {stats.date}
             </h3>
-            <p className="">{formatCompact(test)}</p>
+            <p className="">{formatCompact(stats.totalVideos)}</p>
           </div>
 
           <div>
@@ -58,7 +59,7 @@ let test3 = 10000
               Comptes Réalisateur actifs
             </h3>
 
-            <p className="">{formatCompact(test2)}</p>
+            <p className="">{formatCompact(stats.producerCount)}</p>
           </div>
         </div>
       </div>
