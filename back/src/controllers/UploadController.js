@@ -3,6 +3,22 @@ import { videoDuration } from "@numairawan/video-duration";
 import fs from "fs/promises";
 import { uploadVideoToYoutubeInternal,uploadToS3 } from "./YoutubeController.js";
 import path from "path";
+import EmailController from "./EmailController.js";
+import { VIDEO_REJECT_TEMPLATE } from "../constants/VideoRejectTemplate.js";
+
+function upload(req, res) {
+  // Upload vers répertoire uploads/ avec Multer
+  // Upload vers YouTubeAPI
+
+  if (copyright == true) {
+    EmailController.sendMail(
+      req.userEmail, // Check AuthMiddleware
+      "Refus de votre vidéo qui est moche",
+      VIDEO_REJECT_TEMPLATE,
+    );
+  }
+}
+
 
 function getUploads(req, res) {
   Upload.findAll()
@@ -244,4 +260,5 @@ export default {
   updateUpload,
   deleteUpload,
   getRecentUploads,
+  upload,
 };
