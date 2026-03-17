@@ -5,7 +5,8 @@ async function getVideos(page = 1, limit = 6) {
 }
 
 async function getAllVideos() {
-  return await instance.get("gallerie?limit=1000/juryvideo");
+  return await instance.get("/gallerie/juryvideo?limit=1000");
+
 }
 
 async function deleteVideo(id) {
