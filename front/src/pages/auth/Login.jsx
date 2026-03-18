@@ -30,6 +30,7 @@ export function Login() {
       localStorage.setItem("email", response.data?.email);
       localStorage.setItem("role", response.data?.role);
       localStorage.setItem("token", response.data?.token);
+      localStorage.setItem("userId", response.data?.id);
 
       switch (response.data?.role) {
         case "ADMIN":
@@ -60,6 +61,14 @@ export function Login() {
     return (
       <>
         <h1 className="text-2xl">
+          You are already logged in as {localStorage.getItem("first_name")}
+        </h1>
+        <button onClick={handleLogout} className="hover:cursor-pointer">
+          <LogOut className="size-4" />
+          <span>Log out</span>
+        </button>
+        <Link to="/">Return to homepage</Link>
+         <h1 className="text-2xl">
           You are already logged in as {localStorage.getItem("first_name")}
         </h1>
         <button onClick={handleLogout} className="hover:cursor-pointer">
@@ -162,9 +171,9 @@ export function Login() {
           <h2 className="text-[11px] text-[var(--login-text-muted)] tracking-[2.2px]">
             {t("login.register_text")}
           </h2>
-          <h2 className="text-[16px] capitalize tracking-[2.2px] mb-[-3px]">
+          <Link to="/auth/register" className="text-[16px] capitalize tracking-[2.2px] mb-[-3px]">
             {t("login.register_button")}
-          </h2>
+          </Link>
         </div>
       </div>
     </form>

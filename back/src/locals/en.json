@@ -1,6 +1,6 @@
 {
   "home": {
-    "tagline_1": "TEST VIDEO DEMO",
+    "tagline_1": "bienvenue",
     "tagline_2": "DESIRABLE",
     "tagline_3": "FUTURES",
     "subtitles": "The 60-second AI-made short film festival.",
@@ -141,8 +141,9 @@
     "AI_2": "Midjourney",
     "AI_3": "Runway",
     "status": "Status",
-    "publish": "Published",
+    "published": "Published",
     "pending": "Pending"
+    
   },
   "palmares": {
     "edition_title": "MARS.AI FESTIVAL — INAUGURAL EDITION",
@@ -247,5 +248,36 @@
     "connected": "CONNECTED",
     "year": "© 2026 MARS.A.I ● MARSEILLE HUB PROTOCOL",
     "legal_text": "CYBER-PREMIUM DESIGN SYSTEM LEGAL"
-  }
+  },
+"profile": {
+  "title": "PROFILE",
+  "subtitle": "Manage your personal information",
+  "personal_info": "Personal information",
+  "other_info": "Other information",
+  "first_name": "First name",
+  "last_name": "Last name",
+  "email": "Email",
+  "role": "Role",
+  "created_at": "Registered on",
+  "phone": "Phone",
+  "mobile": "mobile",
+  "country": "Country",
+  "city": "City",
+  "no_info": "Not provided",
+  "update_profile": "Update profile",
+  "save_changes": "Save changes",
+  "saving": "Saving...",
+  "update_success": "Profile updated successfully",
+  "update_error": "Error updating profile",
+  "birth_date":"Date of birth",
+  "birth_date_placeholder":"DD/MM/YYYY",
+  "street":"Street",
+  "postal_code":"Postal code",
+  "biography":"Biography",
+  "current_job":"Current job",
+  "portfolio_url":"Portfolio URL",
+  "recent_videos":"Recent videos",
+  "save": "Save changes",
+  "edit_profile": "Edit profile"
+}
 }

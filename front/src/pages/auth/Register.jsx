@@ -16,7 +16,7 @@ const registerSchema = z
     email: z.string().email("Email invalide"),
     password: z
       .string()
-      .min(6, "Le mot de passe doit contenir au moins 6 caractères"),
+      .min(8, "Le mot de passe doit contenir au moins 8 caractères"),
     confirmpassword: z.string(),
   })
   .refine((data) => data.password === data.confirmpassword, {
@@ -263,8 +263,16 @@ export function Register() {
         : t("register.register_button")}
     </button>
   </div>
+        <div className="flex items-center sm:items-end flex-col sm:flex-row w-full gap-[15px] justify-center">
+          <h2 className="text-[11px] text-[var(--login-text-muted)] tracking-[2.2px]">
+            {t("register.login_text")}
+          </h2>
+          <Link to="/auth/login" className="text-[16px] capitalize tracking-[2.2px] mb-[-3px]">
+            {t("register.login_button")}
+          </Link>
+        </div>
+      
 </form>
-
 
     </>
   );

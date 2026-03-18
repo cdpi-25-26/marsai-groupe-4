@@ -32,6 +32,7 @@ import {
 import handleLogout from "@/utils/helpers";
 import { ThemeToggle } from "../ThemeToggle";
 import YoutubeConnectButton from './YoutubeConnectButton';
+import PhaseButton from './PhaseButton'
 
 const navItems = [
   { title: "Overview", url: "/admin", icon: LayoutDashboard },
@@ -50,7 +51,7 @@ export default function AdminSidebar() {
 
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" >
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -112,6 +113,11 @@ export default function AdminSidebar() {
           </SidebarMenuButton>
         </SidebarMenuItem>
         <SidebarMenu>
+          <SidebarMenuItem>
+  <SidebarMenuButton asChild tooltip="Changer de phase">
+    <PhaseButton />
+  </SidebarMenuButton>
+</SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip="Back Home">
               <NavLink to="/">

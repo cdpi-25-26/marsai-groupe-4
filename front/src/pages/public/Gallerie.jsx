@@ -38,7 +38,7 @@ export default function Gallerie() {
       ? `${UPLOADS_BASE}/${video.thumbnail}`
       : `${UPLOADS_BASE}/thumbnail-placeholder.png`;
 
-    const youtubeIdOrUrl = video?.youtube_link ?? "";
+    const youtubeIdOrUrl = (video?.youtube_link ?? "") || (video?.youtube_video_id ?? "");
     const youtubeUrl =
       youtubeIdOrUrl && !String(youtubeIdOrUrl).startsWith("http")
         ? `https://www.youtube.com/watch?v=${youtubeIdOrUrl}`

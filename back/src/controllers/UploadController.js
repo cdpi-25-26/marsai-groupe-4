@@ -3,6 +3,22 @@ import { videoDuration } from "@numairawan/video-duration";
 import fs from "fs/promises";
 import { uploadVideoToYoutubeInternal,uploadToS3 } from "./YoutubeController.js";
 import path from "path";
+import EmailController from "./EmailController.js";
+import { VIDEO_REJECT_TEMPLATE } from "../constants/VideoRejectTemplate.js";
+
+function upload(req, res) {
+  // Upload vers répertoire uploads/ avec Multer
+  // Upload vers YouTubeAPI
+
+  if (copyright == true) {
+    EmailController.sendMail(
+      req.userEmail, // Check AuthMiddleware
+      "Refus de votre vidéo qui est moche",
+      VIDEO_REJECT_TEMPLATE,
+    );
+  }
+}
+
 
 function getUploads(req, res) {
   Upload.findAll()
@@ -113,11 +129,13 @@ async function createUpload(req, res) {
       });
 
       if (youtubeResult.success) {
+        const youtubeFullLink = `https://www.youtube.com/watch?v=${youtubeResult.videoId}`;
         await newFilm.update({
           youtube_video_id: youtubeResult.videoId,
           youtube_status: "uploaded",
+          youtube_link: youtubeFullLink,
         });
-        console.log(`[AUTO] Upload YouTube réussi → ID: ${youtubeResult.videoId}`);
+       console.log(`[AUTO] Upload YouTube réussi → ID: ${youtubeResult.videoId} → Lien: ${youtubeFullLink}`);
       }
     } catch (youtubeError) {
       console.error("[AUTO] Échec upload YouTube :", youtubeError);
@@ -126,6 +144,10 @@ async function createUpload(req, res) {
 
     await newFilm.update({
   video_path: path.basename(videoFile.path),  
+  subtitles_path: subtitlesFile ? path.basename(subtitlesFile.path) : null,
+  thumbnail_path: thumbnailFile ? path.basename(thumbnailFile.path) : null,
+  image_2_path: image2File ? path.basename(image2File.path) : null,
+  image_3_path: image3File ? path.basename(image3File.path) : null,
 });
 
     try {
@@ -209,10 +231,34 @@ async function deleteUpload(req, res) {
   }
 }
 
+async function getRecentUploads(req, res) {
+  try {
+    const userId = req.params.id; 
+
+    if (req.user.role !== "ADMIN" && userId !== req.user.id.toString()) {
+      return res.status(403).json({ error: "Accès interdit" });
+    }
+
+    const recentVideos = await Upload.findAll({
+      where: { user_id: userId },
+      order: [['created_at', 'DESC']],
+      limit: 3,
+      attributes: ['id', 'title', 'thumbnail', 'youtube_video_id', 'youtube_status', 'created_at']
+    });
+
+    res.json(recentVideos);
+  } catch (err) {
+    console.error("[Recent Uploads] Erreur :", err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+}
+
 export default {
   getUploads,
   getUploadbyId,
   createUpload,
   updateUpload,
   deleteUpload,
+  getRecentUploads,
+  upload,
 };

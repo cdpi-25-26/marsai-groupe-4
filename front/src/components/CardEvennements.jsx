@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { MicVocal, Film, Wrench, Calendar, Clock, EllipsisVertical, MapPin, Pen } from "lucide-react";
+import { MicVocal, Film, Wrench } from "lucide-react";
+import { Calendar } from "lucide-react";
+import { Clock } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
+import { MapPin } from "lucide-react";
+import { Pen } from "lucide-react";
+import { Link } from "react-router";
 
 function CardEvennements({ data }) {
 
@@ -114,42 +120,22 @@ function CardEvennements({ data }) {
           </h2>
         </div>
 
-        <div
-          className="h-[6px] w-full rounded-[16px] overflow-hidden"
-          style={{
-            background: "var(--evennements-card-bg)",
-            border: `1px solid var(--evennements-card-border)`,
-          }}
-        >
-          <div
+        <div className="flex gap-[8px]">
+          <Link to={`/reservation/${data.id}`} className="w-full">
+            <button className="w-full tracking-[1px] bg-gradient-to-r from-[#E60076] to-[#FF637E] rounded-[16px] h-[42px] flex items-center justify-center text-[10px] font-bold uppercase">
+              Réserver
+            </button>
+          </Link>
+          <button
+            className="w-full rounded-[16px] h-[42px] text-[10px] font-bold uppercase border"
             style={{
-              width: `${percentage}%`,
-              background: `linear-gradient(to right, var(--evennements-progress-from), var(--evennements-progress-to))`,
-              height: "6px",
+              background: "var(--evennements-card-bg)",
+              borderColor: "var(--evennements-card-border)",
             }}
-          />
-        </div>
-      </div>
-
-      <div className="flex gap-[8px]">
-        <button
-          className="w-full rounded-[16px] h-[42px] text-[10px] font-bold uppercase border"
-          style={{
-            background: "var(--evennements-card-bg)",
-            borderColor: "var(--evennements-card-border)",
-          }}
-        >
-          Details
-        </button>
-
-        <div
-          className="w-[52px] h-[42px] flex items-center justify-center border rounded-[16px]"
-          style={{
-            background: "var(--evennements-card-bg)",
-            borderColor: "var(--evennements-card-border)",
-          }}
-        >
-          <Pen size={16} />
+          >
+            Details
+          </button>
+          
         </div>
       </div>
     </div>

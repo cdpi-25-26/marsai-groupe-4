@@ -1,20 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 import { getVideos, deleteVideo, updateVideo } from "../../api/videos.js";
 import { useState, Fragment } from "react";
+import { CircleX, Pencil } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { 
-  flexRender, 
-  getCoreRowModel, 
+import {
+  flexRender,
+  getCoreRowModel,
   useReactTable,
   getSortedRowModel,
 } from "@tanstack/react-table";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { YouTubePlayer } from "@/components/ui/youtube-video-player.jsx";
@@ -44,6 +45,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { assignPrize } from "../../api/phase.js";
 
 function Videos() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,6 +55,11 @@ function Videos() {
   const [editingVideo, setEditingVideo] = useState(null);
   const limit = 10;
   const queryClient = useQueryClient();
+  const [prizeDialogOpen, setPrizeDialogOpen] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState(null);
+
+
+ 
 
   const { isPending, isError, data, error } = useQuery({
     queryKey: ["films", currentPage, limit],
@@ -68,8 +75,11 @@ function Videos() {
       queryClient.invalidateQueries({ queryKey: ['films'] });
     },
     onError: (error) => {
-      alert('Erreur lors de la suppression: ' + (error.response?.data?.error || error.message));
-    }
+      alert(
+        "Erreur lors de la suppression: " +
+          (error.response?.data?.error || error.message),
+      );
+    },
   });
 
   const updateMutation = useMutation({
@@ -82,8 +92,11 @@ function Videos() {
       setEditingVideo(null);
     },
     onError: (error) => {
-      alert('Erreur lors de la mise à jour: ' + (error.response?.data?.error || error.message));
-    }
+      alert(
+        "Erreur lors de la mise à jour: " +
+          (error.response?.data?.error || error.message),
+      );
+    },
   });
 
   function handleEdit(video) {
@@ -95,15 +108,15 @@ function Videos() {
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = {
-      title: formData.get('title'),
-      translated_title: formData.get('translated_title'),
-      synopsis: formData.get('synopsis'),
-      synopsis_en: formData.get('synopsis_en'),
-      status: formData.get('status'),
-      ai_tools: formData.get('ai_tools'),
-      language: formData.get('language'),
-      duration: formData.get('duration'),
-      youtube_link: formData.get('youtube_link'),
+      title: formData.get("title"),
+      translated_title: formData.get("translated_title"),
+      synopsis: formData.get("synopsis"),
+      synopsis_en: formData.get("synopsis_en"),
+      status: formData.get("status"),
+      ai_tools: formData.get("ai_tools"),
+      language: formData.get("language"),
+      duration: formData.get("duration"),
+      youtube_link: formData.get("youtube_link"),
     };
     updateMutation.mutate({ id: editingVideo.id, data });
   }
@@ -135,7 +148,9 @@ function Videos() {
             ) : (
               <ChevronRight className="w-4 h-4" />
             )}
-            <span className="font-medium hover:cursor-pointer">{video.title}</span>
+            <span className="font-medium hover:cursor-pointer">
+              {video.title}
+            </span>
           </button>
         );
       },
@@ -214,28 +229,48 @@ function Videos() {
     },
     {
       id: "actions",
-      header: "",
-      cell: ({ row }) => {
-        const video = row.original;
-        return (
-          <div className="flex gap-2 justify-end">
-            <Button 
-              variant="outline"
-              size="sm"
-              onClick={() => handleEdit(video)} className="hover:cursor-pointer"
-            >
-              Modifier
-            </Button>
-            <Button 
-              variant="destructive"
-              size="sm"
-              onClick={() => handleDelete(video.id)} className="hover:cursor-pointer"
-            >
-              Supprimer
-            </Button>
-          </div>
-        );
-      },
+  header: "",
+  cell: ({ row }) => {
+    const video = row.original;
+
+    // Affiche le bouton en phase 2 (attribuer) ET phase 3 (modifier)
+    if (video.phase_status !== "phase2" && video.phase_status !== "phase3") {
+      return null;
+    }
+
+    return (
+      <div className="flex gap-2 justify-end">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            setSelectedVideo(video);
+            setPrizeDialogOpen(true);
+          }}
+        >
+          {video.phase_status === "phase3" ? "Modifier le prix" : "Attribuer un prix"}
+        </Button>
+
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handleEdit(video)}
+          className="hover:cursor-pointer"
+        >
+          <Pencil />
+        </Button>
+
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => handleDelete(video.id)}
+          className="hover:cursor-pointer"
+        >
+          <CircleX />
+        </Button>
+      </div>
+    );
+  },
     },
   ];
 
@@ -250,18 +285,28 @@ function Videos() {
     onSortingChange: setSorting,
   });
 
-  
   if (isPending) {
-    return <div className="container mx-auto px-4 py-8">Chargement en cours...</div>;
+    return (
+      <div className="container mx-auto px-4 py-8">Chargement en cours...</div>
+    );
   }
 
   if (isError) {
-    return <div className="container mx-auto px-4 py-8">Une erreur est survenue : {error.message}</div>;
+    return (
+      <div className="container mx-auto px-4 py-8">
+        Une erreur est survenue : {error.message}
+      </div>
+    );
   }
+
+  const handleAssignPrize = (video) => {
+    setSelectedVideo(video);
+    setPrizeDialogOpen(true);
+  };
 
   return (
     <section className="container mx-auto px-4 py-8">
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div className="bg-background rounded-lg shadow-md p-6 mb-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800">Liste des vidéos</h2>
         </div>
@@ -274,10 +319,12 @@ function Videos() {
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (
                       <TableHead key={header.id}>
-                        {header.isPlaceholder ? null : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
                       </TableHead>
                     ))}
                   </TableRow>
@@ -293,13 +340,19 @@ function Videos() {
                         <TableRow>
                           {row.getVisibleCells().map((cell) => (
                             <TableCell key={cell.id}>
-                              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext(),
+                              )}
                             </TableCell>
                           ))}
                         </TableRow>
                         {isExpanded && (
                           <TableRow>
-                            <TableCell colSpan={columns.length} className="bg-gray-50">
+                            <TableCell
+                              colSpan={columns.length}
+                              className="bg-gray-50"
+                            >
                               <div className="p-4 space-y-4">
                                 <div className="max-w-4xl">
                                   <YouTubePlayer
@@ -314,15 +367,24 @@ function Videos() {
                                     className="mb-4"
                                   />
                                 </div>
-                                
+
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                   <div>
-                                    <h4 className="font-semibold text-gray-700 mb-2">Synopsis</h4>
-                                    <p className="text-gray-600">{video.synopsis || "Aucun synopsis disponible"}</p>
+                                    <h4 className="font-semibold text-gray-700 mb-2">
+                                      Synopsis
+                                    </h4>
+                                    <p className="text-gray-600">
+                                      {video.synopsis ||
+                                        "Aucun synopsis disponible"}
+                                    </p>
                                   </div>
                                   <div>
-                                    <h4 className="font-semibold text-gray-700 mb-2">Outils IA utilisés</h4>
-                                    <p className="text-gray-600">{video.ai_tools || "Non spécifié"}</p>
+                                    <h4 className="font-semibold text-gray-700 mb-2">
+                                      Outils IA utilisés
+                                    </h4>
+                                    <p className="text-gray-600">
+                                      {video.ai_tools || "Non spécifié"}
+                                    </p>
                                   </div>
                                 </div>
                               </div>
@@ -334,7 +396,10 @@ function Videos() {
                   })
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={columns.length} className="h-24 text-center">
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
                       Aucune vidéo trouvée.
                     </TableCell>
                   </TableRow>
@@ -343,8 +408,145 @@ function Videos() {
             </Table>
           </div>
         ) : (
-          <div className="text-center py-8 text-gray-500">Aucune vidéo à afficher.</div>
+          <div className="text-center py-8 text-gray-500">
+            Aucune vidéo à afficher.
+          </div>
         )}
+
+    <Dialog open={prizeDialogOpen} onOpenChange={setPrizeDialogOpen}>
+  <DialogContent className="max-w-lg">
+    <DialogHeader>
+      <DialogTitle>
+        {selectedVideo?.phase_status === "phase3" 
+          ? "Modifier le prix de" 
+          : "Attribuer un prix à"} {selectedVideo?.title}
+      </DialogTitle>
+    </DialogHeader>
+
+    <form
+      onSubmit={async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+
+        const prizeData = {
+          name: formData.get("name")?.trim() || "Prix spécial",
+          prize: formData.get("prize")?.trim() || "Trophy",
+          description: formData.get("description")?.trim() || null,
+          edition_year: selectedVideo?.edition_year || 2026,
+        };
+
+        try {
+          await assignPrize(selectedVideo.id, prizeData);
+          console.log(
+            selectedVideo?.phase_status === "phase3" 
+              ? "Prix modifié avec succès !" 
+              : "Prix attribué avec succès !"
+          );
+          setPrizeDialogOpen(false);
+          queryClient.invalidateQueries(["videos"]);
+        } catch (err) {
+          console.log("Erreur : " + (err.response?.data?.error || err.message));
+        }
+      }}
+      className="space-y-6"
+    >
+      {/* Nom du prix */}
+      <div>
+        <label className="block text-sm font-medium mb-2">
+          Nom du prix / Catégorie *
+        </label>
+        <input
+          type="text"
+          name="name"
+          required
+          placeholder="Ex: Best AI Use, Grand Prix, Mention spéciale..."
+          defaultValue={selectedVideo?.awards?.[0]?.name || ""}
+          className="
+            w-full p-3 
+            bg-white/5 
+            border border-white/20 
+            rounded-xl 
+            text-white 
+            focus:outline-none 
+            focus:ring-2 
+            focus:ring-pink-500/50 
+            focus:border-pink-500/40
+          "
+        />
+        <p className="mt-1 text-xs text-gray-400">
+          Le nom du prix ou de la catégorie (ex: Best Film, Prix du Jury)
+        </p>
+      </div>
+
+      {/* Type de récompense (prize) */}
+      <div>
+        <label className="block text-sm font-medium mb-2">
+          Type de récompense *
+        </label>
+        <input
+          type="text"
+          name="prize"
+          required
+          placeholder="Ex: Trophy, Certificate, Médaille, Diplôme..."
+          defaultValue={selectedVideo?.awards?.[0]?.prize || "Trophy"}
+          className="
+            w-full p-3 
+            bg-white/5 
+            border border-white/20 
+            rounded-xl 
+            text-white 
+            focus:outline-none 
+            focus:ring-2 
+            focus:ring-pink-500/50 
+            focus:border-pink-500/40
+          "
+        />
+        <p className="mt-1 text-xs text-gray-400">
+          Le type de prix physique ou symbolique (ex: Trophy, Certificate)
+        </p>
+      </div>
+
+      {/* Description */}
+      <div>
+        <label className="block text-sm font-medium mb-2">
+          Description (optionnel)
+        </label>
+        <textarea
+          name="description"
+          rows={4}
+          defaultValue={selectedVideo?.awards?.[0]?.description || ""}
+          className="
+            w-full p-3 
+            bg-white/5 
+            border border-white/20 
+            rounded-xl 
+            text-white 
+            focus:outline-none 
+            focus:ring-2 
+            focus:ring-pink-500/50 
+            focus:border-pink-500/40
+            resize-y
+          "
+          placeholder="Détails du prix, contexte, justification..."
+        />
+      </div>
+
+      {/* Boutons */}
+      <div className="flex justify-end gap-4">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => setPrizeDialogOpen(false)}
+        >
+          Annuler
+        </Button>
+        <Button type="submit">
+          {selectedVideo?.phase_status === "phase3" ? "Modifier" : "Attribuer"}
+        </Button>
+      </div>
+    </form>
+  </DialogContent>
+</Dialog>
 
         {data.data.totalPages > 1 && (
           <Pagination className="mt-6">
@@ -352,11 +554,16 @@ function Videos() {
               <PaginationItem>
                 <PaginationPrevious
                   onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-                  className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                  className={
+                    currentPage === 1 ? "pointer-events-none opacity-50" : ""
+                  }
                 />
               </PaginationItem>
 
-              {Array.from({ length: data.data.totalPages }, (_, i) => i + 1).map((page) => (
+              {Array.from(
+                { length: data.data.totalPages },
+                (_, i) => i + 1,
+              ).map((page) => (
                 <PaginationItem key={page}>
                   <PaginationLink
                     onClick={() => setCurrentPage(page)}
@@ -369,8 +576,14 @@ function Videos() {
 
               <PaginationItem>
                 <PaginationNext
-                  onClick={() => setCurrentPage((p) => Math.min(p + 1, data.data.totalPages))}
-                  className={currentPage === data.data.totalPages ? "pointer-events-none opacity-50" : ""}
+                  onClick={() =>
+                    setCurrentPage((p) => Math.min(p + 1, data.data.totalPages))
+                  }
+                  className={
+                    currentPage === data.data.totalPages
+                      ? "pointer-events-none opacity-50"
+                      : ""
+                  }
                 />
               </PaginationItem>
             </PaginationContent>
@@ -494,7 +707,9 @@ function Videos() {
                   Annuler
                 </Button>
                 <Button type="submit" disabled={updateMutation.isPending}>
-                  {updateMutation.isPending ? "Enregistrement..." : "Enregistrer"}
+                  {updateMutation.isPending
+                    ? "Enregistrement..."
+                    : "Enregistrer"}
                 </Button>
               </div>
             </form>

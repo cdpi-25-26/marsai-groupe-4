@@ -141,7 +141,7 @@
     "AI_2": "Midjourney",
     "AI_3": "Runway",
     "status": "Statut",
-    "publish": "Publié",
+    "published": "Publié",
     "pending": "En attente"
   },
   "palmares": {
@@ -213,8 +213,8 @@
     "publish_button": "Confirmer et envoyer"
   },
   "footer": {
-    "subtitle": "La plateforme mondiale de la narration générative, ancrée dans",
-    "subtitle_2": "la lumière de Marseille.",
+    "subtitle": "La plateforme mondiale de la narration générative, ancrée dans la lumière de Marseille.",
+    "subtitle_2": "",
     "gallery": "Galerie",
     "program": "Programme",
     "ticket": "Billetterie",
@@ -247,5 +247,36 @@
     "connected": "CONNECTÉ",
     "year": "© 2026 MARS.A.I ● PROTOCOL MARSEILLE HUB",
     "legal_text": "DESIGN SYSTÈME CYBER-PREMIUM LÉGAL"
-  }
+  },
+  "profile": {
+  "title": "PROFIL",
+  "subtitle": "Gérez vos informations personnelles",
+  "personal_info": "Informations personnelles",
+  "other_info": "Autres informations",
+  "first_name": "Prénom",
+  "last_name": "Nom",
+  "email": "Email",
+  "role": "Rôle",
+  "created_at": "Inscrit le",
+  "phone": "Téléphone",
+  "mobile": "Mobile",
+  "country": "Pays",
+  "city": "Ville",
+  "no_info": "Non renseigné",
+  "update_profile": "Mettre à jour le profil",
+  "save_changes": "Enregistrer les modifications",
+  "saving": "Enregistrement en cours...",
+  "update_success": "Profil mis à jour avec succès",
+  "update_error": "Erreur lors de la mise à jour",
+  "birth_date":"Date de naissance",
+  "birth_date_placeholder":"JJ/MM/AAAA",
+  "street":"Rue",
+  "postal_code":"Code postal",
+  "biography":"Biographie",
+  "current_job":"Emploi actuel",
+  "portfolio_url":"URL du portfolio",
+  "recent_videos":"Vidéos récentes",
+  "save": "Enregistrer les modifications",
+  "edit_profile": "Modifier le profil"
+}
 }

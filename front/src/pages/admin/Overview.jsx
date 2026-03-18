@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getStats } from "../../api/overview.js";
-import { Users, Video, Clapperboard } from "lucide-react";
+import { Users, Video, Clapperboard, User } from "lucide-react";
 
 function StatCard({ icon: Icon, label, value, color }) {
   return (
@@ -22,6 +22,19 @@ function Overview() {
     queryFn: getStats,
   });
 
+  const formatCompact = (number) => {
+  return new Intl.NumberFormat("en", {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(number);
+};
+
+
+
+let test = 100000;
+let test2 = 1000000;
+let test3 = 10000
+
   if (isPending) {
     return (
       <div className="p-6 text-muted-foreground animate-pulse">Chargement en cours...</div>
@@ -35,6 +48,7 @@ function Overview() {
   }
 
   const stats = data.data;
+  console.log(stats)
 
   return (
     <div className="p-6 space-y-8">
@@ -46,7 +60,7 @@ function Overview() {
       {/* Stat cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <StatCard icon={Users} label="Total Utilisateurs" value={stats.totalUsers} color="bg-blue-500" />
-        <StatCard icon={Video} label="Total Vidéos" value={stats.totalVideos} color="bg-purple-500" />
+        <StatCard icon={Video} label={`Total Vidéos${stats.date ? ` — ${stats.date}` : ""}`} value={stats.totalVideos} color="bg-purple-500" />
         <StatCard icon={Clapperboard} label="Réalisateurs actifs" value={stats.producerCount} color="bg-pink-500" />
       </div>
 

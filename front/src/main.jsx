@@ -26,10 +26,11 @@ import Settings from "./pages/admin/Settings.jsx";
 import Evaluations from "./pages/admin/Evaluations.jsx";
 import Reservation from "./pages/public/Reservation.jsx";
 import Profile from "./pages/public/Profile.jsx";
-import JuryVote from "./pages/jury/JuryVote.jsx";
+import JuryVote from "./pages/JuryVote.jsx";
 import Gallerie from "./pages/public/Gallerie.jsx";
 import { UploadRoleGuard } from "./middlewares/Upload.jsx";
 import ForgotPassword from "./pages/auth/ForgotPassword.jsx";
+import { ContestProvider } from './utils/phasestatus.jsx';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -42,56 +43,66 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <Routes>
-          {/* Routes publiques */}
-          <Route path="/" element={<PublicLayout />}>
-            <Route index element={<Home />} />
-            <Route path="/gallerie" element={<Gallerie />} />
-            <Route path="/evennements" element={<Evennements />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/auth/login" element={<Login />} />
-            <Route path="/auth/register" element={<Register />} />
-            <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-            <Route path="/films/:id" element={<Film />} />
-            <Route path="/upload" element={<UploadRoleGuard allowedRoles={["PRODUCER", "ADMIN"]}>
-             <Upload />
-            </UploadRoleGuard>} />
-            <Route path="/palmares" element={<Palmares />} />
-            <Route path="/agenda" element={<Evennements />} />
-            <Route path="/reservation" element={<Reservation />} />
-            <Route path="/profile" element={
-              <UploadRoleGuard allowedRoles={["PRODUCER", "JURY", "ADMIN"]}>
-                <Profile />
-              </UploadRoleGuard>
-            } />
+      <ContestProvider>
+        <QueryClientProvider client={queryClient}>
+          <Routes>
+            {/* Routes publiques */}
+            <Route path="/" element={<PublicLayout />}>
+              <Route index element={<Home />} />
+              <Route path="/gallerie" element={<Gallerie />} />
+              <Route path="/evennements" element={<Evennements />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/auth/login" element={<Login />} />
+              <Route path="/auth/register" element={<Register />} />
+              <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+              <Route path="/films/:id" element={<Film />} />
+              <Route
+                path="/upload"
+                element={
+                  <UploadRoleGuard allowedRoles={["PRODUCER", "ADMIN"]}>
+                    <Upload />
+                  </UploadRoleGuard>
+                }
+              />
+              <Route path="/palmares" element={<Palmares />} />
+              <Route path="/agenda" element={<Evennements />} />
+              <Route path="/reservation" element={<Reservation />} />
+              <Route path="/profile" element={
+                <UploadRoleGuard allowedRoles={["PRODUCER", "JURY", "ADMIN"]}>
+                  <Profile />
+                </UploadRoleGuard>
+              } />
+              <Route
+                path="/jury"
+                element={
+                  <RoleGuard allowedRoles={["JURY", "ADMIN"]}>
+                    <JuryVote />
+                  </RoleGuard>
+                }
+              />
+            </Route>
+
+            {/* Routes admin */}
             <Route
-              path="/jury"
+              path="admin"
               element={
-                <RoleGuard allowedRoles={["JURY", "ADMIN"]}>
-                  <JuryVote />
+                <RoleGuard allowedRoles={["ADMIN"]}>
+                  <AdminLayout />
                 </RoleGuard>
               }
-            />
-          </Route>
-
-          {/* Routes privées */}
-          <Route path="admin" element={ <RoleGuard allowedRoles={["ADMIN"]}>
-            <AdminLayout />
-            </RoleGuard>
-              } >
-            <Route index element={<Dashboard />} />
-            <Route path="users" element={<Users />} />
-            <Route path="videos" element={<Videos />} />
-            <Route path="jurys" element={<Jury />} />
-            <Route path="events" element={<Events />} />
-            <Route path="cms" element={<Cms />} />
-            <Route path="settings" element={<Settings />} />
-            <Route path="evaluations" element={<Evaluations />} />
-
-          </Route>
-        </Routes>
-      </QueryClientProvider>
+            >
+              <Route index element={<Dashboard />} />
+              <Route path="users" element={<Users />} />
+              <Route path="videos" element={<Videos />} />
+              <Route path="jurys" element={<Jury />} />
+              <Route path="events" element={<Events />} />
+              <Route path="cms" element={<Cms />} />
+              <Route path="settings" element={<Settings />} />
+              <Route path="evaluations" element={<Evaluations />} />
+            </Route>
+          </Routes>
+        </QueryClientProvider>
+      </ContestProvider>
     </BrowserRouter>
-  </StrictMode>,
+  </StrictMode>
 );

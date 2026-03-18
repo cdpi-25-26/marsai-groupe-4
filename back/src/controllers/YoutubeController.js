@@ -94,7 +94,7 @@ async function googleAuthCallback(req, res) {
 
     await saveTokens(tokens);
 
-    res.redirect("/admin"); 
+    res.redirect("http://localhost:5173/admin"); 
   } catch (error) {
     console.error("Erreur auth callback:", error);
     res.status(500).send("Erreur lors de l'authentification");
@@ -121,7 +121,7 @@ async function uploadVideoToYoutubeInternal(filePath, metadata = {}) {
           categoryId: "22", // People & Blogs
         },
         status: {
-          privacyStatus: "private", // ou "public" / "unlisted" si tu veux
+          privacyStatus: "public", // ou "public" / "unlisted" si tu veux
         },
       },
       media: {
@@ -157,6 +157,7 @@ const BASE_FOLDER = "grp4";
   try {
     const fileContent = fs.createReadStream(localFilePath);
     const fileName = path.basename(localFilePath);
+    
 
     // Clé S3 : on garde la même structure que local + prefix grp4
 const s3Key = `${BASE_FOLDER}/${subFolder}/${fileName}`;

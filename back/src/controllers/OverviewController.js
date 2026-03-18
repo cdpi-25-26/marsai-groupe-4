@@ -4,6 +4,7 @@ import { Op } from "sequelize";
 
 async function getStats(req, res) {
   try {
+    const currentYear = new Date().getFullYear();
     const videoCount = await Video.count({ where: { status: 'submitted' } });
     const userCount = await User.count();
     const producerCount = await User.count({ where: { role: 'PRODUCER' } });
@@ -16,6 +17,7 @@ async function getStats(req, res) {
       producerCount,
       recentVideos,
       recentUsers,
+      date: currentYear,
     };
 
     res.json(stats);

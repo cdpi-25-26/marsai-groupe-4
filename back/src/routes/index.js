@@ -16,6 +16,8 @@ import profileRouter from "./Profile.route.js";
 import contactRouter from "./Contact.route.js";
 import reservationRouter from "./Reservation.route.js";
 import settingsRouter from "./admin/Settings.route.js";
+import newsletterRouter from "./Newsletter.route.js";
+import Phaserouter from "./admin/Phase.route.js";
 
 const router = express.Router();
 
@@ -36,5 +38,7 @@ router.use("/profile", profileRouter);
 router.use("/contact", contactRouter);
 router.use("/reservations", reservationRouter);
 router.use("/admin/settings", settingsRouter);
-
+router.use("/newsletter", newsletterRouter);
+router.use("/awards", awardRouter);
+router.use("/phase", Phaserouter);
 export default router;
