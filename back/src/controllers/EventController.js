@@ -2,9 +2,12 @@ import Event from "../models/Event.js"
 import sequelize from "../db/connection.js";
 
 function getEvents(req, res) {
-    Event.findAll().then((events) => {
-        res.json(events);
-    });
+    Event.findAll()
+        .then((events) => res.json(events))
+        .catch((error) => {
+            console.error("Error fetching events:", error);
+            res.status(500).json({ error: "Erreur serveur", details: error.message });
+        });
 }
 
 
@@ -33,13 +36,18 @@ async function deleteEvent(req, res) {
 
 function getEventById(req, res) {
     const { id } = req.params;
-    Event.findOne({ where: { id } }).then((event) => {
-        if(event) {
-           res.json(event);
-        } else {
-      res.status(404).json({ error: "Evennement non trouvé" });
-    }
-    })
+    Event.findOne({ where: { id } })
+        .then((event) => {
+            if (event) {
+                res.json(event);
+            } else {
+                res.status(404).json({ error: "Evennement non trouvé" });
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching event:", error);
+            res.status(500).json({ error: "Erreur serveur", details: error.message });
+        });
 }
 
 function createEvent(req, res) {

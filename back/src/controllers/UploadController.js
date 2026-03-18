@@ -7,16 +7,17 @@ import EmailController from "./EmailController.js";
 import { VIDEO_REJECT_TEMPLATE } from "../constants/VideoRejectTemplate.js";
 
 function upload(req, res) {
-  // Upload vers répertoire uploads/ avec Multer
-  // Upload vers YouTubeAPI
+  const copyright = req.body.copyright;
 
   if (copyright == true) {
     EmailController.sendMail(
-      req.userEmail, // Check AuthMiddleware
+      req.user?.email,
       "Refus de votre vidéo qui est moche",
       VIDEO_REJECT_TEMPLATE,
     );
   }
+
+  res.json({ message: "ok" });
 }
 
 
@@ -233,11 +234,7 @@ async function deleteUpload(req, res) {
 
 async function getRecentUploads(req, res) {
   try {
-    const userId = req.params.id; 
-
-    if (req.user.role !== "ADMIN" && userId !== req.user.id.toString()) {
-      return res.status(403).json({ error: "Accès interdit" });
-    }
+    const userId = req.user.id.toString();
 
     const recentVideos = await Upload.findAll({
       where: { user_id: userId },

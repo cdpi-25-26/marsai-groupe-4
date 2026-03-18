@@ -21,7 +21,7 @@ function Evennements() {
   });
 
   useEffect(() => {
-    fetch(import.meta.env.VITE_API_URL + "/events" || "http://localhost:3000/events")
+    fetch((import.meta.env.VITE_API_URL || "http://localhost:3000") + "/events")
       .then(res => {
         if (!res.ok) throw new Error("loading error");
         return res.json();
@@ -68,7 +68,7 @@ function Evennements() {
           onClick={() => setTypeFilter("")}
           className={`text-[10px] border rounded-[16px] font-bold tracking-[2px] h-[54px] px-[20px] ${!typeFilter ? "bg-white/10 text-white border-white/30" : "bg-white/2 text-white/40 border-white/10"}`}
         >
-          {t("event_all_events")}
+          {t("event.all_events")}
         </button>
 
         {EVENT_TYPES.map((type) => (

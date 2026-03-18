@@ -16,7 +16,7 @@ function Evaluations() {
 
   useEffect(() => {
     getEvaluations()
-      .then((res) => setEvaluations(res.data))
+      .then((res) => setEvaluations(Array.isArray(res.data) ? res.data : (res.data.evaluations || [])))
       .catch(() => {});
   }, []);
 

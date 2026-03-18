@@ -78,6 +78,28 @@ const Film = sequelize.define(
       allowNull: true,
     },
 
+    video_path: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
+
+    youtube_video_id: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+
+    youtube_status: {
+      type: DataTypes.STRING(30),
+      allowNull: false,
+      defaultValue: "pending",
+    },
+
+    edition_year: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 2026,
+    },
+
     phase_status: {
       type: DataTypes.ENUM("phase1", "phase2", "phase3", "rejected"),
       allowNull: false,

@@ -31,10 +31,6 @@ function Overview() {
 
 
 
-let test = 100000;
-let test2 = 1000000;
-let test3 = 10000
-
   if (isPending) {
     return (
       <div className="p-6 text-muted-foreground animate-pulse">Chargement en cours...</div>
@@ -48,7 +44,6 @@ let test3 = 10000
   }
 
   const stats = data.data;
-  console.log(stats)
 
   return (
     <div className="p-6 space-y-8">

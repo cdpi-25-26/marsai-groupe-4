@@ -6,14 +6,13 @@ export const getAllAwards = async (req, res) => {
     const awards = await Award.findAll({
       include: [{
         model: Film,               // ← Film = Upload (ton modèle)
-        as: 'Film',
+        as: 'film',
         attributes: ['title', 'thumbnail']  // ← on prend les vrais champs
       }],
       order: [['edition_year', 'DESC'], ['id', 'ASC']]
     });
 
     // Pas besoin de map manuel, Sequelize renvoie déjà la bonne structure
-    console.log("Awards sent:", awards[0]); // pour debug
     res.json(awards);
   } catch (error) {
     console.error("Awards error:", error);

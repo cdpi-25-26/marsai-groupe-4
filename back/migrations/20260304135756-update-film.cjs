@@ -15,8 +15,7 @@ module.exports = {
   async down(queryInterface) {
     await queryInterface.sequelize.transaction(async (t) => {
       await queryInterface.sequelize.query(
-       ` ALTER TABLE films,
-
+       ` ALTER TABLE films
         DROP COLUMN phase_status;`,
         { transaction: t }
       );

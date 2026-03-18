@@ -1,8 +1,9 @@
 import express from 'express';
-import multer from 'multer'; 
+import multer from 'multer';
 import { googleAuth, googleAuthCallback, uploadVideoToYoutubeInternal, loadTokens } from '../controllers/YoutubeController.js';
 import path from 'path';
 import fs from 'fs';
+import AuthMiddleware from '../middlewares/AuthMiddleware.js';
 
 const youtubeRouter = express.Router();
 const UploadDir = path.join(process.cwd(), "uploads/videos");
@@ -18,10 +19,10 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-youtubeRouter.get("/auth", googleAuth);
+youtubeRouter.get("/auth", (req, res, next) => AuthMiddleware(req, res, next, ["ADMIN"]), googleAuth);
 
 youtubeRouter.get("/auth/callback", googleAuthCallback);
-youtubeRouter.post("/upload", upload.single("video"), uploadVideoToYoutubeInternal);
+youtubeRouter.post("/upload", (req, res, next) => AuthMiddleware(req, res, next, ["ADMIN"]), upload.single("video"), uploadVideoToYoutubeInternal);
 
 youtubeRouter.get("/check-auth", async (req, res) => {
   try {

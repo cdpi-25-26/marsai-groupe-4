@@ -39,6 +39,5 @@ router.use("/contact", contactRouter);
 router.use("/reservations", reservationRouter);
 router.use("/admin/settings", settingsRouter);
 router.use("/newsletter", newsletterRouter);
-router.use("/awards", awardRouter);
 router.use("/phase", Phaserouter);
 export default router;

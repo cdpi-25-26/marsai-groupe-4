@@ -2,9 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { Mail, Send, ArrowLeft } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import axios from "axios";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+import instance from "../../api/config";
 
 export default function ForgotPassword() {
   const { t } = useTranslation();
@@ -19,7 +17,7 @@ export default function ForgotPassword() {
     setLoading(true);
     setError("");
     try {
-      await axios.post(`${API_URL}/api/auth/forgot-password`, { email });
+      await instance.post("/auth/forgot-password", { email });
       setSent(true);
     } catch (err) {
       setError(err.response?.data?.error || "Une erreur est survenue.");

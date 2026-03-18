@@ -1,4 +1,4 @@
-mport { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { getMe, updateMe } from "../../api/profile";
@@ -13,13 +13,12 @@ export default function Profile() {
   const { data: user, isLoading, error, refetch } = useQuery({
     queryKey: ["profile"],
     queryFn: () => getMe().then((res) => res.data),
-    onSuccess: (data) => setForm(data),
   });
 
   // sync form when user loads
-  if (user && !form.email) {
-    setForm(user);
-  }
+  useEffect(() => {
+    if (user) setForm(user);
+  }, [user]);
 
   const mutation = useMutation({
     mutationFn: (data) => updateMe(data),

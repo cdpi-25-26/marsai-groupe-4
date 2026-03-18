@@ -25,8 +25,8 @@ function Home() {
       <section className="hero">
         <div className="hero-overlay"></div>
         <div className="hero-content">
-            <div class="btn-protocole">
-              <Sparkles class="btn-sparkle"/>
+            <div className="btn-protocole">
+              <Sparkles className="btn-sparkle"/>
               <h2>Le Protocole Temporel 2026</h2>
               </div>
 

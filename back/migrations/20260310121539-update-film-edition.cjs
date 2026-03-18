@@ -15,8 +15,7 @@ ADD COLUMN edition_year YEAR NOT NULL DEFAULT 2026;`,
   async down(queryInterface) {
     await queryInterface.sequelize.transaction(async (t) => {
       await queryInterface.sequelize.query(
-       ` ALTER TABLE films,
-
+       ` ALTER TABLE films
         DROP COLUMN edition_year;`,
         { transaction: t }
       );

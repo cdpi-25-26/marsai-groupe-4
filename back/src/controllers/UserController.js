@@ -4,45 +4,50 @@ import { hashPassword } from "../utils/password.js";
 
 // Liste
 function getUsers(req, res) {
-  User.findAll().then((users) => {
+  User.findAll({ attributes: { exclude: ['password'] } }).then((users) => {
     res.json(users);
   });
 }
 
 // Création
-function createUser(req, res) {
+async function createUser(req, res) {
   if (!req.body) {
     return res.status(400).json({ error: "Données manquantes" });
   }
 
   const { first_name, last_name, email, password, role } = req.body;
 
-if (!first_name || !last_name || !email || !password ) {
-  return res.status(400).json({ error: "Tous les champs sont requis" });
-}
-
-// Vérifie si email déjà utilisé
-User.findOne({ where: { email } }).then(async (existingEmail) => {
-  if (existingEmail) {
-    return res.status(400).json({ error: "Email déjà utilisé" });
+  if (!first_name || !last_name || !email || !password) {
+    return res.status(400).json({ error: "Tous les champs sont requis" });
   }
 
-  const hash = await hashPassword(password);
-  User.create({ first_name, last_name, email, password: hash, role: role || "PRODUCER" })
-      .then((newUser) => {
-        const { password, ...safeUser } = newUser.dataValues;
-        res.status(201).json({ message: "Utilisateur créé", newUser: safeUser });
-      });
-});
+  try {
+    const existingEmail = await User.findOne({ where: { email } });
+    if (existingEmail) {
+      return res.status(400).json({ error: "Email déjà utilisé" });
+    }
+
+    const hash = await hashPassword(password);
+    const newUser = await User.create({ first_name, last_name, email, password: hash, role: role || "PRODUCER" });
+    const { password: _, ...safeUser } = newUser.dataValues;
+    res.status(201).json({ message: "Utilisateur créé", newUser: safeUser });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({ error: "Erreur serveur", details: error.message });
+  }
 }
 
 // Suppression
 async function deleteUser(req, res) {
   const { id } = req.params;
-  await Evaluation.destroy({ where: { user_id: id } });
-  User.destroy({ where: { id } }).then(() => {
-    res.status(204).json({ message: "Utilisateur supprimé" });
-  });
+  try {
+    await Evaluation.destroy({ where: { user_id: id } });
+    await User.destroy({ where: { id } });
+    res.status(200).json({ message: "Utilisateur supprimé" });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ error: "Erreur serveur", details: error.message });
+  }
 }
 
 // Modification

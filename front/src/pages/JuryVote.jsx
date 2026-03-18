@@ -58,8 +58,8 @@ function JuryVote() {
       getEvaluations().then((res) => res.data),
     ])
       .then(([filmsData, evalsData]) => {
-        setAllFilms(filmsData);
-        setEvaluations(evalsData);
+        setAllFilms(Array.isArray(filmsData) ? filmsData : (filmsData.films || filmsData.showVideos || []));
+        setEvaluations(Array.isArray(evalsData) ? evalsData : (evalsData.evaluations || []));
         setError(null);
       })
       .catch((err) => setError(err.message))
@@ -156,7 +156,7 @@ function JuryVote() {
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  });
+  }, [handleVote, handleUndo]);
 
   // Handle video ended — unlock voting
   function handleVideoEnded() {

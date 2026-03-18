@@ -1,7 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
 import { useTranslation } from "react-i18next";
 
 export default function AccessDeniedPage() {
@@ -9,10 +7,7 @@ export default function AccessDeniedPage() {
   const { t } = useTranslation();
 
   return (
-<>
- <Navbar />
     <div className="min-h-screen bg-black text-white font-sans">
-    
       <main className="mx-auto max-w-[1180px] px-6 py-16">
         <section className="rounded-[28px] border border-white/10 bg-white/5 p-8 shadow-[0_24px_80px_rgba(0,0,0,0.55)] backdrop-blur-md md:p-12">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-4 py-2 text-[11px] font-black tracking-widest text-white/80">
@@ -28,8 +23,9 @@ export default function AccessDeniedPage() {
           </h1>
 
           <p className="mt-4 max-w-[75ch] text-white/70">
-            {t("accessdenied.message_reason")}  
+            {t("accessdenied.message_reason")}
           </p>
+
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <button
               onClick={() => navigate("/")}
@@ -49,12 +45,6 @@ export default function AccessDeniedPage() {
           </div>
         </section>
       </main>
-
-     
     </div>
-
-    <Footer /></>
-    
-   
   );
 }

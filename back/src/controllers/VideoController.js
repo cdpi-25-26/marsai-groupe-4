@@ -140,7 +140,7 @@ async function deleteVideo(req, res) {
       await Video.destroy({ where: { id }, transaction: t });
     });
 
-    res.status(204).json({ message: "Video supprimé" });
+    res.status(200).json({ message: "Video supprimé" });
   } catch (error) {
     res.status(500).json({
       error: "Impossible de supprimer le video",

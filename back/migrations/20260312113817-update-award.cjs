@@ -15,8 +15,7 @@ MODIFY COLUMN film_id INT NULL;`,
   async down(queryInterface) {
     await queryInterface.sequelize.transaction(async (t) => {
       await queryInterface.sequelize.query(
-       ` ALTER TABLE award,
-
+       ` ALTER TABLE awards
         DROP COLUMN film_id;`,
         { transaction: t }
       );

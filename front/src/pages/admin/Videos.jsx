@@ -1,6 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { getVideos, deleteVideo, updateVideo } from "../../api/videos.js";
 import { useState, Fragment } from "react";
+
+function extractYoutubeId(link) {
+  if (!link) return "";
+  try {
+    if (link.includes("youtu.be/")) return link.split("youtu.be/")[1].split(/[?&]/)[0];
+    if (link.includes("youtube.com/watch")) return new URL(link).searchParams.get("v") || "";
+    if (link.includes("youtube.com/embed/")) return link.split("embed/")[1].split(/[?&]/)[0];
+    return link;
+  } catch {
+    return link;
+  }
+}
 import { CircleX, Pencil } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -233,11 +245,6 @@ function Videos() {
   cell: ({ row }) => {
     const video = row.original;
 
-    // Affiche le bouton en phase 2 (attribuer) ET phase 3 (modifier)
-    if (video.phase_status !== "phase2" && video.phase_status !== "phase3") {
-      return null;
-    }
-
     return (
       <div className="flex gap-2 justify-end">
         <Button
@@ -356,7 +363,7 @@ function Videos() {
                               <div className="p-4 space-y-4">
                                 <div className="max-w-4xl">
                                   <YouTubePlayer
-                                    videoId={video.youtube_link}
+                                    videoId={extractYoutubeId(video.youtube_link)}
                                     title={video.title}
                                     customThumbnail={
                                       video.thumbnail
@@ -443,7 +450,7 @@ function Videos() {
               : "Prix attribué avec succès !"
           );
           setPrizeDialogOpen(false);
-          queryClient.invalidateQueries(["videos"]);
+          queryClient.invalidateQueries({ queryKey: ['films'] });
         } catch (err) {
           console.log("Erreur : " + (err.response?.data?.error || err.message));
         }
