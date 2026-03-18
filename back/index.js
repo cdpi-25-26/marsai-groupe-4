@@ -26,7 +26,7 @@ const PORT = process.env.PORT || 3000; // Définir le port du serveur
 app.use("/", router);
 
 // Démarrer le serveur
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log("-----------------------------");
   console.log("--        L'ARBITRE        --");
   console.log("-----------------------------");
