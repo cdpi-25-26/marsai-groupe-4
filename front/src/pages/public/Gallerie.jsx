@@ -77,13 +77,18 @@ export default function Gallerie() {
     return (
       <Shell>
         <section className="mb-10">
-          <h1 className="m-0 text-[44px] md:text-[56px] leading-[0.95] font-black tracking-[-1.5px]">
-            {t("gallery.title")} <br />
-            {t("gallery.title2")}{" "}
-            <span className="bg-gradient-to-r from-[#ff4fd8] to-[#7b2cff] bg-clip-text text-transparent">
-              {t("gallery.title3")}
-            </span>
-          </h1>
+          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md px-8 py-10">
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#7b2cff]/15 via-transparent to-[#ff4fd8]/10" />
+            <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-[#7b2cff]/20 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-10 -left-10 h-48 w-48 rounded-full bg-[#ff4fd8]/15 blur-3xl" />
+            <h1 className="relative m-0 text-[44px] md:text-[56px] leading-[0.95] font-black tracking-[-1.5px]">
+              {t("gallery.title")} <br />
+              {t("gallery.title2")}{" "}
+              <span className="bg-gradient-to-r from-[#ff4fd8] to-[#7b2cff] bg-clip-text text-transparent">
+                {t("gallery.title3")}
+              </span>
+            </h1>
+          </div>
         </section>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -127,13 +132,18 @@ export default function Gallerie() {
     return (
       <Shell>
         <section className="mb-10">
-          <h1 className="m-0 text-[44px] md:text-[56px] leading-[0.95] font-black tracking-[-1.5px]">
-            {t("gallery.title")} <br />
-            {t("gallery.title2")}{" "}
-            <span className="bg-gradient-to-r from-[#ff4fd8] to-[#7b2cff] bg-clip-text text-transparent">
-              {t("gallery.title3")}
-            </span>
-          </h1>
+          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md px-8 py-10">
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#7b2cff]/15 via-transparent to-[#ff4fd8]/10" />
+            <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-[#7b2cff]/20 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-10 -left-10 h-48 w-48 rounded-full bg-[#ff4fd8]/15 blur-3xl" />
+            <h1 className="relative m-0 text-[44px] md:text-[56px] leading-[0.95] font-black tracking-[-1.5px]">
+              {t("gallery.title")} <br />
+              {t("gallery.title2")}{" "}
+              <span className="bg-gradient-to-r from-[#ff4fd8] to-[#7b2cff] bg-clip-text text-transparent">
+                {t("gallery.title3")}
+              </span>
+            </h1>
+          </div>
         </section>
 
         <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-white/70">
