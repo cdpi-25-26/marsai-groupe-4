@@ -34,9 +34,8 @@ export function setupAssociations() {
   Award.belongsTo(Film, { foreignKey: "film_id", as: "film" });
   Film.hasMany(Award, { foreignKey: "film_id", as: "awards" });
 
-  // Evaluation -> Film
+  // Evaluation -> Film (Evaluation.belongsTo already defined inline in Evaluation.js)
   Film.hasMany(Evaluation, { foreignKey: "film_id", as: "evaluations" });
-  Evaluation.belongsTo(Film, { foreignKey: "film_id", as: "film" });
 
   // Reservation -> Event
   Reservation.belongsTo(Event, { foreignKey: "event_id", as: "event" });
