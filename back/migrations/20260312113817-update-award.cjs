@@ -5,8 +5,7 @@ module.exports = {
  async up(queryInterface) {
     await queryInterface.sequelize.transaction(async (t) => {
       await queryInterface.sequelize.query(
-        `ALTER TABLE awards
-MODIFY COLUMN film_id INT NULL;`,
+        `ALTER TABLE awards ALTER COLUMN film_id DROP NOT NULL;`,
         { transaction: t }
       );
     });
@@ -15,8 +14,7 @@ MODIFY COLUMN film_id INT NULL;`,
   async down(queryInterface) {
     await queryInterface.sequelize.transaction(async (t) => {
       await queryInterface.sequelize.query(
-       ` ALTER TABLE awards
-        DROP COLUMN film_id;`,
+        `ALTER TABLE awards DROP COLUMN IF EXISTS film_id;`,
         { transaction: t }
       );
     });
