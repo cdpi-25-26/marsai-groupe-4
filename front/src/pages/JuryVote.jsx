@@ -72,8 +72,19 @@ function JuryVote() {
   const languages = [...new Set(allFilms.map((f) => f.language).filter(Boolean))];
   const types = [...new Set(allFilms.map((f) => f.type).filter(Boolean))];
 
-  const hasVideo = currentFilm?.video_file;
+  const hasVideo = currentFilm?.video_file || currentFilm?.youtube_link;
   const votingDisabled = submitting || (hasVideo && !videoWatched);
+
+  // Extract YouTube video ID from full URL or bare ID
+  function extractYouTubeId(url) {
+    if (!url) return null;
+    try {
+      const u = new URL(url);
+      if (u.hostname.includes("youtube.com")) return u.searchParams.get("v");
+      if (u.hostname.includes("youtu.be")) return u.pathname.slice(1);
+    } catch (_) {}
+    return url;
+  }
 
   function handleVote(decision) {
     if (!currentFilm || votingDisabled) return;
@@ -381,6 +392,43 @@ function JuryVote() {
                     )}
                   </div>
                 )}
+
+                {/* YouTube embed — shown when no local file */}
+                {!currentFilm.video_file && currentFilm.youtube_link && (() => {
+                  const ytId = extractYouTubeId(currentFilm.youtube_link);
+                  return (
+                    <div
+                      onMouseDown={(e) => e.stopPropagation()}
+                      onTouchStart={(e) => e.stopPropagation()}
+                      style={{ marginBottom: 16 }}
+                    >
+                      <div style={{ position: "relative", paddingTop: "56.25%", borderRadius: 10, overflow: "hidden", background: "#000" }}>
+                        <iframe
+                          src={`https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1`}
+                          title={currentFilm.title}
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                          style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: 0 }}
+                        />
+                      </div>
+                      {!videoWatched && (
+                        <button
+                          onMouseDown={(e) => e.stopPropagation()}
+                          onTouchStart={(e) => e.stopPropagation()}
+                          onClick={() => setVideoWatched(true)}
+                          style={{
+                            marginTop: 10, width: "100%", padding: "10px 0",
+                            background: "rgba(251,191,36,0.1)", border: "1px solid #fbbf24",
+                            borderRadius: 8, color: "#fbbf24", fontSize: 13, fontWeight: 600,
+                            cursor: "pointer",
+                          }}
+                        >
+                          ✓ J'ai regardé le film — voter
+                        </button>
+                      )}
+                    </div>
+                  );
+                })()}
 
                 {/* Comment */}
                 <textarea
