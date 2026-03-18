@@ -37,7 +37,7 @@ export function Login() {
           navigate("/admin");
           break;
         case "JURY":
-          navigate("/");
+          navigate("/jury");
           break;
         default:
           navigate("/");
