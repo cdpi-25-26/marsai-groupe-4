@@ -1,6 +1,7 @@
 import Award from "../models/Award.js";
 import Film from "../models/Video.js";
 import User from "../models/User.js";
+import EmailController from "./EmailController.js";
 
 async function listAwards(req, res) {
   try {
@@ -65,6 +66,26 @@ async function createAward(req, res) {
     }
 
     const award = await Award.create({ name, edition_year, prize, description, film_id });
+
+    // Notify the film's producer by email
+    try {
+      const film = await Film.findByPk(film_id, {
+        include: [{ model: User, as: "user", attributes: ["email", "first_name"] }],
+      });
+      if (film?.user?.email) {
+        await EmailController.sendMail(
+          film.user.email,
+          `🏆 Félicitations — Votre film "${film.title}" a reçu un prix !`,
+          `<h2>Félicitations ${film.user.first_name} !</h2>
+           <p>Votre film <strong>${film.title}</strong> a été récompensé au festival MarsAI.</p>
+           <p><strong>Prix :</strong> ${prize}<br/>
+           <strong>Nom de la récompense :</strong> ${name}<br/>
+           ${description ? `<strong>Description :</strong> ${description}` : ""}</p>
+           <p>Merci pour votre participation. À bientôt sur MarsAI !</p>`
+        );
+      }
+    } catch (_) { /* email failure must not block the response */ }
+
     res.status(201).json(award);
   } catch (error) {
     res.status(500).json({ error: "Failed to create award", details: error.message });

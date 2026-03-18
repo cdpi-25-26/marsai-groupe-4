@@ -7,16 +7,6 @@ import EmailController from "./EmailController.js";
 import { VIDEO_REJECT_TEMPLATE } from "../constants/VideoRejectTemplate.js";
 
 function upload(req, res) {
-  const copyright = req.body.copyright;
-
-  if (copyright == true) {
-    EmailController.sendMail(
-      req.user?.email,
-      "Refus de votre vidéo qui est moche",
-      VIDEO_REJECT_TEMPLATE,
-    );
-  }
-
   res.json({ message: "ok" });
 }
 

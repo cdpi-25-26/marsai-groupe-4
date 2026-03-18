@@ -245,9 +245,17 @@ function Home() {
             {t("home.sponsor_title")} <span className="sponsors-title-gradient">{t("home.sponsor_title2")}</span>
           </h2>
           <div className="sponsors-grid">
-            {[...Array(6)].map((_, i) => (
+            {[
+              { name: "Région Sud", sub: "Provence-Alpes-Côte d'Azur" },
+              { name: "Ville de Marseille", sub: "Partenaire officiel" },
+              { name: "CNC", sub: "Centre National du Cinéma" },
+              { name: "Adobe", sub: "Creative Partner" },
+              { name: "ARTE", sub: "Média partenaire" },
+              { name: "Université d'Aix", sub: "Partenaire académique" },
+            ].map((s, i) => (
               <div key={i} className="sponsor-card">
-                <span className="sponsor-placeholder">SPONSOR</span>
+                <span className="sponsor-placeholder" style={{ fontSize: "13px", fontWeight: 700, letterSpacing: "0.5px" }}>{s.name}</span>
+                <span style={{ fontSize: "11px", opacity: 0.5, marginTop: 4, display: "block" }}>{s.sub}</span>
               </div>
             ))}
           </div>
