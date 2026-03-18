@@ -3,6 +3,9 @@ primary_region = 'cdg'
 
 [build]
 
+[deploy]
+  release_command = "node_modules/.bin/sequelize db:migrate"
+
 [http_service]
   internal_port = 3000
   force_https = true
