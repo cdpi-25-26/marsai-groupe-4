@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const dialect = process.env.DB_DIALECT || "mysql";
 const port = Number(process.env.DB_PORT) || (dialect === "postgres" ? 5432 : 3306);
-const dialectOptions = dialect === "postgres" ? { ssl: { require: true, rejectUnauthorized: false } } : {};
+const dialectOptions = {};
 
 module.exports = {
   development: {
