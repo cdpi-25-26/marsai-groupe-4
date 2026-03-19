@@ -133,7 +133,7 @@
     "title2": "OF",
     "title3": "FILMS",
     "loading": "Loading...",
-    "no_video": "An error occurred",
+    "no_video": "You are in phase 1 , there is no video",
     "no_display": "No video to display.",
     "discovery": "Discover a selection of films generated with AI tools.",
     "type": "AI Type",
