@@ -39,6 +39,9 @@ export function Login() {
         case "JURY":
           navigate("/jury");
           break;
+        case "PRODUCER":
+          navigate("/producer");
+          break;
         default:
           navigate("/");
           break;

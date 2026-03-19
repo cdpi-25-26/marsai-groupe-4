@@ -31,6 +31,9 @@ import Gallerie from "./pages/public/Gallerie.jsx";
 import { UploadRoleGuard } from "./middlewares/Upload.jsx";
 import ForgotPassword from "./pages/auth/ForgotPassword.jsx";
 import { ContestProvider } from './utils/phasestatus.jsx';
+import Awards from "./pages/admin/Awards.jsx";
+import PhaseManagement from "./pages/admin/PhaseManagement.jsx";
+import ProducerDashboard from "./pages/producer/Dashboard.jsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -99,7 +102,19 @@ createRoot(document.getElementById("root")).render(
               <Route path="cms" element={<Cms />} />
               <Route path="settings" element={<Settings />} />
               <Route path="evaluations" element={<Evaluations />} />
+              <Route path="awards" element={<Awards />} />
+              <Route path="phases" element={<PhaseManagement />} />
             </Route>
+
+            {/* Route producteur */}
+            <Route
+              path="/producer"
+              element={
+                <UploadRoleGuard allowedRoles={["PRODUCER", "ADMIN"]}>
+                  <ProducerDashboard />
+                </UploadRoleGuard>
+              }
+            />
           </Routes>
         </QueryClientProvider>
       </ContestProvider>
