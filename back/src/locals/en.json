@@ -215,7 +215,7 @@
   },
   "footer": {
     "subtitle": "The global platform for generative storytelling, rooted in the light of Marseille.",
-    "subtitle_2": "the light of Marseille.",
+    "subtitle_2": "",
     "gallery": "Gallery",
     "program": "Program",
     "ticket": "Tickets",
@@ -230,12 +230,7 @@
     "select": "Select"
   },
   "navbar": {
-    "home": "Home",
-    "gallery": "Gallery",
-    "palmares": "Winners",
-    "agenda": "Events",
-    "jury": "Jury Area",
-    "profile": "Profile"
+    "gallery": "Gallery"
   },
   "publiclayout": {
     "subtitle": "The global platform for generative storytelling, rooted in the light of Marseille.",

@@ -7,6 +7,7 @@ import { signIn } from "../../api/auth.js";
 import { Send } from "lucide-react";
 import {UserPlus} from "lucide-react" 
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 // Schéma de validation Zod
 const registerSchema = z
@@ -49,11 +50,11 @@ export function Register() {
       });
     },
     onSuccess: (res) => {
-      alert(res.data.message);
-      navigate("/auth/login"); // redirection après inscription
+      toast.success(res.data.message);
+      navigate("/auth/login");
     },
     onError: (err) => {
-      alert(err.response?.data?.error || "Une erreur est survenue");
+      toast.error(err.response?.data?.error || "Une erreur est survenue");
     },
   });
 

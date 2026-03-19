@@ -7,7 +7,16 @@ import EmailController from "./EmailController.js";
 import { VIDEO_REJECT_TEMPLATE } from "../constants/VideoRejectTemplate.js";
 
 function upload(req, res) {
-  res.json({ message: "ok" });
+  // Upload vers répertoire uploads/ avec Multer
+  // Upload vers YouTubeAPI
+
+  if (copyright == true) {
+    EmailController.sendMail(
+      req.userEmail, // Check AuthMiddleware
+      "Refus de votre vidéo qui est moche",
+      VIDEO_REJECT_TEMPLATE,
+    );
+  }
 }
 
 
@@ -111,7 +120,6 @@ async function createUpload(req, res) {
     
     // === AUTO UPLOAD SUR YOUTUBE ===
     try {
-      console.log(`[AUTO] Début upload YouTube pour le film ${newFilm.id}`);
 
       const youtubeResult = await uploadVideoToYoutubeInternal(videoFile.path, {
         title: newFilm.title,
@@ -126,7 +134,6 @@ async function createUpload(req, res) {
           youtube_status: "uploaded",
           youtube_link: youtubeFullLink,
         });
-       console.log(`[AUTO] Upload YouTube réussi → ID: ${youtubeResult.videoId} → Lien: ${youtubeFullLink}`);
       }
     } catch (youtubeError) {
       console.error("[AUTO] Échec upload YouTube :", youtubeError);
@@ -142,7 +149,6 @@ async function createUpload(req, res) {
 });
 
     try {
-      console.log(`[S3] Envoi automatique pour le film ${newFilm.id}`);
 
       // Vidéo principale
       const s3VideoKey = await uploadToS3(videoFile.path, "videos");
@@ -155,7 +161,6 @@ async function createUpload(req, res) {
 
       // Optionnel : tu peux stocker les clés S3 quelque part si besoin plus tard
       // ex: newFilm.update({ s3_video_key: s3VideoKey }) mais tu as dit non
-      console.log(`[S3] Vidéo envoyée → clé : ${s3VideoKey}`);
     } catch (s3Error) {
       console.error("[S3] Échec envoi Scaleway :", s3Error);
       // Pas bloquant : l'upload local et YouTube restent valides
@@ -224,7 +229,11 @@ async function deleteUpload(req, res) {
 
 async function getRecentUploads(req, res) {
   try {
-    const userId = req.user.id.toString();
+    const userId = req.params.id; 
+
+    if (req.user.role !== "ADMIN" && userId !== req.user.id.toString()) {
+      return res.status(403).json({ error: "Accès interdit" });
+    }
 
     const recentVideos = await Upload.findAll({
       where: { user_id: userId },

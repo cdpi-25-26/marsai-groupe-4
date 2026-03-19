@@ -18,7 +18,7 @@ const Evaluation = sequelize.define(
     },
 
     decision: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.ENUM("YES", "MAYBE", "NO"),
       allowNull: false,
       defaultValue: "MAYBE",
     },

@@ -40,8 +40,41 @@ export default function Film() {
         setError("");
         setFilm(null);
 
-        const res = await api.get(`/gallerie/${id}`);
-        setFilm(res.data);
+        const token = localStorage.getItem("token");
+        if (!token) {
+          setError('Pas de token dans le localStorage. Il faut se connecter (clé « token »).');
+          return;
+        }
+
+        const targetId = Number(id);
+        const limit = 50;
+
+        const findIn = (data) => {
+          const arr = data?.showVideos || data?.videos || data?.items || [];
+          return arr.find((v) => Number(v.id) === targetId) || null;
+        };
+
+        const firstRes = await api.get(`/gallerie?page=1&limit=${limit}`);
+        const firstData = firstRes.data;
+
+        let found = findIn(firstData);
+        if (found) {
+          setFilm(found);
+          return;
+        }
+
+        const totalPages = Number(firstData?.totalPages || 1);
+
+        for (let p = 2; p <= totalPages; p++) {
+          const res = await api.get(`/gallerie?page=${p}&limit=${limit}`);
+          found = findIn(res.data);
+          if (found) {
+            setFilm(found);
+            return;
+          }
+        }
+
+        setError("Film not found");
       } catch (err) {
         console.error("FETCH FILM ERROR:", err);
 
@@ -131,7 +164,7 @@ export default function Film() {
         ) : null}
 
         {/* INFO */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 mt-6">
+        <div className="grid grid-cols-5 gap-8 mt-6">
           {director ? (
             <div>
               <span className="text-slate-400 font-black uppercase">Réalisateur </span>
@@ -178,7 +211,7 @@ export default function Film() {
             <div className="text-slate-400 font-black uppercase">
               SYNOPSIS 
             </div>
-            <div className="block text-sm font-extrabold text-white/55 font-jakarta mt-4 leading-relaxed">
+            <div className="block text-sm font-extrabold text-white/55 font-jakartamt-4  leading-relaxed">
               {film.synopsis}
             </div>
           </div>

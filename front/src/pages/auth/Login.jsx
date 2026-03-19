@@ -5,8 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import handleLogout from "@/utils/helpers.js";
-import { LogOut, Send, LogIn, Mail, Lock } from "lucide-react";
+import { LogOut } from "lucide-react";
+import { Send } from "lucide-react";
+import { LogIn } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 const loginSchema = z.object({
   email: z.string().email("Email invalide"),
@@ -37,10 +40,7 @@ export function Login() {
           navigate("/admin");
           break;
         case "JURY":
-          navigate("/jury");
-          break;
-        case "PRODUCER":
-          navigate("/producer");
+          navigate("/");
           break;
         default:
           navigate("/");
@@ -49,11 +49,11 @@ export function Login() {
     },
     onError: (error) => {
       if (error.code === "ERR_NETWORK") {
-        alert("Impossible de contacter le serveur.");
+        toast.error("Impossible de contacter le serveur.");
       } else if (error.response?.data?.error) {
-        alert(error.response.data.error);
+        toast.error(error.response.data.error);
       } else {
-        alert("Erreur lors de la connexion");
+        toast.error("Erreur lors de la connexion");
       }
     },
   });
@@ -64,6 +64,14 @@ export function Login() {
     return (
       <>
         <h1 className="text-2xl">
+          You are already logged in as {localStorage.getItem("first_name")}
+        </h1>
+        <button onClick={handleLogout} className="hover:cursor-pointer">
+          <LogOut className="size-4" />
+          <span>Log out</span>
+        </button>
+        <Link to="/">Return to homepage</Link>
+         <h1 className="text-2xl">
           You are already logged in as {localStorage.getItem("first_name")}
         </h1>
         <button onClick={handleLogout} className="hover:cursor-pointer">
@@ -101,7 +109,11 @@ export function Login() {
         </h2>
 
         <div className="flex bg-[var(--login-input-bg)] border border-[var(--login-border-main)] rounded-[28px] w-full mb-[24px]">
-          <Mail className="flex items-center mx-[15px] my-auto text-[var(--login-text-muted)] shrink-0" size={18} />
+          <img
+            className="flex items-center px-[15px]"
+            src="/src/assets/login_svg/Icon (2).svg"
+            alt=""
+          />
           <input
             id="email"
             type="email"
@@ -116,7 +128,11 @@ export function Login() {
         </h2>
 
         <div className="flex bg-[var(--login-input-bg)] border border-[var(--login-border-main)] rounded-[28px] w-full">
-          <Lock className="flex items-center mx-[15px] my-auto text-[var(--login-text-muted)] shrink-0" size={18} />
+          <img
+            className="flex items-center px-[15px]"
+            src="/src/assets/login_svg/Icon (2).svg"
+            alt=""
+          />
           <input
             id="password"
             type="password"
@@ -144,9 +160,9 @@ export function Login() {
           </label>
 
           <h2 className="mr-auto tracking-[1px]">{t("login.hold")}</h2>
-          <Link to="/auth/forgot-password" className="text-[#51A2FF] tracking-[2px] cursor-pointer hover:underline">
+          <h2 className="text-[#51A2FF] tracking-[2px] cursor-pointer">
             Reset ?
-          </Link>
+          </h2>
         </div>
 
         <button

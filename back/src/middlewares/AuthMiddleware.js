@@ -28,7 +28,7 @@ export default async function AuthMiddleware(req, res, next, roles = []) {
 
 
     if (!user || (roles.length && !roles.includes(user.role))) {
-      return res.status(403).json({
+      return res.status(401).json({
         error:
           "Permission denied, you are not authorized to access this resource",
       });

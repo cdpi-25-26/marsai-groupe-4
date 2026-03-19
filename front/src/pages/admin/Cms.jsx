@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from '../../api/config';
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 function Cms() {
   const [enTranslations, setEnTranslations] = useState({});
@@ -75,7 +76,7 @@ function Cms() {
       setSaving(false);
     } catch (error) {
       console.error('Error saving translations:', error);
-      alert('Error saving translations');
+      toast.error('Error saving translations');
       setSaving(false);
     }
   };

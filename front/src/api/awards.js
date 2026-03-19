@@ -1,16 +1,10 @@
-import instance from "./config";
+import axios from "axios";
 
-async function getAwards() {
-  return await instance.get("palmares");
-}
-
-async function getAwardById(id) {
-  return await instance.get(`palmares/${id}`);
-}
-
+// src/api/awards.js
 export async function fetchAwards() {
-  const res = await getAwards();
-  return res.data;
+  const res = await fetch("http://localhost:3000/awards"); // без /api
+  if (!res.ok) {
+    throw new Error(`Failed to fetch awards: ${res.status}`);
+  }
+  return res.json();
 }
-
-export { getAwards, getAwardById };

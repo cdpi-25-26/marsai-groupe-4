@@ -1,10 +1,7 @@
 import User from "./User.js";
 import Film from "./Video.js";
-import Award from "./Award.js";
+import Award from "./Award.js";  
 import FilmsJury from "./FilmsJury.js";
-import Reservation from "./Reservation.js";
-import Event from "./Event.js";
-import Evaluation from "./Evaluation.js";
 
 
 export function setupAssociations() {
@@ -30,14 +27,7 @@ export function setupAssociations() {
   FilmsJury.belongsTo(Film, { foreignKey: "film_id", as: "film" });
   FilmsJury.belongsTo(User, { foreignKey: "user_id", as: "jury" });
 
-  // Award -> Film
-  Award.belongsTo(Film, { foreignKey: "film_id", as: "film" });
-  Film.hasMany(Award, { foreignKey: "film_id", as: "awards" });
-
-  // Evaluation -> Film (Evaluation.belongsTo already defined inline in Evaluation.js)
-  Film.hasMany(Evaluation, { foreignKey: "film_id", as: "evaluations" });
-
-  // Reservation -> Event
-  Reservation.belongsTo(Event, { foreignKey: "event_id", as: "event" });
-  Event.hasMany(Reservation, { foreignKey: "event_id", as: "reservations" });
+ 
+  Award.belongsTo(Film, { foreignKey: "film_id" });  
+  Film.hasMany(Award, { foreignKey: "film_id" });
 }

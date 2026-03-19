@@ -1,6 +1,7 @@
 import "./utils/i18n.js";
 
 import { StrictMode } from "react";
+import { Toaster } from "sonner";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -22,18 +23,13 @@ import Upload from "./pages/public/Upload.jsx";
 import Palmares from "./pages/public/Palmares.jsx";
 import Evennements from "./pages/public/Evennements.jsx";
 import Cms from "./pages/admin/Cms.jsx";
-import Settings from "./pages/admin/Settings.jsx";
-import Evaluations from "./pages/admin/Evaluations.jsx";
 import Reservation from "./pages/public/Reservation.jsx";
-import Profile from "./pages/public/Profile.jsx";
-import JuryVote from "./pages/JuryVote.jsx";
+import JuryVote from "./pages/jury/JuryVote.jsx";
 import Gallerie from "./pages/public/Gallerie.jsx";
+import Profile from "./pages/public/Profile.jsx";
 import { UploadRoleGuard } from "./middlewares/Upload.jsx";
-import ForgotPassword from "./pages/auth/ForgotPassword.jsx";
 import { ContestProvider } from './utils/phasestatus.jsx';
-import Awards from "./pages/admin/Awards.jsx";
-import PhaseManagement from "./pages/admin/PhaseManagement.jsx";
-import ProducerDashboard from "./pages/producer/Dashboard.jsx";
+
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -46,77 +42,60 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <ContestProvider>
-        <QueryClientProvider client={queryClient}>
-          <Routes>
-            {/* Routes publiques */}
-            <Route path="/" element={<PublicLayout />}>
-              <Route index element={<Home />} />
-              <Route path="/gallerie" element={<Gallerie />} />
-              <Route path="/evennements" element={<Evennements />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/auth/login" element={<Login />} />
-              <Route path="/auth/register" element={<Register />} />
-              <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-              <Route path="/films/:id" element={<Film />} />
-              <Route
-                path="/upload"
-                element={
-                  <UploadRoleGuard allowedRoles={["PRODUCER", "ADMIN"]}>
-                    <Upload />
-                  </UploadRoleGuard>
-                }
-              />
-              <Route path="/palmares" element={<Palmares />} />
-              <Route path="/agenda" element={<Evennements />} />
-              <Route path="/reservation" element={<Reservation />} />
-              <Route path="/profile" element={
-                <UploadRoleGuard allowedRoles={["PRODUCER", "JURY", "ADMIN"]}>
-                  <Profile />
-                </UploadRoleGuard>
-              } />
-              <Route
-                path="/jury"
-                element={
-                  <RoleGuard allowedRoles={["JURY", "ADMIN"]}>
-                    <JuryVote />
-                  </RoleGuard>
-                }
-              />
-            </Route>
+    <ContestProvider>
+      <QueryClientProvider client={queryClient}>
+        <Toaster richColors position="top-right" />
+        <Routes>
+          {/* Routes publiques */}
+          <Route path="/" element={<PublicLayout />}>
+            <Route index element={<Home />} />
+            <Route path="/gallerie" element={<Gallerie />} />
+            <Route path="/evennements" element={<Evennements />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/auth/login" element={<Login />} />
+            <Route path="/auth/register" element={<Register />} />
+            <Route path="/films/:id" element={<Film />} />
 
-            {/* Routes admin */}
-            <Route
-              path="admin"
-              element={
-                <RoleGuard allowedRoles={["ADMIN"]}>
-                  <AdminLayout />
-                </RoleGuard>
-              }
-            >
-              <Route index element={<Dashboard />} />
-              <Route path="users" element={<Users />} />
-              <Route path="videos" element={<Videos />} />
-              <Route path="jurys" element={<Jury />} />
-              <Route path="events" element={<Events />} />
-              <Route path="cms" element={<Cms />} />
-              <Route path="settings" element={<Settings />} />
-              <Route path="evaluations" element={<Evaluations />} />
-              <Route path="awards" element={<Awards />} />
-              <Route path="phases" element={<PhaseManagement />} />
-            </Route>
-
-            {/* Route producteur */}
-            <Route
-              path="/producer"
-              element={
+            
+            <Route path="/upload" element={
                 <UploadRoleGuard allowedRoles={["PRODUCER", "ADMIN"]}>
-                  <ProducerDashboard />
+                  <Upload />
                 </UploadRoleGuard>
               }
             />
-          </Routes>
-        </QueryClientProvider>
+
+            <Route path="/palmares" element={<Palmares />} />
+            <Route path="/agenda" element={<Evennements />} />
+            <Route path="/reservation/:id" element={<Reservation />} />
+            <Route path="/profile/:id" element={<Profile />} />
+            <Route
+              path="/jury"
+              element={
+                <RoleGuard allowedRoles={["JURY", "ADMIN"]}>
+                  <JuryVote />
+                </RoleGuard>
+              }
+            />
+          </Route>
+
+          {/* Routes admin */}
+          <Route
+            path="admin"
+            element={
+              <RoleGuard allowedRoles={["ADMIN"]}>
+                <AdminLayout />
+              </RoleGuard>
+            }
+          >
+            <Route index element={<Dashboard />} />
+            <Route path="users" element={<Users />} />
+            <Route path="videos" element={<Videos />} />
+            <Route path="jurys" element={<Jury />} />
+            <Route path="events" element={<Events />} />
+            <Route path="cms" element={<Cms />} />
+          </Route>
+        </Routes>
+      </QueryClientProvider>
       </ContestProvider>
     </BrowserRouter>
   </StrictMode>

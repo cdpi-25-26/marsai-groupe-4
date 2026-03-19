@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../db/connection.js";
+import Film from "./Video.js";
 
 const Award = sequelize.define(
   "Award",
@@ -43,5 +44,8 @@ const Award = sequelize.define(
     freezeTableName: true,
   }
 );
+
+// 🔗 Связь
+Award.belongsTo(Film, { foreignKey: "film_id" });
 
 export default Award;

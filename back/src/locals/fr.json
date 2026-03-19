@@ -229,12 +229,7 @@
     "select": "Sélectionner"
   },
   "navbar": {
-    "home": "Accueil",
-    "gallery": "Galerie",
-    "palmares": "Palmarès",
-    "agenda": "Agenda",
-    "jury": "Espace Jury",
-    "profile": "Profil"
+    "gallery": "Galerie"
   },
   "publiclayout": {
     "subtitle": "La plateforme mondiale de la narration générative, ancrée dans la lumière de Marseille.",

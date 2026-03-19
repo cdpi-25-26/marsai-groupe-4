@@ -13,8 +13,6 @@ import {
   LogOut,
   SquareCode,
   LogIn,
-  Trophy,
-  Layers,
 } from "lucide-react";
 import { Form, NavLink, useLocation } from "react-router";
 
@@ -43,10 +41,6 @@ const navItems = [
   { title: "Gestion Films", url: "/admin/videos", icon: Clapperboard },
   { title: "Evenements", url: "/admin/events", icon: CalendarCheck },
   { title: "CMS", url: "/admin/cms", icon: SquareCode },
-  { title: "Evaluations", url: "/admin/evaluations", icon: BarChart3 },
-  { title: "Prix & Palmarès", url: "/admin/awards", icon: Trophy },
-  { title: "Phases", url: "/admin/phases", icon: Layers },
-  { title: "Settings", url: "/admin/settings", icon: Settings },
 ]
 
 export default function AdminSidebar() {

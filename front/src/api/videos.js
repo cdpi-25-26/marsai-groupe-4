@@ -1,7 +1,7 @@
 import instance from "./config.js";
 
-async function getVideos(page = 1, limit = 6, all = false) {
-  return await instance.get(`films?page=${page}&limit=${limit}${all ? "&all=true" : ""}`);
+async function getVideos(page = 1, limit = 6) {
+  return await instance.get(`films?page=${page}&limit=${limit}`);
 }
 
 async function getAllVideos() {

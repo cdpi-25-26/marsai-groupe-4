@@ -1,19 +1,24 @@
 import instance from "./config";
 
+
 async function getPhase1Videos() {
   return await instance.get("/phase/phase1");
 }
 
 async function getTop50() {
-  return await instance.post("/phase/top50");
+  return await instance.get("/phase/top50");
 }
 
 async function assignPrize(videoId, prizeData) {
   return await instance.put(`/phase/prize/${videoId}`, prizeData);
 }
 
-async function getContestStatus() {
+async function getContestStatus(){
   return await instance.get("/phase/status");
+}
+
+async function getAvailablesPrizes(){
+  return await instance.get("/prizes")
 }
 
 export async function getAvailablePrizes() {
@@ -26,4 +31,5 @@ export async function getAvailablePrizes() {
   }
 }
 
-export { getPhase1Videos, getTop50, assignPrize, getContestStatus };
+
+export {getPhase1Videos, getTop50,assignPrize,getContestStatus,getAvailablesPrizes}

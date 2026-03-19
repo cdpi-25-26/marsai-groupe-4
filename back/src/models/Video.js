@@ -33,7 +33,7 @@ const Film = sequelize.define(
     },
 
     status: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.ENUM("submitted", "under_review", "rejected", "selected", "finalist"),
       allowNull: false,
       defaultValue: "submitted",
     },
@@ -76,28 +76,6 @@ const Film = sequelize.define(
     youtube_link: {
       type: DataTypes.STRING(255),
       allowNull: true,
-    },
-
-    video_path: {
-      type: DataTypes.STRING(255),
-      allowNull: true,
-    },
-
-    youtube_video_id: {
-      type: DataTypes.STRING(50),
-      allowNull: true,
-    },
-
-    youtube_status: {
-      type: DataTypes.STRING(30),
-      allowNull: false,
-      defaultValue: "pending",
-    },
-
-    edition_year: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 2026,
     },
 
     phase_status: {

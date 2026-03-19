@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getEvents, createEvent, updateEvent, deleteEvent, getTypes } from "../../api/events.js";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {CircleX, Pencil } from "lucide-react";
@@ -54,6 +55,7 @@ function Events(){
     const [modeEdit, setModeEdit] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [sorting, setSorting] = useState([]);
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         getEvents().then((data) => {
@@ -73,12 +75,12 @@ function Events(){
         mutationFn: async (newEvent) => {
             return await createEvent(newEvent);
         },
-        onSuccess: (data, variables, context) => {
-            window.location.reload();
+        onSuccess: () => {
+            toast.success("Évènement créé avec succès !");
+            queryClient.invalidateQueries();
         },
         onError: (error) => {
-            console.error('Error creating event:', error);
-            alert('Erreur lors de la création: ' + (error.response?.data?.error || error.message));
+            toast.error('Erreur lors de la création: ' + (error.response?.data?.error || error.message));
         },
     });
 
@@ -86,12 +88,12 @@ function Events(){
         mutationFn: async (id) => {
             return await deleteEvent(id);
         },
-        onSuccess: (data, variables, context) => {
-            window.location.reload();
+        onSuccess: () => {
+            toast.success("Évènement supprimé avec succès !");
+            queryClient.invalidateQueries();
         },
         onError: (error) => {
-            console.error('Error deleting event:', error);
-            alert('Erreur lors de la suppression: ' + (error.response?.data?.error || error.message));
+            toast.error('Erreur lors de la suppression: ' + (error.response?.data?.error || error.message));
         },
     });
 
@@ -99,17 +101,16 @@ function Events(){
         mutationFn: async (updatedEvent) => {
             return await updateEvent(updatedEvent.id, updatedEvent);
         },
-        onSuccess: (data, variables, context) => {
-            window.location.reload();
+        onSuccess: () => {
+            toast.success("Évènement mis à jour avec succès !");
+            queryClient.invalidateQueries();
         },
         onError: (error) => {
-            console.error('Error updating event:', error);
-            alert('Erreur lors de la mise à jour: ' + (error.response?.data?.error || error.message));
+            toast.error('Erreur lors de la mise à jour: ' + (error.response?.data?.error || error.message));
         },
     });
 
     function onSubmit(data) {
-        console.log('Form submitted with data:', data);
         if (modeEdit && data.id) {
             return updateMutation.mutate(data);
         } else {

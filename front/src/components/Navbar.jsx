@@ -14,7 +14,8 @@ export default function Navbar() {
   const isLoggedIn = !!localStorage.getItem("token");
   const userRole = localStorage.getItem("role");
   const userPath = isLoggedIn ? "/admin" : "/auth/login";
-  const profilePath = isLoggedIn ? '/profile' : '/auth/login';
+  const userId = localStorage.getItem("userId");
+  const profilePath = isLoggedIn && userId ? `/profile/${userId}` : '/auth/login';
   const isJury = userRole === "JURY" || userRole === "ADMIN";
 
   useEffect(() => {
@@ -137,25 +138,25 @@ export default function Navbar() {
         </div>
 
         {/* Links */}
-        <NavLink to="/" onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition">
-          {t("navbar.home")}
-        </NavLink>
         <NavLink to="/gallerie" onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition">
           {t("navbar.gallery")}
         </NavLink>
+        <NavLink to="/" onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition">
+          Home
+        </NavLink>
         <NavLink to="/palmares" onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition">
-          {t("navbar.palmares")}
+          Palmarès
         </NavLink>
         <NavLink to="/agenda" onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition">
-          {t("navbar.agenda")}
+          Agenda
         </NavLink>
         {isJury && (
           <NavLink to="/jury" onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition">
-            {t("navbar.jury")}
+            Espace Jury
           </NavLink>
         )}
         <NavLink to={userPath} onClick={() => setOpen(false)} className="text-white/70 hover:text-white transition">
-          {t("navbar.profile")}
+          Profile
         </NavLink>
       </div>
     </section>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import axios from "axios";
 import ConfirmModal from "@/components/ConfirmModal";
 import { Sparkles } from "lucide-react";
 import { Film } from "lucide-react";
@@ -123,7 +124,8 @@ export default function Upload() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tempData, setTempData] = useState(null);
   const [toastMessage, setToastMessage] = useState(null);
-const [toastVisible, setToastVisible] = useState(false);
+  const [toastVisible, setToastVisible] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const {
     register,
@@ -214,23 +216,23 @@ const [toastVisible, setToastVisible] = useState(false);
       if (tempData.image_3) formData.append("image_3", tempData.image_3);
       formData.append("video", tempData.video);
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/uploads`, {
-        method: "POST",
+      setUploadProgress(0);
+      await axios.post(`${import.meta.env.VITE_API_URL}/uploads`, formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: formData,
+        onUploadProgress: (e) => {
+          if (e.total) setUploadProgress(Math.round((e.loaded * 100) / e.total));
+        },
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Erreur lors de l'upload");
-      }
-
+      setUploadProgress(100);
       showToast("Tout a été envoyé avec succès !");
       reset();
+      setUploadProgress(0);
     } catch (err) {
-      setServerError(err.message);
+      setServerError(err.response?.data?.error || err.message);
+      setUploadProgress(0);
     } finally {
       setLoading(false);
     }
@@ -598,9 +600,21 @@ const [toastVisible, setToastVisible] = useState(false);
               disabled={loading}
               className="min-h-20 w-full md:w-[60%] px-6 bg-[#741748] border border-white/10 text-[16px] sm:text-[16px] rounded-[13px] font-bold uppercase hover:bg-[#ffffff10] duration-300 cursor-pointer transition-colors disabled:opacity-50"
             >
-              {loading ? "Envoi en cours..." : t("upload.upload_button")}
+              {loading ? `Envoi en cours... ${uploadProgress}%` : t("upload.upload_button")}
             </button>
           </div>
+
+          {loading && uploadProgress > 0 && (
+            <div className="mt-4 max-w-[60%] mx-auto">
+              <div className="w-full bg-white/10 rounded-full h-2">
+                <div
+                  className="bg-[#f6339a] h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${uploadProgress}%` }}
+                />
+              </div>
+              <p className="text-center text-white/40 text-sm mt-1">{uploadProgress}%</p>
+            </div>
+          )}
           
 
           {serverError && <p className="mt-6 text-white/40-400 text-center">{serverError}</p>}

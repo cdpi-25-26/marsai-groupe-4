@@ -33,39 +33,9 @@ const Event = sequelize.define(
         },
 
         type: {
-          type: DataTypes.STRING(20),
+          type: DataTypes.ENUM("conference", "screening", "Workshop"),
           allowNull: false,
           defaultValue: "conference",
-        },
-
-        time_start: {
-          type: DataTypes.TIME,
-          allowNull: false,
-          defaultValue: "00:00:00",
-        },
-
-        time_end: {
-          type: DataTypes.TIME,
-          allowNull: false,
-          defaultValue: "00:00:00",
-        },
-
-        capacity: {
-          type: DataTypes.INTEGER,
-          allowNull: false,
-          defaultValue: 0,
-        },
-
-        enrolled: {
-          type: DataTypes.INTEGER,
-          allowNull: false,
-          defaultValue: 0,
-        },
-
-        status: {
-          type: DataTypes.STRING(20),
-          allowNull: false,
-          defaultValue: "DRAFT",
         },
     },
 

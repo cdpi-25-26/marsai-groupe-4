@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Train, Car, MapPin, CalendarDays, Clock, Navigation } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { sendContact } from "../../api/contact";
 
 export default function Contact() {
   const { t, i18n } = useTranslation();
@@ -13,27 +12,29 @@ export default function Contact() {
     message: "",
   });
 
-  const [sending, setSending] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState("");
+  const [schedule, setSchedule] = useState([]);
+
+  // ===== FETCH SCHEDULE FROM DB =====
+  useEffect(() => {
+    fetch("/api/schedule/today")
+      .then((res) => res.json())
+      .then((data) => setSchedule(data))
+      .catch(() => setSchedule([]));
+  }, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setSending(true);
-    setError("");
-    try {
-      await sendContact(form);
-      setSuccess(true);
-      setForm({ email: "", name: "", subject: "", message: "" });
-    } catch (err) {
-      setError(err?.response?.data?.error || "Failed to send message");
-    } finally {
-      setSending(false);
-    }
+
+    const subject = encodeURIComponent(`Demande: ${form.subject}`);
+    const body = encodeURIComponent(
+      `Nom: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`
+    );
+
+    window.location.href = `mailto:tonemail@example.com?subject=${subject}&body=${body}`;
   };
 
   const today = new Date();
@@ -46,6 +47,7 @@ export default function Contact() {
     })
     .toUpperCase();
 
+  // Programme traduit
   const schedules = useMemo(
     () => ({
       "2026-06-13": [
@@ -74,7 +76,7 @@ export default function Contact() {
   const todayKey = today.toISOString().split("T")[0];
   const todaySchedule = schedules[todayKey] || schedules["2026-06-13"];
 
-  // MAP: language depends on site language (fr/en)
+  // ===== MAP: language depends on site language (fr/en) =====
   const lang = (i18n.resolvedLanguage || i18n.language || "fr").split("-")[0];
 
   const MAP_EMBEDS = {
@@ -86,8 +88,9 @@ export default function Contact() {
 
   return (
     <div className="bg-black text-white min-h-screen px-6 py-16">
+      {/* CONTAINER — même largeur que le Footer */}
       <div className="w-full max-w-[1000px] mx-auto flex flex-col items-center">
-        {/* HERO */}
+        {/* HERO + PROGRAMME */}
         <section className="w-full mb-20">
           <div className="flex items-center gap-3 text-pink-500 mb-4">
             <CalendarDays size={18} />
@@ -96,6 +99,32 @@ export default function Contact() {
 
           <h1 className="text-5xl font-bold">{formattedDate}</h1>
           <h2 className="text-3xl text-pink-500 font-semibold mb-8">MARSEILLE</h2>
+
+{/* PROGRAMME — à activer si tu veux afficher le programme du jour */}
+          {/* <div className="flex items-center gap-3 mb-6 mt-10">
+            <Clock className="text-pink-500" />
+            <h3 className="text-xl font-semibold">{t("contact.program")}</h3>
+          </div>
+
+          <div className="space-y-4">
+            {todaySchedule.map((item, index) => (
+              <div
+                key={index}
+                className="bg-white/5 backdrop-blur-md rounded-2xl p-5 flex items-center gap-6 border border-white/10"
+              >
+                <div className={`text-2xl font-bold w-20 ${tagColors[item.tag] || "text-pink-400"}`}>
+                  {item.time}
+                </div>
+
+                <div>
+                  <div className={`text-xs tracking-widest ${tagColors[item.tag] || "text-pink-400"}`}>
+                    {item.tag}
+                  </div>
+                  <div className="text-lg">{item.title}</div>
+                </div>
+              </div>
+            ))}
+          </div> */}
         </section>
 
         {/* ACCÈS */}
@@ -109,6 +138,7 @@ export default function Contact() {
 
         {/* INFOS */}
         <div className="w-full space-y-10 mb-16">
+          {/* Transport */}
           <div className="flex items-start gap-5">
             <div className="bg-blue-600/20 p-4 rounded-2xl">
               <Train className="text-blue-400" size={30} />
@@ -120,6 +150,7 @@ export default function Contact() {
             </div>
           </div>
 
+          {/* Voiture */}
           <div className="flex items-start gap-5">
             <div className="bg-green-600/20 p-4 rounded-2xl">
               <Car className="text-green-400" size={30} />
@@ -131,6 +162,7 @@ export default function Contact() {
             </div>
           </div>
 
+          {/* Adresse */}
           <div className="flex items-start gap-5">
             <div className="bg-purple-600/20 p-4 rounded-2xl">
               <MapPin className="text-purple-400" size={30} />
@@ -142,10 +174,10 @@ export default function Contact() {
           </div>
         </div>
 
-        {/* MAP */}
+        {/* MAP — language depends on the site language */}
         <div className="w-full h-[350px] rounded-3xl overflow-hidden shadow-2xl mb-24">
           <iframe
-            key={lang}
+            key={lang} // force reload on language switch
             title="Google Map Marseille"
             src={mapSrc}
             width="100%"
@@ -168,7 +200,6 @@ export default function Contact() {
                 type="email"
                 name="email"
                 required
-                value={form.email}
                 onChange={handleChange}
                 className="w-full p-3 rounded-lg bg-black/40 border border-gray-600 text-white"
               />
@@ -180,7 +211,6 @@ export default function Contact() {
                 type="text"
                 name="name"
                 required
-                value={form.name}
                 onChange={handleChange}
                 className="w-full p-3 rounded-lg bg-black/40 border border-gray-600 text-white"
               />
@@ -192,7 +222,6 @@ export default function Contact() {
                 type="text"
                 name="subject"
                 required
-                value={form.subject}
                 onChange={handleChange}
                 className="w-full p-3 rounded-lg bg-black/40 border border-gray-600 text-white"
               />
@@ -204,7 +233,6 @@ export default function Contact() {
                 name="message"
                 rows="5"
                 required
-                value={form.message}
                 onChange={handleChange}
                 className="w-full p-3 rounded-lg bg-black/40 border border-gray-600 text-white"
               />
@@ -212,23 +240,10 @@ export default function Contact() {
 
             <button
               type="submit"
-              disabled={sending}
-              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 py-3 rounded-xl font-semibold text-white hover:opacity-90 transition disabled:opacity-50"
+              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 py-3 rounded-xl font-semibold text-white hover:opacity-90 transition"
             >
-              {sending ? "Sending..." : t("contact.publish")}
+              {t("contact.publish")}
             </button>
-
-            {success && (
-              <div className="mt-4 p-4 rounded-xl bg-green-500/20 text-green-400 text-center">
-                Message sent successfully!
-              </div>
-            )}
-
-            {error && (
-              <div className="mt-4 p-4 rounded-xl bg-red-500/20 text-red-400 text-center">
-                {error}
-              </div>
-            )}
           </form>
         </div>
       </div>

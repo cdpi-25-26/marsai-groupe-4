@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import instance from "../../api/config.js";
+import { toast } from "sonner";
 import { CircleX, Pencil, Trophy } from "lucide-react";
 import {
   flexRender,
@@ -83,7 +84,7 @@ export default function Awards() {
       await instance.delete(`admin/awards/${id}`);
       setAwards((prev) => prev.filter((a) => a.id !== id));
     } catch {
-      alert("Erreur lors de la suppression");
+      toast.error("Erreur lors de la suppression");
     }
   }
 

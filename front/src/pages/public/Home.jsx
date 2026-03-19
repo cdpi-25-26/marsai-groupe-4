@@ -1,5 +1,4 @@
 import { Link } from "react-router";
-import { useEffect, useState } from "react";
 import "./Home.css";
 import { useTranslation } from "react-i18next";
 import { Sparkles } from "lucide-react";
@@ -9,24 +8,14 @@ import { Sparkles } from "lucide-react";
 
 function Home() {
   const { t } = useTranslation();
-  const [films, setFilms] = useState([]);
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
-
-  useEffect(() => {
-    fetch(`${API_URL}/gallerie?page=1&limit=3`)
-      .then((r) => r.json())
-      .then((data) => setFilms(data.showVideos || []))
-      .catch(() => {});
-  }, []);
-
   return (
     <>
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-overlay"></div>
         <div className="hero-content">
-            <div className="btn-protocole">
-              <Sparkles className="btn-sparkle"/>
+            <div class="btn-protocole">
+              <Sparkles class="btn-sparkle"/>
               <h2>Le Protocole Temporel 2026</h2>
               </div>
 
@@ -145,27 +134,33 @@ function Home() {
           </div>
 
           <div className="films-grid">
-            {films.length > 0 ? films.map((film) => (
-              <Link to={`/films/${film.id}`} key={film.id} className="film-card" style={{ textDecoration: "none", color: "inherit" }}>
-                <div className="film-image">
-                  {film.thumbnail ? (
-                    <img src={`${API_URL}/uploads/images/${film.thumbnail}`} alt={film.title} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "inherit" }} />
-                  ) : (
-                    <div className="film-placeholder film-placeholder-1"></div>
-                  )}
-                </div>
-                <div className="film-info">
-                  <h3 className="film-title">{film.title}</h3>
-                  <p className="film-director">{film.user ? `${film.user.first_name} ${film.user.last_name}` : ""}</p>
-                </div>
-              </Link>
-            )) : (
-              <>
-                <div className="film-card"><div className="film-image"><div className="film-placeholder film-placeholder-1"></div></div><div className="film-info"><h3 className="film-title">{t("home.film_title_1")}</h3><p className="film-director">{t("home.film_director_1")}</p></div></div>
-                <div className="film-card"><div className="film-image"><div className="film-placeholder film-placeholder-2"></div></div><div className="film-info"><h3 className="film-title">{t("home.film_title_2")}</h3><p className="film-director">{t("home.film_director_2")}</p></div></div>
-                <div className="film-card"><div className="film-image"><div className="film-placeholder film-placeholder-3"></div></div><div className="film-info"><h3 className="film-title">{t("home.film_title_3")}</h3><p className="film-director">{t("home.film_director_3")}</p></div></div>
-              </>
-            )}
+            <div className="film-card">
+              <div className="film-image">
+                <div className="film-placeholder film-placeholder-1"></div>
+              </div>
+              <div className="film-info">
+                <h3 className="film-title">{t("home.film_title_1")} </h3>
+                <p className="film-director">{t("home.film_director_1")}</p>
+              </div>
+            </div>
+            <div className="film-card">
+              <div className="film-image">
+                <div className="film-placeholder film-placeholder-2"></div>
+              </div>
+              <div className="film-info">
+                <h3 className="film-title">{t("home.film_title_2")}</h3>
+                <p className="film-director">{t("home.film_director_2")}</p>
+              </div>
+            </div>
+            <div className="film-card">
+              <div className="film-image">
+                <div className="film-placeholder film-placeholder-3"></div>
+              </div>
+              <div className="film-info">
+                <h3 className="film-title">{t("home.film_title_3")}</h3>
+                <p className="film-director">{t("home.film_director_3")}</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -245,17 +240,9 @@ function Home() {
             {t("home.sponsor_title")} <span className="sponsors-title-gradient">{t("home.sponsor_title2")}</span>
           </h2>
           <div className="sponsors-grid">
-            {[
-              { name: "Région Sud", sub: "Provence-Alpes-Côte d'Azur" },
-              { name: "Ville de Marseille", sub: "Partenaire officiel" },
-              { name: "CNC", sub: "Centre National du Cinéma" },
-              { name: "Adobe", sub: "Creative Partner" },
-              { name: "ARTE", sub: "Média partenaire" },
-              { name: "Université d'Aix", sub: "Partenaire académique" },
-            ].map((s, i) => (
+            {[...Array(6)].map((_, i) => (
               <div key={i} className="sponsor-card">
-                <span className="sponsor-placeholder" style={{ fontSize: "13px", fontWeight: 700, letterSpacing: "0.5px" }}>{s.name}</span>
-                <span style={{ fontSize: "11px", opacity: 0.5, marginTop: 4, display: "block" }}>{s.sub}</span>
+                <span className="sponsor-placeholder">SPONSOR</span>
               </div>
             ))}
           </div>

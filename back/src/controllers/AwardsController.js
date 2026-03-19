@@ -6,7 +6,7 @@ export const getAllAwards = async (req, res) => {
     const awards = await Award.findAll({
       include: [{
         model: Film,               // ← Film = Upload (ton modèle)
-        as: 'film',
+        as: 'Film',
         attributes: ['title', 'thumbnail']  // ← on prend les vrais champs
       }],
       order: [['edition_year', 'DESC'], ['id', 'ASC']]
@@ -16,6 +16,6 @@ export const getAllAwards = async (req, res) => {
     res.json(awards);
   } catch (error) {
     console.error("Awards error:", error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "Failed to fetch awards" });
   }
 };

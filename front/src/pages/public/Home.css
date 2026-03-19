@@ -141,7 +141,7 @@
   border-radius: 9999px; 
   margin-bottom: 1rem;
   font-size: 13px;
-  font-weight: bold;
+  font: bold;
   align-items: center;
 
 }

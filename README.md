@@ -33,34 +33,3 @@ npm run back
 ```sh
 npm run front
 ```
-
----
-
-## Deployment (Production)
-
-### Sites
-
-| Service | URL |
-|---------|-----|
-| **Frontend** | https://front-two-olive.vercel.app |
-| **Backend API** | https://marsai-api.fly.dev |
-
-### Stack utilisé
-
-| Composant | Plateforme |
-|-----------|-----------|
-| Frontend (React + Vite) | **Vercel** |
-| Backend (Node.js + Express) | **Fly.io** (1024 MB RAM, alpine) |
-| Base de données (PostgreSQL) | **Fly Postgres** |
-
-### Comptes de test
-
-| Rôle | Email | Mot de passe |
-|------|-------|-------------|
-| **Admin** | `admin1@marsai.test` | `password123` |
-| **Jury** | `jury1@marsai.test` | `password123` |
-| **Producer** | `producer1@marsai.test` | `password123` |
-
-> Admin → `/admin` dashboard
-> Jury → `/jury` dashboard
-> Producer → profil + soumission de films

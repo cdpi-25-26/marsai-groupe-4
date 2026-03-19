@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { getJuryMembers, getJuryFilms, assignFilmToJury, unassignFilmFromJury } from "../../api/jury.js";
 import { getAllVideos } from "../../api/videos.js";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -92,7 +93,7 @@ function Jury() {
     },
     onError: (error) => {
       console.error('Error assigning film:', error);
-      alert(error.response?.data?.error || "Erreur lors de l'assignation");
+      toast.error(error.response?.data?.error || "Erreur lors de l'assignation");
     },
   });
 
@@ -110,7 +111,7 @@ function Jury() {
     },
     onError: (error) => {
       console.error('Error unassigning film:', error);
-      alert(error.response?.data?.error || "Erreur lors de la suppression");
+      toast.error(error.response?.data?.error || "Erreur lors de la suppression");
     },
   });
 

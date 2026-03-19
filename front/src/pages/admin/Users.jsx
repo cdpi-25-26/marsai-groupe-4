@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { deleteUser, getUsers, updateUser, getRoles, createUser } from "../../api/users.js";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {CircleX, Pencil } from "lucide-react";
@@ -64,6 +65,7 @@ function Users() {
   const [modeEdit, setModeEdit] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [sorting, setSorting] = useState([]);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     getUsers().then((data) => {
@@ -83,8 +85,9 @@ function Users() {
     mutationFn: async (newUser) => {
       return await createUser(newUser);
     },
-    onSuccess: (data, variables, context) => {
-      window.location.reload();
+    onSuccess: () => {
+      toast.success("Utilisateur créé avec succès !");
+      queryClient.invalidateQueries();
     },
   });
 
@@ -96,8 +99,9 @@ function Users() {
     mutationFn: async (id) => {
       return await deleteUser(id);
     },
-    onSuccess: (data, variables, context) => {
-      window.location.reload();
+    onSuccess: () => {
+      toast.success("Utilisateur supprimé avec succès !");
+      queryClient.invalidateQueries();
     },
   });
 
@@ -111,8 +115,10 @@ function Users() {
     mutationFn: async (updatedUser) => {
       return await updateUser(updatedUser.id, updatedUser);
     },
-    onSuccess: (data, variables, context) => {
-      window.location.reload();
+    onSuccess: () => {
+      toast.success("Utilisateur mis à jour avec succès !");
+      queryClient.invalidateQueries();
+      handleReset();
     },
   });
 
@@ -171,6 +177,7 @@ function Users() {
     }
 
     function onUpdate(updatedUser) {
+      console.log(updateUser);
       updateMutation.mutate(updatedUser);
     }
 
@@ -380,7 +387,7 @@ function Users() {
               <FormField label="Instagram URL" id="instagram_url" type="url" register={register} />
               <FormField label="LinkedIn URL" id="linkedin_url" type="url" register={register} />
               <FormField label="Facebook URL" id="facebook_url" type="url" register={register} />
-              <FormField label="TikTok URL" id="tiktok_url" type="url" register={register} />
+              <FormField label="TikTok URL" id="tiktok_ur" type="url" register={register} />
               <FormField label="Source de découverte" id="discovery_source" register={register} />
               <FormField label="Rôle" id="role" type="select" register={register} options={roles} />
             </div>

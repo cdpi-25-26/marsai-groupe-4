@@ -2,7 +2,7 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import Backend from "i18next-http-backend"; // https://github.com/i18next/i18next-http-backend
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
 
 i18n
     .use(Backend)
@@ -10,12 +10,12 @@ i18n
     .init({
         lng: "en", // c'est language par défualt
         debug: true,
-        fallbackLng: "fr", // si jamais lng est introuvable
+        fallbackLng: "fr", // si jamais lng est introuvable 
         interpolation: {
             escapeValue: false,
         },
         backend:{
-           loadPath: `${API_URL}/translations/{{lng}}`,
+           loadPath: `${import.meta.env.VITE_API_URL}/translations/{{lng}}`,
             requestOptions: {
                 headers:{
                     Authorization: `Bearer ${localStorage.getItem("token")}`,

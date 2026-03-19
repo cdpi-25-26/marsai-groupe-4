@@ -4,7 +4,6 @@ import { listFilms } from "../../api/films";
 import FilmCard from "../../components/FilmCard";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
-import { Search } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -20,7 +19,6 @@ export default function Gallerie() {
   const [typeIA, setTypeIA] = useState("");
   const [pays, setPays] = useState("");
   const [statut, setStatut] = useState("");
-  const [search, setSearch] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 9;
@@ -31,7 +29,7 @@ export default function Gallerie() {
     keepPreviousData: true,
   });
 
-  const UPLOADS_BASE = `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/uploads/images`;
+  const UPLOADS_BASE = "http://localhost:3000";
 
   const toFilmCardShape = (video) => {
     const thumb = video?.thumbnail
@@ -77,18 +75,13 @@ export default function Gallerie() {
     return (
       <Shell>
         <section className="mb-10">
-          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md px-8 py-10">
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#7b2cff]/15 via-transparent to-[#ff4fd8]/10" />
-            <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-[#7b2cff]/20 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-10 -left-10 h-48 w-48 rounded-full bg-[#ff4fd8]/15 blur-3xl" />
-            <h1 className="relative m-0 text-[44px] md:text-[56px] leading-[0.95] font-black tracking-[-1.5px]">
-              {t("gallery.title")} <br />
-              {t("gallery.title2")}{" "}
-              <span className="bg-gradient-to-r from-[#ff4fd8] to-[#7b2cff] bg-clip-text text-transparent">
-                {t("gallery.title3")}
-              </span>
-            </h1>
-          </div>
+          <h1 className="m-0 text-[44px] md:text-[56px] leading-[0.95] font-black tracking-[-1.5px]">
+            {t("gallery.title")} <br />
+            {t("gallery.title2")}{" "}
+            <span className="bg-gradient-to-r from-[#ff4fd8] to-[#7b2cff] bg-clip-text text-transparent">
+              {t("gallery.title3")}
+            </span>
+          </h1>
         </section>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -118,32 +111,20 @@ export default function Gallerie() {
     );
   }
 
-  const rawVideos = data?.data?.showVideos ?? [];
+  const videos = data?.data?.showVideos ?? [];
   const totalPages = data?.data?.totalPages ?? 1;
-
-  const videos = rawVideos.filter((v) => {
-    if (typeIA && !(v.ai_tools || "").toLowerCase().includes(typeIA.toLowerCase())) return false;
-    if (statut && v.status !== statut) return false;
-    if (search && !(v.title || "").toLowerCase().includes(search.toLowerCase())) return false;
-    return true;
-  });
 
   if (videos.length === 0) {
     return (
       <Shell>
         <section className="mb-10">
-          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md px-8 py-10">
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#7b2cff]/15 via-transparent to-[#ff4fd8]/10" />
-            <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-[#7b2cff]/20 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-10 -left-10 h-48 w-48 rounded-full bg-[#ff4fd8]/15 blur-3xl" />
-            <h1 className="relative m-0 text-[44px] md:text-[56px] leading-[0.95] font-black tracking-[-1.5px]">
-              {t("gallery.title")} <br />
-              {t("gallery.title2")}{" "}
-              <span className="bg-gradient-to-r from-[#ff4fd8] to-[#7b2cff] bg-clip-text text-transparent">
-                {t("gallery.title3")}
-              </span>
-            </h1>
-          </div>
+          <h1 className="m-0 text-[44px] md:text-[56px] leading-[0.95] font-black tracking-[-1.5px]">
+            {t("gallery.title")} <br />
+            {t("gallery.title2")}{" "}
+            <span className="bg-gradient-to-r from-[#ff4fd8] to-[#7b2cff] bg-clip-text text-transparent">
+              {t("gallery.title3")}
+            </span>
+          </h1>
         </section>
 
         <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-white/70">
@@ -170,17 +151,7 @@ export default function Gallerie() {
       {/* Filters in a nice panel */}
       <section className="mb-10">
         <div className="mb-12">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div className="flex items-center gap-3 h-12 rounded-2xl px-4 bg-white/10 border border-white/20">
-              <Search size={16} className="text-white/50 shrink-0" />
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
-                placeholder={t("event.search_placeholder")}
-                className="w-full bg-transparent outline-none text-sm text-white placeholder-white/40"
-              />
-            </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <select
               className="h-12 rounded-2xl px-4 pr-10 text-sm font-bold text-white outline-none
                          bg-gradient-to-r from-[#7b2cff] to-[#FF2B7F]

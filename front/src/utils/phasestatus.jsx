@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import instance from '../api/config';
+import axios from 'axios';
 
 const ContestContext = createContext();
 
@@ -10,7 +10,7 @@ export function ContestProvider({ children }) {
   useEffect(() => {
     const fetchStatus = async () => {
       try {
-        const res = await instance.get('/phase/status');
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/phase/status`);
         setContestStatus(res.data);
       } catch (err) {
         console.error("Erreur récupération état concours", err);

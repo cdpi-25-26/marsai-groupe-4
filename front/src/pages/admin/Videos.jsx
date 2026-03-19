@@ -1,20 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { getVideos, deleteVideo, updateVideo } from "../../api/videos.js";
 import { useState, Fragment } from "react";
-
-function extractYoutubeId(link) {
-  if (!link) return "";
-  try {
-    if (link.includes("youtu.be/")) return link.split("youtu.be/")[1].split(/[?&]/)[0];
-    if (link.includes("youtube.com/watch")) return new URL(link).searchParams.get("v") || "";
-    if (link.includes("youtube.com/embed/")) return link.split("embed/")[1].split(/[?&]/)[0];
-    return link;
-  } catch {
-    return link;
-  }
-}
 import { CircleX, Pencil } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import {
   flexRender,
   getCoreRowModel,
@@ -75,7 +64,7 @@ function Videos() {
 
   const { isPending, isError, data, error } = useQuery({
     queryKey: ["films", currentPage, limit],
-    queryFn: () => getVideos(currentPage, limit, true),
+    queryFn: () => getVideos(currentPage, limit),
     keepPreviousData: true,
   });
 
@@ -83,11 +72,12 @@ function Videos() {
     mutationFn: async (id) => {
       return await deleteVideo(id);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['films'] });
+    onSuccess: (data, variables, context) => {
+      queryClient.invalidateQueries(["films"]);
+      toast.success("Vidéo supprimée avec succès !");
     },
     onError: (error) => {
-      alert(
+      toast.error(
         "Erreur lors de la suppression: " +
           (error.response?.data?.error || error.message),
       );
@@ -99,12 +89,12 @@ function Videos() {
       return await updateVideo(id, data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['films'] });
+      queryClient.invalidateQueries(["films"]);
       setIsEditDialogOpen(false);
       setEditingVideo(null);
     },
     onError: (error) => {
-      alert(
+      toast.error(
         "Erreur lors de la mise à jour: " +
           (error.response?.data?.error || error.message),
       );
@@ -181,40 +171,6 @@ function Videos() {
       cell: ({ row }) => row.original.user?.email || "N/A",
     },
     {
-      accessorKey: "status",
-      header: "Statut",
-      cell: ({ row }) => {
-        const video = row.original;
-        const statusColors = {
-          submitted: "bg-gray-100 text-gray-700",
-          under_review: "bg-blue-100 text-blue-700",
-          selected: "bg-green-100 text-green-700",
-          finalist: "bg-purple-100 text-purple-700",
-          rejected: "bg-red-100 text-red-700",
-        };
-        const statusLabels = {
-          submitted: "Soumis",
-          under_review: "En révision",
-          selected: "Sélectionné",
-          finalist: "Finaliste",
-          rejected: "Rejeté",
-        };
-        return (
-          <select
-            value={video.status || "submitted"}
-            onChange={(e) => {
-              updateMutation.mutate({ id: video.id, data: { status: e.target.value } });
-            }}
-            className={`px-2 py-1 rounded-full text-xs font-medium border-0 cursor-pointer ${statusColors[video.status] || statusColors.submitted}`}
-          >
-            {Object.entries(statusLabels).map(([val, label]) => (
-              <option key={val} value={val}>{label}</option>
-            ))}
-          </select>
-        );
-      },
-    },
-    {
       accessorKey: "juryMembers",
       header: "Jury Assigné",
       cell: ({ row }) => {
@@ -224,7 +180,9 @@ function Videos() {
             <Users className="w-4 h-4 text-gray-500" />
             <span>
               {juryMembers.length > 0
-                ? juryMembers.map(j => `${j.first_name} ${j.last_name}`).join(", ")
+                ? juryMembers
+                    .map((j) => `${j.first_name} ${j.last_name}`)
+                    .join(", ")
                 : "Aucun jury"}
             </span>
           </div>
@@ -244,6 +202,11 @@ function Videos() {
   header: "",
   cell: ({ row }) => {
     const video = row.original;
+
+    // Affiche le bouton en phase 2 (attribuer) ET phase 3 (modifier)
+    if (video.phase_status !== "phase2" && video.phase_status !== "phase3") {
+      return null;
+    }
 
     return (
       <div className="flex gap-2 justify-end">
@@ -363,12 +326,12 @@ function Videos() {
                               <div className="p-4 space-y-4">
                                 <div className="max-w-4xl">
                                   <YouTubePlayer
-                                    videoId={extractYoutubeId(video.youtube_link)}
+                                    videoId={video.youtube_link}
                                     title={video.title}
                                     customThumbnail={
                                       video.thumbnail
-                                        ? `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/uploads/images/${video.thumbnail}`
-                                        : `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/uploads/images/thumbnail-placeholder.png`
+                                        ? `http://localhost:3000/uploads/images/${video.thumbnail}`
+                                        : "http://localhost:3000/uploads/images/thumbnail-placeholder.png"
                                     }
                                     defaultExpanded={false}
                                     className="mb-4"
@@ -450,7 +413,7 @@ function Videos() {
               : "Prix attribué avec succès !"
           );
           setPrizeDialogOpen(false);
-          queryClient.invalidateQueries({ queryKey: ['films'] });
+          queryClient.invalidateQueries(["videos"]);
         } catch (err) {
           console.log("Erreur : " + (err.response?.data?.error || err.message));
         }

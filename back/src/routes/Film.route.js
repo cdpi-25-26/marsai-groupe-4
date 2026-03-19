@@ -3,11 +3,10 @@ import FilmController from "../controllers/FilmController.js";
 
 const filmRouter = express.Router();
 
-// GET /gallerie
+// GET /films
 filmRouter.get("/", FilmController.listFilms);
 
 filmRouter.get("/juryvideo", FilmController.listJuryFilms);
-// GET /gallerie/:id
-filmRouter.get("/:id", FilmController.getFilmById);
+
 
 export default filmRouter;

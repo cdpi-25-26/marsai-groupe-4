@@ -9,17 +9,17 @@ module.exports = {
 
       await q(`
         CREATE TABLE films_jury (
-          id SERIAL PRIMARY KEY,
+          id INT AUTO_INCREMENT PRIMARY KEY,
           film_id INT NOT NULL,
           user_id INT NOT NULL,
 
           created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-          UNIQUE (user_id, film_id),
+          UNIQUE KEY uk_films_jury (user_id, film_id),
           CONSTRAINT fk_films_jury_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
           CONSTRAINT fk_films_jury_film FOREIGN KEY (film_id) REFERENCES films(id) ON DELETE CASCADE
-        );
+        ) ENGINE=InnoDB;
       `);
     });
   },

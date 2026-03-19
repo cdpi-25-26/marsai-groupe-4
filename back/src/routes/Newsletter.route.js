@@ -14,7 +14,8 @@ const contactsApi = new SibApiV3Sdk.ContactsApi();
 router.post("/", async (req, res) => {
   const { email } = req.body;
 
-  if (!email || !email.includes("@")) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email || !emailRegex.test(email)) {
     return res.status(400).json({ success: false, error: "Email invalide" });
   }
 

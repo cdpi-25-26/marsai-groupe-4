@@ -5,7 +5,6 @@ import { google } from "googleapis";
 import {
   S3Client,
   PutObjectCommand,
-  DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 import YoutubeToken from "../models/YoutubeTokens.js";
 import path from "path"
@@ -14,17 +13,18 @@ dotenv.config();
 
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI } = process.env;
 
-if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET || !GOOGLE_REDIRECT_URI) {
-  console.warn("⚠ Missing Google API credentials — YouTube features disabled");
+const youtubeEnabled = !!(GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && GOOGLE_REDIRECT_URI);
+if (!youtubeEnabled) {
+  console.warn("[YouTube] Google API credentials not set — YouTube upload disabled");
 }
 
 const SCOPES = ["https://www.googleapis.com/auth/youtube.upload"];
 
-const oauth2Client = new google.auth.OAuth2(
+const oauth2Client = youtubeEnabled ? new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   GOOGLE_REDIRECT_URI
-);
+) : null;
 
 let lastOAuthState = null;
 
@@ -94,8 +94,7 @@ async function googleAuthCallback(req, res) {
 
     await saveTokens(tokens);
 
-    const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
-    res.redirect(`${frontendUrl}/admin`);
+    res.redirect(`${process.env.FRONTEND_URL || "http://localhost:5173"}/admin`);
   } catch (error) {
     console.error("Erreur auth callback:", error);
     res.status(500).send("Erreur lors de l'authentification");
@@ -156,7 +155,7 @@ const BASE_FOLDER = "grp4";
 // Fonction qui upload un fichier local vers S3
  async function uploadToS3(localFilePath, subFolder = "videos") {
   try {
-    const fileContent = fs.createReadStream(localFilePath);
+    const fileContent = fs.readFileSync(localFilePath);
     const fileName = path.basename(localFilePath);
     
 

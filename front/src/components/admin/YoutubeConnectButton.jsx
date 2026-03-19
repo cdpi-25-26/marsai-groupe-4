@@ -8,7 +8,7 @@ export default function YoutubeConnectButton() {
   useEffect(() => {
     const checkConnection = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/youtube/check-auth`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/youtube/check-auth`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
           },
@@ -31,7 +31,7 @@ export default function YoutubeConnectButton() {
 
   const handleConnect = () => {
     setLoading(true);
-    window.location.href = `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/youtube/auth`;
+    window.location.href = `${import.meta.env.VITE_API_URL}/youtube/auth`;
   };
 
   if (loading) {
