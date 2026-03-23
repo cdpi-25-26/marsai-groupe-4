@@ -1,4 +1,5 @@
 import Upload from "../models/Upload.js";
+import User from "../models/User.js";
 import { videoDuration } from "@numairawan/video-duration";
 import fs from "fs/promises";
 import { uploadVideoToYoutubeInternal,uploadToS3 } from "./YoutubeController.js";
@@ -116,8 +117,32 @@ async function createUpload(req, res) {
       video_path: videoFile.path,
       youtube_status: "pending",        
     });
-
     
+    try {
+  // Récupère l'utilisateur pour avoir son email
+  const user = await User.findByPk(userId, { attributes: ['email', 'first_name', 'last_name'] });
+
+  if (user && user.email) {
+    const html = `
+      <h2>Bonjour ${user.first_name || 'Participant'} !</h2>
+      <p>Votre vidéo <strong>${newFilm.title}</strong> a bien été reçue !</p>
+      <p>Elle est actuellement en attente de validation (phase 1).</p>
+      <p>Nous vous tiendrons au courant dès que le statut évolue (top 50, palmarès, etc.).</p>
+      <p>Merci pour votre participation ! 🚀</p>
+      <p>L’équipe MarsAI</p>
+    `;
+
+    await EmailController.sendMail(
+      user.email,
+      "MarsAI – Confirmation de soumission",
+      html
+    );
+
+    console.log(`[EMAIL] Confirmation envoyée à ${user.email} pour la vidéo ${newFilm.id}`);
+  }
+} catch (emailErr) {
+  console.error("[EMAIL] Échec envoi confirmation :", emailErr);
+}
     // === AUTO UPLOAD SUR YOUTUBE ===
     try {
       console.log(`[AUTO] Début upload YouTube pour le film ${newFilm.id}`);
@@ -179,6 +204,7 @@ async function createUpload(req, res) {
     console.error("Erreur lors de la création de l'upload :", error);
     res.status(500).json({ error: "Erreur serveur lors du traitement" });
   }
+  
 }
 
 
