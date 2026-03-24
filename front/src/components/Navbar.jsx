@@ -76,9 +76,11 @@ export default function Navbar() {
               <Gavel size={20} />
             </NavLink>
           )}
-          <NavLink to="/auth/login" className={iconLinkClass}>
-              <MehIcon size={20} />
-            </NavLink>
+          {!isLoggedIn && (  
+            <NavLink to="/auth/login" className={iconLinkClass}>
+                <MehIcon size={20} />
+              </NavLink>
+          )}
         </div>
 
         {/* RIGHT SIDE */}
