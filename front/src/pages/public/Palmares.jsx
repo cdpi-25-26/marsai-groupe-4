@@ -1,7 +1,9 @@
 import { Trophy } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { fetchAwards } from "../../api/awards";
+
+const UPLOADS_BASE = "http://localhost:3000";
 
 export default function Palmares() {
 
@@ -11,50 +13,27 @@ export default function Palmares() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const loadAwards = useCallback(async () => {
-    try {
-
-      setLoading(true);
-      setError(null);
-
-      const data = await fetchAwards();
-
-      setAwards(data);
-
-    } catch (err) {
-
-      setError(err.message);
-      setAwards([]);
-
-    } finally {
-
-      setLoading(false);
-
-    }
-
-  }, []);
-
   useEffect(() => {
+    const loadAwards = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await fetchAwards();
+        setAwards(data);
+      } catch (err) {
+        setError(err.message || "Erreur lors du chargement du palmarès");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     loadAwards();
-  }, [loadAwards]);
-
-  const today = new Date();
-
-  const formattedDate = today
-    .toLocaleDateString("fr-FR", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    })
-    .toUpperCase();
+  }, []);
 
   if (loading) {
     return (
-      <div
-        className="p-20 text-center"
-        style={{ color: "var(--palmares-text)" }}
-      >
-        Chargement...
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-lg text-gray-400">Chargement du palmarès...</p>
       </div>
     );
   }
@@ -93,6 +72,15 @@ export default function Palmares() {
   }
 
   const topWinners = awards.slice(0, 3);
+
+  // Fonction utilitaire pour le thumbnail (comme dans Gallerie)
+  const getThumbnailUrl = (thumbnail) => {
+  if (thumbnail) {
+    return `${UPLOADS_BASE}/${thumbnail}`;
+  }
+  // Fallback direct à la racine public/ (pas besoin d'uploads)
+  return `${UPLOADS_BASE}/thumbnail-placeholder.png`;
+};
 
   return (
     <div

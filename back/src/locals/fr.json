@@ -11,7 +11,7 @@
     "adventure_button": "COMMENCER L'AVENTURE",
     "objectif-title": " OBJECTIFS DU",
     "first_objectif": "L'HUMAIN AU CENTRE",
-    "first description": "Mettre l'humain au cœur de la création pour ne pas perdre l'émotion.",
+    "first_description": "Mettre l'humain au cœur de la création pour ne pas perdre l'émotion.",
     "second_objectif": "CHALLENGE CRÉATIF",
     "second_description": "Challenger la créativité grâce à un format ultra-court de 60s.",
     "third_objectif": "FUTURS SOUHAITABLES",
@@ -133,7 +133,7 @@
     "title2": "DES",
     "title3": "FILMS",
     "loading": "Chargement en cours...",
-    "no_video": "Une erreur est survenue",
+    "no_video": "Vous etes en phase 1 il n'y a pas de video",
     "no_display": "Aucune vidéo à afficher.",
     "discovery": "Découvrez une sélection de films générés avec des outils d’IA.",
     "type": "Type d’IA",
@@ -141,7 +141,7 @@
     "AI_2": "Midjourney",
     "AI_3": "Runway",
     "status": "Statut",
-    "publish": "Publié",
+    "published": "Publié",
     "pending": "En attente"
   },
   "palmares": {
@@ -213,8 +213,8 @@
     "publish_button": "Confirmer et envoyer"
   },
   "footer": {
-    "subtitle": "La plateforme mondiale de la narration générative, ancrée dans",
-    "subtitle_2": "la lumière de Marseille.",
+    "subtitle": "La plateforme mondiale de la narration générative, ancrée dans la lumière de Marseille.",
+    "subtitle_2": "",
     "gallery": "Galerie",
     "program": "Programme",
     "ticket": "Billetterie",

@@ -27,6 +27,8 @@ import JuryVote from "./pages/jury/JuryVote.jsx";
 import Gallerie from "./pages/public/Gallerie.jsx";
 import Profile from "./pages/public/Profile.jsx";
 import { UploadRoleGuard } from "./middlewares/Upload.jsx";
+import { ContestProvider } from './utils/phasestatus.jsx';
+
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,6 +41,7 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
+    <ContestProvider>
       <QueryClientProvider client={queryClient}>
         <Routes>
           {/* Routes publiques */}
@@ -50,13 +53,20 @@ createRoot(document.getElementById("root")).render(
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/register" element={<Register />} />
             <Route path="/films/:id" element={<Film />} />
-            <Route path="/upload" element={<UploadRoleGuard allowedRoles={["Producer", "ADMIN"]}>
-             <Upload />
-            </UploadRoleGuard>} />
+
+            
+            <Route path="/upload" element={
+                <ContestProvider>  
+                  <UploadRoleGuard allowedRoles={["PRODUCER", "ADMIN"]}>
+                    <Upload />
+                  </UploadRoleGuard>
+                </ContestProvider>
+              }
+            />
+
             <Route path="/palmares" element={<Palmares />} />
             <Route path="/agenda" element={<Evennements />} />
-           <Route path="/reservation/:id" element={<Reservation />} />
-
+            <Route path="/reservation/:id" element={<Reservation />} />
             <Route path="/profile/:id" element={<Profile />} />
             <Route
               path="/jury"
@@ -66,25 +76,27 @@ createRoot(document.getElementById("root")).render(
                 </RoleGuard>
               }
             />
-
-            
           </Route>
 
-          {/* Routes privées */}
-          <Route path="admin" element={ <RoleGuard allowedRoles={["ADMIN"]}>
-            <AdminLayout />
-            </RoleGuard> 
-              } >
+          {/* Routes admin */}
+          <Route
+            path="admin"
+            element={
+              <RoleGuard allowedRoles={["ADMIN"]}>
+                <AdminLayout />
+              </RoleGuard>
+            }
+          >
             <Route index element={<Dashboard />} />
             <Route path="users" element={<Users />} />
             <Route path="videos" element={<Videos />} />
             <Route path="jurys" element={<Jury />} />
             <Route path="events" element={<Events />} />
             <Route path="cms" element={<Cms />} />
-
           </Route>
         </Routes>
       </QueryClientProvider>
+      </ContestProvider>
     </BrowserRouter>
-  </StrictMode>,
+  </StrictMode>
 );

@@ -33,7 +33,7 @@ const Award = sequelize.define(
 
     film_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
   },
   {

@@ -13,7 +13,7 @@ export default function AccessDeniedPage() {
  <Navbar />
     <div className="min-h-screen bg-black text-white font-sans">
     
-      <main className="mx-auto max-w-[1180px] px-6 py-16">
+      <main className="mx-auto max-w-295 px-6 py-16">
         <section className="rounded-[28px] border border-white/10 bg-white/5 p-8 shadow-[0_24px_80px_rgba(0,0,0,0.55)] backdrop-blur-md md:p-12">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-4 py-2 text-[11px] font-black tracking-widest text-white/80">
             {t("accessdenied.access_denied")}
@@ -21,7 +21,7 @@ export default function AccessDeniedPage() {
 
           <h1 className="m-0 text-[40px] leading-[1.05] font-black tracking-[-1px] md:text-[56px]">
             {t("accessdenied.sorry")}{" "}
-            <span className="bg-gradient-to-r from-[#ff4fd8] to-[#7b2cff] bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-[#ff4fd8] to-[#7b2cff] bg-clip-text text-transparent">
               {t("accessdenied.not_access")}
             </span>{" "}
             {t("accessdenied.page")}
@@ -34,10 +34,19 @@ export default function AccessDeniedPage() {
             <button
               onClick={() => navigate("/")}
               className="rounded-2xl px-6 py-4 text-sm font-black text-white
-                         bg-gradient-to-r from-[#7b2cff] to-[#FF2B7F]
+                         bg-linear-to-r from-[#7b2cff] to-[#FF2B7F]
                          shadow-[0_24px_80px_rgba(0,0,0,0.55)] transition hover:opacity-95"
             >
               {t("accessdenied.home_button")}
+            </button>
+
+            <button
+              onClick={() => navigate("/auth/login")}
+              className="rounded-2xl px-6 py-4 text-sm font-black text-white
+                         bg-linear-to-r from-[#7b2cff] to-[#FF2B7F]
+                         shadow-[0_24px_80px_rgba(0,0,0,0.55)] transition hover:opacity-95"
+            >
+              Login
             </button>
 
             <button

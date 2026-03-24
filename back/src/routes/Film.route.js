@@ -6,4 +6,7 @@ const filmRouter = express.Router();
 // GET /films
 filmRouter.get("/", FilmController.listFilms);
 
+filmRouter.get("/juryvideo", FilmController.listJuryFilms);
+
+
 export default filmRouter;

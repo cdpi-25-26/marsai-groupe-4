@@ -267,11 +267,19 @@ function Home() {
             {t("home.sponsor_title")} <span className="sponsors-title-gradient">{t("home.sponsor_title2")}</span>
           </h2>
           <div className="sponsors-grid">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="sponsor-card">
-                <span className="sponsor-placeholder">SPONSOR</span>
+            
+              <div className="sponsor-card">
+                <span className="sponsor-placeholder"><img src="https://intra.pro.laplateforme.io//assets/img/logo.png"/></span>
               </div>
-            ))}
+              <div className="sponsor-card">
+           <span className="sponsor-placeholder"><img src="https://www.mobilefilmfestival.com/wp-content/uploads/2021/08/unric_logo-standard-e1629825347279.png"/></span>
+              </div>
+               <div className="sponsor-card">
+           <span className="sponsor-placeholder"><img src="https://www.mobilefilmfestival.com/wp-content/uploads/2021/09/logo-humeco-e1632396389569.png"/></span>
+              </div>
+               <div className="sponsor-card">
+           <span className="sponsor-placeholder"><img src="https://www.mobilefilmfestival.com/wp-content/uploads/2021/08/primary_full_color_horizontal-e1629826216782.png"/></span>
+              </div>
           </div>
         </div>
       </section>

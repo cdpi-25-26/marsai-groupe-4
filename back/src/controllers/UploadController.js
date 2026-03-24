@@ -1,8 +1,25 @@
 import Upload from "../models/Upload.js";
+import User from "../models/User.js";
 import { videoDuration } from "@numairawan/video-duration";
 import fs from "fs/promises";
 import { uploadVideoToYoutubeInternal,uploadToS3 } from "./YoutubeController.js";
 import path from "path";
+import EmailController from "./EmailController.js";
+import { VIDEO_REJECT_TEMPLATE } from "../constants/VideoRejectTemplate.js";
+
+function upload(req, res) {
+  // Upload vers répertoire uploads/ avec Multer
+  // Upload vers YouTubeAPI
+
+  if (copyright == true) {
+    EmailController.sendMail(
+      req.userEmail, // Check AuthMiddleware
+      "Refus de votre vidéo qui est moche",
+      VIDEO_REJECT_TEMPLATE,
+    );
+  }
+}
+
 
 function getUploads(req, res) {
   Upload.findAll()
@@ -100,8 +117,32 @@ async function createUpload(req, res) {
       video_path: videoFile.path,
       youtube_status: "pending",        
     });
-
     
+    try {
+  // Récupère l'utilisateur pour avoir son email
+  const user = await User.findByPk(userId, { attributes: ['email', 'first_name', 'last_name'] });
+
+  if (user && user.email) {
+    const html = `
+      <h2>Bonjour ${user.first_name || 'Participant'} !</h2>
+      <p>Votre vidéo <strong>${newFilm.title}</strong> a bien été reçue !</p>
+      <p>Elle est actuellement en attente de validation (phase 1).</p>
+      <p>Nous vous tiendrons au courant dès que le statut évolue (top 50, palmarès, etc.).</p>
+      <p>Merci pour votre participation !</p>
+      <p>L’équipe MarsAI</p>
+    `;
+
+    await EmailController.sendMail(
+      user.email,
+      "MarsAI – Confirmation de soumission",
+      html
+    );
+
+    console.log(`[EMAIL] Confirmation envoyée à ${user.email} pour la vidéo ${newFilm.id}`);
+  }
+} catch (emailErr) {
+  console.error("[EMAIL] Échec envoi confirmation :", emailErr);
+}
     // === AUTO UPLOAD SUR YOUTUBE ===
     try {
       console.log(`[AUTO] Début upload YouTube pour le film ${newFilm.id}`);
@@ -113,11 +154,13 @@ async function createUpload(req, res) {
       });
 
       if (youtubeResult.success) {
+        const youtubeFullLink = `https://www.youtube.com/watch?v=${youtubeResult.videoId}`;
         await newFilm.update({
           youtube_video_id: youtubeResult.videoId,
           youtube_status: "uploaded",
+          youtube_link: youtubeFullLink,
         });
-        console.log(`[AUTO] Upload YouTube réussi → ID: ${youtubeResult.videoId}`);
+       console.log(`[AUTO] Upload YouTube réussi → ID: ${youtubeResult.videoId} → Lien: ${youtubeFullLink}`);
       }
     } catch (youtubeError) {
       console.error("[AUTO] Échec upload YouTube :", youtubeError);
@@ -161,6 +204,7 @@ async function createUpload(req, res) {
     console.error("Erreur lors de la création de l'upload :", error);
     res.status(500).json({ error: "Erreur serveur lors du traitement" });
   }
+  
 }
 
 
@@ -242,4 +286,5 @@ export default {
   updateUpload,
   deleteUpload,
   getRecentUploads,
+  upload,
 };

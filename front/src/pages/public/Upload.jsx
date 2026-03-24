@@ -9,6 +9,8 @@ import { CircleCheck } from "lucide-react";
 import { Info } from "lucide-react";
 import { Image } from "lucide-react";
 import { useTranslation} from "react-i18next";
+import { useContest } from "../../utils/phasestatus";
+
 
 const MAX_SECONDS = 60;
 const MAX_FILE_SIZE = 500 * 1024 * 1024;
@@ -115,10 +117,13 @@ function getVideoDuration(file) {
 }
 
 export default function Upload() {
+  const { contestStatus, loading: statusLoading } = useContest();
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tempData, setTempData] = useState(null);
+  const [toastMessage, setToastMessage] = useState(null);
+const [toastVisible, setToastVisible] = useState(false);
 
   const {
     register,
@@ -145,6 +150,45 @@ export default function Upload() {
     },
   });
 
+  const { t } = useTranslation();
+
+  // === BLOCAGE SELON LA PHASE  ===
+  if (statusLoading) {
+    return (
+      <section className="py-40 bg-black text-white px-4 sm:px-6 text-center">
+        <p className="text-xl text-gray-400">Chargement de l’état du concours...</p>
+      </section>
+    );
+  }
+
+  if (contestStatus?.currentPhase !== "phase1") {
+    return (
+      <section className="py-40 bg-black text-white px-4 sm:px-6 text-center">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-4xl sm:text-5xl font-bold text-yellow-400 mb-8">
+            Soumissions fermées
+          </h2>
+          <p className="text-xl sm:text-2xl text-gray-300 mb-6">
+            Le concours est actuellement en{" "}
+            <span className="font-semibold text-pink-500">
+              {contestStatus?.phaseName || "phase inconnue"}
+            </span>.
+          </p>
+          <p className="text-lg text-gray-400 mb-10">
+            Les soumissions sont terminées. Revenez plus tard pour le palmarès !
+          </p>
+          <button
+            onClick={() => window.location.href = "/palmares"}
+            className="mt-8 px-10 py-5 bg-pink-600 hover:bg-pink-700 rounded-xl text-white font-bold text-lg transition duration-300"
+          >
+            Voir le palmarès
+          </button>
+        </div>
+      </section>
+    );
+  }
+
+  // === SI ON EST EN PHASE 1 → on affiche le formulaire ===
   const onSubmit = (data) => {
     setTempData(data);
     setIsModalOpen(true);
@@ -183,7 +227,7 @@ export default function Upload() {
         throw new Error(errorData.error || "Erreur lors de l'upload");
       }
 
-      alert("Tout a été envoyé avec succès !");
+      showToast("Tout a été envoyé avec succès !");
       reset();
     } catch (err) {
       setServerError(err.message);
@@ -196,7 +240,17 @@ export default function Upload() {
     setIsModalOpen(false);
   };
 
-  const { t } = useTranslation();
+ const showToast = (message) => {
+  setToastMessage(message);
+  setToastVisible(true);
+  
+  // Disparaît automatiquement après 4 secondes
+  setTimeout(() => {
+    setToastVisible(false);
+  }, 4000);
+};
+ 
+  // === FORMULAIRE NORMAL PHASE 1 QUAND Y A ZERO VIDEO EN PHASE 2 ET 3 ===
   return (
     <section className="py-40 bg-black text-white placeholder:bg-white px-4 sm:px-6  text-[15px] md:text-[15px]">
       <div className="flex flex-col justify-center mb-12 sm:mb-12 text-center">
@@ -559,6 +613,23 @@ export default function Upload() {
           data={tempData}
         />
       </div>
+      {toastVisible && (
+  <div 
+    className="
+      fixed bottom-6 right-6 
+      bg-green-600/90 text-white 
+      px-6 py-4 rounded-xl shadow-2xl 
+      border border-green-400/30 
+      backdrop-blur-sm 
+      flex items-center gap-3 
+      animate-fade-in-up
+      z-50
+    "
+  >
+    <CircleCheck className="h-6 w-6" />
+    <span className="font-medium">{toastMessage}</span>
+  </div>
+)}
     </section>
   );
 }

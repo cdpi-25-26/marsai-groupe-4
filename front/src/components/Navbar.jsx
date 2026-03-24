@@ -1,9 +1,11 @@
 import { NavLink, useLocation } from "react-router";
 import { ThemeToggle } from "./ThemeToggle";
 import { useState, useEffect } from "react";
-import { Trophy, House, Search, Calendar, User, Gavel } from "lucide-react";
+import { Trophy, House, Search, Calendar, User, Gavel, LogOut, MehIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import handleLogout from "../utils/helpers";
 
 export default function Navbar() {
   const { t } = useTranslation();
@@ -87,9 +89,11 @@ const navbarClass = scrolled
               <Gavel size={20} />
             </NavLink>
           )}
-          <NavLink to={userPath} end className={iconLinkClass}>
-            <User size={20} />
-          </NavLink>
+          {!isLoggedIn && (  
+            <NavLink to="/auth/login" className={iconLinkClass}>
+                <MehIcon size={20} />
+              </NavLink>
+          )}
         </div>
 
         {/* RIGHT SIDE */}
@@ -97,7 +101,11 @@ const navbarClass = scrolled
           <LanguageSwitcher />
           <ThemeToggle />
 
-          {/* BURGER — mobile */}
+          {isLoggedIn && (
+            <LogOut onClick={handleLogout} className="cursor-pointer"/>
+          )}
+
+          {/* BURGER — mobile only */}
           <button
             onClick={() => setOpen(true)}
             className={`sm:hidden opacity-70 hover:opacity-100 transition`}
@@ -128,7 +136,7 @@ const navbarClass = scrolled
 
       {/* SIDEBAR */}
       <div
-        className={`fixed top-0 left-0 h-full w-[260px] bg-black border-r border-white/10 p-7 flex flex-col gap-7 transform transition-transform duration-300 ease-in-out sm:hidden z-50 ${
+        className={`fixed top-0 left-0 h-full w-65 bg-black border-r border-white/10 p-7 flex flex-col gap-7 transform transition-transform duration-300 ease-in-out sm:hidden z-50 ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >

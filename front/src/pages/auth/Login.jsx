@@ -9,6 +9,7 @@ import { LogOut } from "lucide-react";
 import { Send } from "lucide-react";
 import { LogIn } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import AccessDeniedPage from "../public/AccessDenied.jsx";
 
 const loginSchema = z.object({
   email: z.string().email("Email invalide"),
@@ -59,7 +60,14 @@ export function Login() {
 
   const isLoggedIn = !!localStorage.getItem("email");
 
+  const token = localStorage.getItem('token');
+
+  if (isLoggedIn && !token) {
+  }
+  
+  
   if (isLoggedIn) {
+    return <AccessDeniedPage />
     return (
       <>
         
@@ -79,29 +87,69 @@ export function Login() {
     loginMutation.mutate(data);
   };
 
+  // ========== DEMO QUICK LOGIN - DELETE THIS SECTION AFTER DEMO ==========
+  const quickLogin = (email, password) => {
+    loginMutation.mutate({ email, password });
+  };
+  // ========================================================================
+
   return (
     <div
       className="bg-[var(--login-bg-main)] text-[var(--login-text-main)] pt-[154px] pb-[90px] px-6 transition-colors duration-300"
     >
-      <div className="flex flex-col max-w-[500px] mx-auto p-8 sm:p-[56px] items-center uppercase bg-[var(--login-bg-card)] border border-[var(--login-border-main)] rounded-[24px] shadow-[0_0_30px_rgba(173,70,255,0.1)] transition-colors duration-300">
+      <div className="flex flex-col max-w-125 mx-auto p-8 sm:p-14 items-center uppercase bg-(--login-bg-card) border border-(--login-border-main) rounded-3xl shadow-[0_0_30px_rgba(173,70,255,0.1)] transition-colors duration-300">
         
-        <LogIn className="bg-[var(--login-input-bg)] mb-[24px] border border-[var(--login-border-main)] p-6 w-[96px] h-[96px] rounded-[32px]" />
+        
 
-        <h2 className="text-center text-[36px] sm:text-[48px] mb-[11px] font-bold inline-block bg-[linear-gradient(to_top,rgba(152,16,250,0.6)_35%,rgba(43,127,255,1)_60%)] bg-clip-text text-transparent tracking-[-2.4px]">
+        <LogIn className="bg-(--login-input-bg) mb-6 border border-(--login-border-main) p-6 w-24 h-24 rounded-[32px]" />
+
+        <h2 className="text-center text-[36px] sm:text-[48px] mb-3 font-bold inline-block bg-[linear-gradient(to_top,rgba(152,16,250,0.6)_35%,rgba(43,127,255,1)_60%)] bg-clip-text text-transparent tracking-[-2.4px]">
           CONNEXION
         </h2>
 
-        <h2 className="text-center text-[10px] mb-[44px] tracking-[3px] text-[var(--login-text-muted)] font-bold">
+        <h2 className="text-center text-[10px] mb-11 tracking-[3px] text-(--login-text-muted) font-bold">
           {t("login.protocole")}
         </h2>
 
-        <h2 className="w-full text-[10px] mb-[12px] tracking-[2px]">
+        {/* ============================= */}
+        <div className="w-full mb-6 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-2xl">
+          <p className="text-[10px] text-yellow-500 mb-3 text-center tracking-[2px]">DEMO QUICK LOGIN</p>
+          <div className="flex gap-2 flex-wrap justify-center">
+            <button
+              type="button"
+              onClick={() => quickLogin("producer1@marsai.test", "123456")}
+              disabled={loginMutation.isPending}
+              className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-[10px] font-bold tracking-[1.5px] transition-colors disabled:opacity-50"
+            >
+              PRODUCER
+            </button>
+            <button
+              type="button"
+              onClick={() => quickLogin("jury1@marsai.test", "123456")}
+              disabled={loginMutation.isPending}
+              className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg text-[10px] font-bold tracking-[1.5px] transition-colors disabled:opacity-50"
+            >
+              JURY
+            </button>
+            <button
+              type="button"
+              onClick={() => quickLogin("admin1@marsai.test", "123456")}
+              disabled={loginMutation.isPending}
+              className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-[10px] font-bold tracking-[1.5px] transition-colors disabled:opacity-50"
+            >
+              ADMIN
+            </button>
+          </div>
+        </div>
+        {/* =================================================================================== */}
+
+        <h2 className="w-full text-[10px] mb-3 tracking-[2px]">
           {t("login.session_identity")}
         </h2>
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
         <div className="flex bg-[var(--login-input-bg)] border border-[var(--login-border-main)] rounded-[28px] w-full mb-[24px]">
           <img
-            className="flex items-center px-[15px]"
+            className="flex items-center px-3.75"
             src="/src/assets/login_svg/Icon (2).svg"
             alt=""
           />
@@ -110,17 +158,17 @@ export function Login() {
             type="email"
             placeholder="agent@marsai.io"
             {...register("email")}
-            className="w-full h-[76px] outline-none bg-transparent placeholder-[var(--login-text-muted)]"
+            className="w-full h-19 outline-none bg-transparent placeholder-(--login-text-muted)"
           />
         </div>
 
-        <h2 className="w-full text-[10px] mb-[12px] tracking-[2px]">
+        <h2 className="w-full text-[10px] mb-3 tracking-[2px]">
           {t("login.password")}
         </h2>
 
-        <div className="flex bg-[var(--login-input-bg)] border border-[var(--login-border-main)] rounded-[28px] w-full">
+        <div className="flex bg-(--login-input-bg) border border-(--login-border-main) rounded-[28px] w-full">
           <img
-            className="flex items-center px-[15px]"
+            className="flex items-center px-3.75"
             src="/src/assets/login_svg/Icon (2).svg"
             alt=""
           />
@@ -128,7 +176,7 @@ export function Login() {
             id="password"
             type="password"
             placeholder="●●●●●●"
-            className="w-full h-[76px] outline-none bg-transparent placeholder-[var(--login-text-muted)]"
+            className="w-full h-19 outline-none bg-transparent placeholder-(--login-text-muted)"
             {...register("password")}
             required
           />
@@ -159,7 +207,7 @@ export function Login() {
         <button
           type="submit"
           disabled={loginMutation.isPending}
-          className="flex justify-center items-center gap-[17px] font-bold w-full bg-[var(--login-btn-bg)] text-[var(--login-bg-main)] rounded-[28px] tracking-[2.75px] uppercase text-[11px] h-[76px] mb-[75px]"
+          className="flex justify-center items-center gap-4 font-bold w-full bg-(--login-btn-bg) text-(--login-bg-main) rounded-[28px] tracking-[2.75px] uppercase text-[11px] h-19 mb-18.75"
         >
           <Send size={20} />
           <h2>
@@ -173,9 +221,9 @@ export function Login() {
           <h2 className="text-[11px] text-[var(--login-text-muted)] tracking-[2.2px]">
             {t("login.register_text")}
           </h2>
-          <h2 className="text-[16px] capitalize tracking-[2.2px] mb-[-3px]">
+          <Link to="/auth/register" className="text-[16px] capitalize tracking-[2.2px] -mb-1">
             {t("login.register_button")}
-          </h2>
+          </Link>
         </div>
       </div>
     </div>
