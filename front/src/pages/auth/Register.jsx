@@ -109,6 +109,9 @@ export function Register() {
       {t("register.subtitle_title")}
     </h2>
 
+    
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full" >
+
     {/* FIRST NAME */}
     <h2 className="w-full text-[10px] mb-3 tracking-[2px]">
       {t("register.first_name")}
@@ -127,6 +130,7 @@ export function Register() {
         className="w-full h-19 pl-3.75 outline-none bg-transparent"
         style={{ color: "var(--login-text-main)" }}
         type="text"
+        autoComplete="given-name"
       />
     </div>
 
@@ -148,7 +152,9 @@ export function Register() {
         className="w-full h-19 pl-3.75 outline-none bg-transparent"
         style={{ color: "var(--login-text-main)" }}
         type="text"
+         autoComplete="family-name"
       />
+
     </div>
 
     {/* EMAIL */}
@@ -169,6 +175,7 @@ export function Register() {
         className="w-full h-19 pl-3.75 outline-none bg-transparent"
         style={{ color: "var(--login-text-main)" }}
         type="email"
+        autoComplete="email"
       />
     </div>
 
@@ -192,6 +199,7 @@ export function Register() {
             className="w-full h-19 pl-3.75 outline-none bg-transparent"
             style={{ color: "var(--login-text-main)" }}
             type="password"
+            autoComplete="new-password"
           />
         </div>
       </div>
@@ -214,6 +222,7 @@ export function Register() {
             className="w-full h-19 pl-3.75 outline-none bg-transparent"
             style={{ color: "var(--login-text-main)" }}
             type="password"
+            autoComplete="new-password"
           />
         </div>
       </div>
@@ -235,17 +244,11 @@ export function Register() {
         ? "Loading..."
         : t("register.register_button")}
     </button>
+    </form>
   </div>
-        <div className="flex items-center sm:items-end flex-col sm:flex-row w-full gap-3.75 justify-center">
-          <h2 className="text-[11px] text-(--login-text-muted) tracking-[2.2px]">
-            {t("register.login_text")}
-          </h2>
-          <Link to="/auth/login" className="text-[16px] capitalize tracking-[2.2px] -mb-0.75">
-            {t("register.login_button")}
-          </Link>
-        </div>
-      
-</form>
+</div>
+
+         
 
     </>
   );

@@ -1,22 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@layer utilities {
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus,
-  input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0) inset !important;
-    -webkit-text-fill-color: rgb(255, 255, 255) !important;
-    transition: background-color 5000s ease-in-out 0s !important;
-  }
-}
 
-@layer base {
-  html {
-    scroll-behavior: smooth;
-  }
-}
 
 * {
   outline: none;
@@ -96,6 +81,138 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 }
+
+/* OVERWIEV */
+
+:root {
+  --overwiev-recentUsers-bg: rgba(0, 0, 0, 0.03);
+  --overwiev-recentUsers-border: rgba(0, 0, 0, 0.1);
+  --overwiev-recentUsers-primary: rgb(75, 85, 99);
+  --overwiev-recentUsers-second-text: rgb(107, 114, 128);
+  --overwiev-rounded: 24px;
+  --sidebar-gradient: linear-gradient(
+    305deg,
+    rgb(255, 255, 255) 40%,
+    rgb(218, 218, 218) 100%
+  );
+
+  --overwiev-recentUsers-icon: rgb(75, 85, 99);
+}
+
+.dark {
+  --overwiev-recentUsers-bg: rgba(255, 255, 255, 0.05);
+  --overwiev-recentUsers-border: rgba(255, 255, 255, 0.1);
+  --overwiev-recentUsers-primary: rgb(229, 231, 235);
+  --overwiev-recentUsers-second-text: rgba(233, 239, 251, 0.504);
+  --overwiev-rounded: 24px;
+  --sidebar-gradient: linear-gradient(
+    305deg,
+    rgb(0, 0, 0) 40%,
+    rgb(125, 31, 53) 100%
+  );
+  --overwiev-recentUsers-icon: rgb(229, 231, 235);
+}
+
+/* EVENNEMENTS /  CARD EVENNEMENTS*/
+:root {
+  --evennements-bg: #ffffff;
+  --evennements-text: #000000;
+
+  --evennements-card-bg: rgba(0, 0, 0, 0.03);
+  --evennements-card-border: rgba(0, 0, 0, 0.1);
+
+  --evennements-text-muted: rgba(0, 0, 0, 0.6);
+  --evennements-text-soft: rgba(0, 0, 0, 0.4);
+
+  --evennements-input-bg: rgba(0, 0, 0, 0.02);
+  --evennements-input-border: rgba(0, 0, 0, 0.1);
+
+  --evennements-accent: #2b7fff;
+  --evennements-accent-bg: rgba(0, 0, 0, 0.1);
+  --evennements-accent-border: rgba(0, 0, 0, 0.2);
+
+  --evennements-progress-from: #000000;
+  --evennements-progress-to: #000000;
+}
+
+.dark {
+  --evennements-bg: #000000;
+  --evennements-text: #ffffff;
+
+  --evennements-card-bg: rgba(255, 255, 255, 0.03);
+  --evennements-card-border: rgba(255, 255, 255, 0.1);
+
+  --evennements-text-muted: rgba(255, 255, 255, 0.6);
+  --evennements-text-soft: rgba(255, 255, 255, 0.4);
+
+  --evennements-input-bg: rgba(255, 255, 255, 0.03);
+  --evennements-input-border: rgba(255, 255, 255, 0.1);
+
+  --evennements-accent: #51a2ff;
+  --evennements-accent-bg: rgba(43, 127, 255, 0.1);
+  --evennements-accent-border: rgba(43, 127, 255, 0.2);
+
+  --evennements-progress-from: #e60076;
+  --evennements-progress-to: #ff637e;
+}
+
+
+/* JURY VOTE */
+
+:root {
+
+  --jury-bg: #ffffff;
+  --jury-text: #000000;
+
+  --jury-card-bg: rgba(0,0,0,0.04);
+  --jury-card-border: rgba(0,0,0,0.1);
+
+  --jury-muted: rgba(0,0,0,0.6);
+  --jury-soft: rgba(0,0,0,0.45);
+
+  --jury-progress-bg: rgba(0,0,0,0.1);
+
+  --jury-input-bg: rgba(0,0,0,0.03);
+  --jury-input-border: rgba(0,0,0,0.15);
+
+  --jury-danger-bg: rgba(239,68,68,0.15);
+  --jury-danger-border: rgba(239,68,68,0.3);
+  --jury-danger-text: #b91c1c;
+
+  --jury-success-bg: rgba(16,185,129,0.15);
+  --jury-success-border: rgba(16,185,129,0.3);
+  --jury-success-text: #047857;
+
+}
+
+.dark {
+
+  --jury-bg: #000000;
+  --jury-text: #ffffff;
+
+  --jury-card-bg: rgba(255,255,255,0.05);
+  --jury-card-border: rgba(255,255,255,0.1);
+
+  --jury-muted: rgba(255,255,255,0.7);
+  --jury-soft: rgba(255,255,255,0.45);
+
+  --jury-progress-bg: rgba(255,255,255,0.1);
+
+  --jury-input-bg: rgba(255,255,255,0.05);
+  --jury-input-border: rgba(255,255,255,0.2);
+
+  --jury-danger-bg: rgba(239,68,68,0.2);
+  --jury-danger-border: rgba(239,68,68,0.35);
+  --jury-danger-text: #fecaca;
+
+  --jury-success-bg: rgba(16,185,129,0.2);
+  --jury-success-border: rgba(16,185,129,0.35);
+  --jury-success-text: #a7f3d0;
+
+}
+
+
+
 
 /* test commit*/
 
@@ -188,6 +305,27 @@
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
+/* TABLES */
+
+:root {
+  --delete-primary: rgb(0, 0, 0);
+  --destructive: rgb(255, 219, 219);
+  --foreground: oklch(0% 0 0);
+  --table-producer: rgb(255, 219, 219);
+  --table-producer-text: rgb(255, 0, 98);
+  --table-head: rgb(255, 0, 98);
+}
+
+.dark {
+  --delete-primary: rgb(255, 255, 255);
+  --destructive: oklch(37.909% 0.00004 271.152);
+  --foreground: rgba(233, 239, 251, 0.504);
+  --table-producer: rgb(89, 0, 42);
+  --table-producer-text: rgb(255, 0, 98);
+  --table-head: rgb(255, 0, 98);
+}
+
+
 /* FOOTER */
 
 :root {
@@ -245,56 +383,18 @@
 /* NAVBAR */
 
 :root {
-  --navbar-background: rgba(255, 255, 255, 0.05);
+  --navbar-background: rgba(0, 0, 0, 0);
+  --navbar-primary: rgb(0, 0, 0);
 }
 
 .dark {
-  --navbar-background: rgba(255, 255, 255, 0.05);
+  --navbar-background: rgba(255, 255, 255, 0);
+  --navbar-primary: rgba(255, 255, 255, 1);
 }
 *
 
 
-/* EVENNEMENTS /  CARD EVENNEMENTS*/
 
-:root {
-  --evennements-bg: #ffffff;
-  --evennements-card-bg: rgba(0, 0, 0, 0.02);
-  --evennements-card-border: rgba(0, 0, 0, 0.08);
-
-  --evennements-text: #000000;
-  --evennements-text-muted: rgba(0, 0, 0, 0.5);
-  --evennements-text-soft: rgba(0, 0, 0, 0.3);
-
-  --evennements-accent: #2b7fff;
-  --evennements-accent-bg: rgba(43, 127, 255, 0.1);
-  --evennements-accent-border: rgba(43, 127, 255, 0.2);
-
-  --evennements-progress-from: #e60076;
-  --evennements-progress-to: #ff637e;
-
-  --evennements-input-bg: rgba(0, 0, 0, 0.03);
-  --evennements-input-border: rgba(0, 0, 0, 0.1);
-}
-
-.dark {
-  --evennements-bg: #000000;
-  --evennements-card-bg: rgba(255, 255, 255, 0.02);
-  --evennements-card-border: rgba(255, 255, 255, 0.05);
-
-  --evennements-text: #ffffff;
-  --evennements-text-muted: rgba(255, 255, 255, 0.5);
-  --evennements-text-soft: rgba(255, 255, 255, 0.3);
-
-  --evennements-accent: #51a2ff;
-  --evennements-accent-bg: rgba(43, 127, 255, 0.1);
-  --evennements-accent-border: rgba(43, 127, 255, 0.2);
-
-  --evennements-progress-from: #e60076;
-  --evennements-progress-to: #ff637e;
-
-  --evennements-input-bg: rgba(255, 255, 255, 0.02);
-  --evennements-input-border: rgba(255, 255, 255, 0.1);
-}
 
 
 
@@ -307,75 +407,83 @@
 
 /* OVERWIEV */
 
-:root {
-  --overwiev-recentUsers-bg: rgba(0, 0, 0, 0.03);
-  --overwiev-recentUsers-border: rgba(0, 0, 0, 0.1);
-  --overwiev-recentUsers-primary: rgb(75, 85, 99);
-    --overwiev-recentUsers-second-text: rgb(107, 114, 128)
-;
-  --overwiev-rounded: 24px;
-  --sidebar-gradient: linear-gradient(
-    305deg,
-    rgb(255, 255, 255) 40%,
-    rgb(218, 218, 218) 100%
-  );
-
-
---overwiev-recentUsers-icon: rgb(75, 85, 99);
-
-}
-
-
-.dark {
-  --overwiev-recentUsers-bg: rgba(255, 255, 255, 0.05);
-  --overwiev-recentUsers-border: rgba(255, 255, 255, 0.1);
-  --overwiev-recentUsers-primary: rgb(229, 231, 235);
-  --overwiev-recentUsers-second-text: rgba(233, 239, 251, 0.504)
-;
-  --overwiev-rounded: 24px;
-  --sidebar-gradient: linear-gradient(
-    305deg,
-    rgb(0, 0, 0) 40%,
-    rgb(125, 31, 53) 100%
-  );
---overwiev-recentUsers-icon: rgb(229, 231, 235);
-
-}
 
 
 
-/* TABLES */
+
 
 :root {
-  --delete-primary: rgb(0, 0, 0);
-  --destructive: rgb(255, 219, 219);
-  --foreground: oklch(0% 0 0);
-  --table-producer: rgb(255, 219, 219);
-  --table-producer-text: rgb(255, 0, 98);
-  --table-head: rgb(255, 0, 98);
-  
-}
+  --palmares-bg: #ffffff;
+  --palmares-text: #000000;
 
+  --palmares-card-bg: rgba(0, 0, 0, 0.03);
+  --palmares-card-border: rgba(0, 0, 0, 0.1);
+
+  --palmares-accent: #ffd43b;
+  --palmares-accent-text: #000000;
+
+  --palmares-prize: #e60076;
+
+  --palmares-text-muted: rgba(0, 0, 0, 0.6);
+}
 
 .dark {
---delete-primary: rgb(255, 255, 255);
---destructive: oklch(37.909% 0.00004 271.152);
-  --foreground: rgba(233, 239, 251, 0.504);
-  --table-producer: rgb(89, 0, 42);
-  --table-producer-text: rgb(255, 0, 98);
-  --table-head: rgb(255, 0, 98);
+  --palmares-bg: #000000;
+  --palmares-text: #ffffff;
+
+  --palmares-card-bg: rgba(255, 255, 255, 0.05);
+  --palmares-card-border: rgba(255, 255, 255, 0.1);
+
+  --palmares-accent: #facc15;
+  --palmares-accent-text: #000000;
+
+  --palmares-prize: #ff4da6;
+
+  --palmares-text-muted: rgba(255, 255, 255, 0.5);
+}
+
+:root {
+  --gallerie-bg: #ffffff;
+  --gallerie-text: #111111;
+  --gallerie-card-bg: rgba(0,0,0,0.03);
+  --gallerie-card-border: rgba(0,0,0,0.08);
+
+  --gallerie-filter-text: #ffffff;
+
+  --gallerie-pagination-bg: rgba(0,0,0,0.04);
+  --gallerie-pagination-border: rgba(0,0,0,0.08);
+}
+
+.dark {
+  --gallerie-bg: #000000;
+  --gallerie-text: #ffffff;
+  --gallerie-card-bg: rgba(255,255,255,0.05);
+  --gallerie-card-border: rgba(255,255,255,0.1);
+
+  --gallerie-filter-text: #ffffff;
+
+  --gallerie-pagination-bg: rgba(255,255,255,0.05);
+  --gallerie-pagination-border: rgba(255,255,255,0.1);
 }
 
 
 
+@layer utilities {
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0) inset !important;
+    -webkit-text-fill-color: rgb(255, 255, 255) !important;
+    transition: background-color 5000s ease-in-out 0s !important;
+  }
+}
 
-
-
-
-
-
-
-
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
 
 
 @layer base {
@@ -383,6 +491,6 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-[var(--background-2)] text-foreground;
   }
 }
