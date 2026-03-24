@@ -41,6 +41,15 @@ export default function AccessDeniedPage() {
             </button>
 
             <button
+              onClick={() => navigate("/auth/login")}
+              className="rounded-2xl px-6 py-4 text-sm font-black text-white
+                         bg-gradient-to-r from-[#7b2cff] to-[#FF2B7F]
+                         shadow-[0_24px_80px_rgba(0,0,0,0.55)] transition hover:opacity-95"
+            >
+              Login
+            </button>
+
+            <button
               onClick={() => navigate(-1)}
               className="rounded-2xl px-6 py-4 text-sm font-black text-white/80 transition hover:bg-white/5"
             >

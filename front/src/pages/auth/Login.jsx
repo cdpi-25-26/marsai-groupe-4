@@ -9,6 +9,7 @@ import { LogOut } from "lucide-react";
 import { Send } from "lucide-react";
 import { LogIn } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import AccessDeniedPage from "../public/AccessDenied.jsx";
 
 const loginSchema = z.object({
   email: z.string().email("Email invalide"),
@@ -59,7 +60,14 @@ export function Login() {
 
   const isLoggedIn = !!localStorage.getItem("email");
 
+  const token = localStorage.getItem('token');
+
+  if (isLoggedIn && !token) {
+  }
+  
+  
   if (isLoggedIn) {
+    return <AccessDeniedPage />
     return (
       <>
         <h1 className="text-2xl">

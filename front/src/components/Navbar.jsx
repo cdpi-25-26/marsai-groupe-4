@@ -76,10 +76,6 @@ export default function Navbar() {
               <Gavel size={20} />
             </NavLink>
           )}
-          <NavLink to={userPath} end className={iconLinkClass}>
-            <User size={20} />
-          </NavLink>
-
         </div>
 
         {/* RIGHT SIDE */}
