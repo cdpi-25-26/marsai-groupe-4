@@ -4,6 +4,7 @@ import Evaluation from "../models/Evaluation.js";
 import Award from "../models/Award.js"
 import { Op } from "sequelize";
 import sequelize from "../db/connection.js";
+import EmailController from "./EmailController.js";
 
 async function getPhases1Video(req,res){
     try {
@@ -226,7 +227,7 @@ async function promoteToNextPhase(req, res) {
   try {
     const editionYear = parseInt(req.body.edition_year) || 2026;
 
-    // 1. Récupère les films en phase 1 avec leurs évaluations "YES"
+    // 1. Récupère les films en phase 1 avec au moins un "YES"
     const films = await Upload.findAll({
       where: { phase_status: "phase1", edition_year: editionYear },
       attributes: [
@@ -234,7 +235,8 @@ async function promoteToNextPhase(req, res) {
         "title",
         "thumbnail",
         "created_at",
-        "phase_status"
+        "phase_status",
+        "user_id"   
       ],
       include: [
         {
@@ -242,12 +244,12 @@ async function promoteToNextPhase(req, res) {
           as: "evaluations",
           where: { decision: "YES" },
           attributes: ["id"],
-          required: true, // ← seulement ceux avec au moins 1 YES
+          required: true,
         },
         {
           model: User,
           as: "producer",
-          attributes: ["first_name", "last_name"]
+          attributes: ["id", "first_name", "last_name", "email"]
         }
       ],
     });
@@ -259,7 +261,7 @@ async function promoteToNextPhase(req, res) {
       });
     }
 
-    // 2. Calcule le nombre de YES
+    // 2. Calcule le top 50
     const filmsWithCount = films.map(film => ({
       id: film.id,
       title: film.title,
@@ -271,7 +273,6 @@ async function promoteToNextPhase(req, res) {
       edition_year: editionYear,
     }));
 
-    // 3. Trie et limite à 50
     const top50 = filmsWithCount
       .sort((a, b) => b.yes_count - a.yes_count || new Date(b.created_at) - new Date(a.created_at))
       .slice(0, 50);
@@ -283,14 +284,34 @@ async function promoteToNextPhase(req, res) {
       });
     }
 
-    // 4. Promotion sélective : seulement les top 50 passent en phase 2 + status "selected"
+    // 3. Récupère les IDs à promouvoir
     const ids = top50.map(video => video.id);
 
+    // 4. Promotion
     await Upload.update(
       { status: "selected", phase_status: "phase2" },
       { where: { id: { [Op.in]: ids }, edition_year: editionYear } }
     );
 
+    // 5. Envoi d'email aux réalisateurs sélectionnés
+   top50.forEach(async (selectedVideo) => {
+  const film = films.find(f => f.id === selectedVideo.id);
+  if (film?.producer?.email) {
+    EmailController.sendMail(
+      film.producer.email,
+      "MarsAI - Votre vidéo est sélectionnée pour le Top 50 !",
+      `
+        <h2>Félicitations ${film.producer.first_name || ''} !</h2>
+        <p>Votre vidéo <strong>${film.title}</strong> fait partie du Top 50 !</p>
+        <p>Elle passe maintenant en <strong>Phase 2</strong>.</p>
+        <p>Nous vous tiendrons informé pour la suite.</p>
+        <p>Bravo et merci pour votre participation !</p>
+        <p>L’équipe MarsAI</p>
+      `
+    ).catch(err => console.error(`Email failed for ${film.producer.email}`, err));
+  }
+});
+    
     res.json({
       message: `Top ${top50.length} promu en phase 2 pour l'édition ${editionYear} (basé sur nombre de YES)`,
       top50
@@ -300,6 +321,7 @@ async function promoteToNextPhase(req, res) {
     res.status(500).json({ error: error.message });
   }
 }
+
 async function revertToPreviousPhase(req, res) {
   try {
     const { edition_year } = req.body;
