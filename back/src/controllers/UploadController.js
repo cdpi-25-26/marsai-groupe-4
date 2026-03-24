@@ -128,7 +128,7 @@ async function createUpload(req, res) {
       <p>Votre vidéo <strong>${newFilm.title}</strong> a bien été reçue !</p>
       <p>Elle est actuellement en attente de validation (phase 1).</p>
       <p>Nous vous tiendrons au courant dès que le statut évolue (top 50, palmarès, etc.).</p>
-      <p>Merci pour votre participation ! 🚀</p>
+      <p>Merci pour votre participation !</p>
       <p>L’équipe MarsAI</p>
     `;
 
