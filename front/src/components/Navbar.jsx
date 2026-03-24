@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { Trophy, House, Search, Calendar, User, Gavel, LogOut, MehIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import LanguageSwitcher from '@/components/LanguageSwitcher';
 import handleLogout from "../utils/helpers";
 
 export default function Navbar() {

@@ -55,7 +55,7 @@ export default function AdminSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <NavLink to="/admin">
-                <div className="flex aspect-square size-8 m-[-8px] items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <div className="flex aspect-square size-8 m-[8px] items-center justify-center rounded-lg bg-primary text-primary-foreground">
                   <LayoutDashboard className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
@@ -104,7 +104,7 @@ export default function AdminSidebar() {
         </SidebarMenuItem>
         <SidebarMenuItem>
           <SidebarMenuButton asChild tooltip="Toggle Theme">
-            <div className="flex items-center w-full hover:cursor-pointer">
+            <div className="flex items-center w-full hover:cursor-pointer mr-2">
               <LogIn />
               <YoutubeConnectButton />
             </div>

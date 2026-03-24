@@ -76,12 +76,8 @@ export function Register() {
   const { t } = useTranslation();
   return (
     <>
-      <form
-  onSubmit={handleSubmit(onSubmit)}
-  className="pt-38.5 pb-22.5 px-6 bg-(--login-bg-main)"
-  style={{ color: "var(--login-text-main)" }}
->
-  <div
+
+    <div
     className="flex flex-col w-fit my-0 mx-auto p-8 sm:p-14 items-center uppercase rounded-[24px] backdrop-blur-xl shadow-xl"
     style={{
       background: "var(--login-bg-card)",
@@ -244,9 +240,10 @@ export function Register() {
         ? "Loading..."
         : t("register.register_button")}
     </button>
+   
     </form>
-  </div>
-</div>
+   </div>
+
 
          
 
