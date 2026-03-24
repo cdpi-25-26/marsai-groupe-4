@@ -1,7 +1,7 @@
 import { NavLink } from "react-router";
 import { ThemeToggle } from "./ThemeToggle";
 import { useState, useEffect } from "react";
-import { Trophy, House, Search, Calendar, User, Gavel, LogOut } from "lucide-react";
+import { Trophy, House, Search, Calendar, User, Gavel, LogOut, MehIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import handleLogout from "../utils/helpers";
@@ -76,6 +76,9 @@ export default function Navbar() {
               <Gavel size={20} />
             </NavLink>
           )}
+          <NavLink to="/auth/login" className={iconLinkClass}>
+              <MehIcon size={20} />
+            </NavLink>
         </div>
 
         {/* RIGHT SIDE */}

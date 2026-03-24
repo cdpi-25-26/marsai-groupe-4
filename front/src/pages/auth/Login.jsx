@@ -94,6 +94,12 @@ export function Login() {
     loginMutation.mutate(data);
   };
 
+  // ========== DEMO QUICK LOGIN - DELETE THIS SECTION AFTER DEMO ==========
+  const quickLogin = (email, password) => {
+    loginMutation.mutate({ email, password });
+  };
+  // ========================================================================
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -101,6 +107,8 @@ export function Login() {
     >
       <div className="flex flex-col max-w-125 mx-auto p-8 sm:p-14 items-center uppercase bg-(--login-bg-card) border border-(--login-border-main) rounded-3xl shadow-[0_0_30px_rgba(173,70,255,0.1)] transition-colors duration-300">
         
+        
+
         <LogIn className="bg-(--login-input-bg) mb-6 border border-(--login-border-main) p-6 w-24 h-24 rounded-[32px]" />
 
         <h2 className="text-center text-[36px] sm:text-[48px] mb-3 font-bold inline-block bg-[linear-gradient(to_top,rgba(152,16,250,0.6)_35%,rgba(43,127,255,1)_60%)] bg-clip-text text-transparent tracking-[-2.4px]">
@@ -110,6 +118,38 @@ export function Login() {
         <h2 className="text-center text-[10px] mb-11 tracking-[3px] text-(--login-text-muted) font-bold">
           {t("login.protocole")}
         </h2>
+
+        {/* ============================= */}
+        <div className="w-full mb-6 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-2xl">
+          <p className="text-[10px] text-yellow-500 mb-3 text-center tracking-[2px]">DEMO QUICK LOGIN</p>
+          <div className="flex gap-2 flex-wrap justify-center">
+            <button
+              type="button"
+              onClick={() => quickLogin("producer1@marsai.test", "123456")}
+              disabled={loginMutation.isPending}
+              className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-[10px] font-bold tracking-[1.5px] transition-colors disabled:opacity-50"
+            >
+              PRODUCER
+            </button>
+            <button
+              type="button"
+              onClick={() => quickLogin("jury1@marsai.test", "123456")}
+              disabled={loginMutation.isPending}
+              className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg text-[10px] font-bold tracking-[1.5px] transition-colors disabled:opacity-50"
+            >
+              JURY
+            </button>
+            <button
+              type="button"
+              onClick={() => quickLogin("admin1@marsai.test", "123456")}
+              disabled={loginMutation.isPending}
+              className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-[10px] font-bold tracking-[1.5px] transition-colors disabled:opacity-50"
+            >
+              ADMIN
+            </button>
+          </div>
+        </div>
+        {/* =================================================================================== */}
 
         <h2 className="w-full text-[10px] mb-3 tracking-[2px]">
           {t("login.session_identity")}
