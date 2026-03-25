@@ -9,6 +9,7 @@ import * as z from 'zod';
 import { useState } from 'react';
 import { Pencil } from 'lucide-react';
 import { useEffect } from 'react';
+import { useToast } from '@/components/Toast.jsx';
 
 const profileSchema = z.object({
   first_name: z.string().min(1, "Le prénom est requis"),
@@ -32,6 +33,7 @@ export default function Profile() {
   const { id } = useParams();
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
+  const toast = useToast();
 
   const { data: apiResponse, isLoading, error } = useQuery({
     queryKey: ['profile', id],
@@ -64,10 +66,10 @@ const { data: recentVideos, isLoading: videosLoading } = useQuery({
     onSuccess: () => {
       queryClient.invalidateQueries(['profile', id]); 
       setIsEditing(false);
-      alert(t('profile.update_success') || "Profil mis à jour !");
+      toast.success(t('profile.update_success') || "Profil mis à jour !");
     },
     onError: (err) => {
-      alert(err.message || t('profile.update_error') || "Erreur lors de la mise à jour");
+      toast.error(err.message || t('profile.update_error') || "Erreur lors de la mise à jour");
     },
   });
 

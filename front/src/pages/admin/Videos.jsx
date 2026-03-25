@@ -3,6 +3,7 @@ import { getVideos, deleteVideo, updateVideo } from "../../api/videos.js";
 import { useState, Fragment } from "react";
 import { CircleX, Pencil } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useToast } from "@/components/Toast.jsx";
 import {
   flexRender,
   getCoreRowModel,
@@ -57,6 +58,7 @@ function Videos() {
   const queryClient = useQueryClient();
   const [prizeDialogOpen, setPrizeDialogOpen] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const toast = useToast();
 
 
  
@@ -73,10 +75,11 @@ function Videos() {
     },
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries(["films"]);
+      toast.success("Vidéo supprimée avec succès");
       window.location.reload();
     },
     onError: (error) => {
-      alert(
+      toast.error(
         "Erreur lors de la suppression: " +
           (error.response?.data?.error || error.message),
       );
@@ -89,11 +92,12 @@ function Videos() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["films"]);
+      toast.success("Vidéo mise à jour avec succès");
       setIsEditDialogOpen(false);
       setEditingVideo(null);
     },
     onError: (error) => {
-      alert(
+      toast.error(
         "Erreur lors de la mise à jour: " +
           (error.response?.data?.error || error.message),
       );

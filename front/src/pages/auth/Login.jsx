@@ -10,6 +10,7 @@ import { Send } from "lucide-react";
 import { LogIn } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import AccessDeniedPage from "../public/AccessDenied.jsx";
+import { useToast } from "@/components/Toast.jsx";
 
 const loginSchema = z.object({
   email: z.string().email("Email invalide"),
@@ -19,6 +20,7 @@ const loginSchema = z.object({
 export function Login() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const toast = useToast();
 
   const { register, handleSubmit } = useForm({
     resolver: zodResolver(loginSchema),
@@ -49,11 +51,11 @@ export function Login() {
     },
     onError: (error) => {
       if (error.code === "ERR_NETWORK") {
-        alert("Impossible de contacter le serveur.");
+        toast.error("Impossible de contacter le serveur.");
       } else if (error.response?.data?.error) {
-        alert(error.response.data.error);
+        toast.error(error.response.data.error);
       } else {
-        alert("Erreur lors de la connexion");
+        toast.error("Erreur lors de la connexion");
       }
     },
   });

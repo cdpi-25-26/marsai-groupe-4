@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { useToast } from "@/components/Toast.jsx";
 
 
 
@@ -14,6 +15,7 @@ import { useNavigate } from "react-router";
   const { t } = useTranslation();
     const { id } = useParams();
     const [event, setEvent] = useState(null);
+    const toast = useToast();
 
 useEffect(() => {
   fetch("http://localhost:3000/events")
@@ -56,7 +58,7 @@ const navigate = useNavigate(); // permet de rediriger
 
 const handleSubmit = (e) => {
   e.preventDefault(); // empêche le formulaire de recharger la page
-  alert("Réservation effectuée avec succès !"); // popup
+  toast.success("Réservation effectuée avec succès !");
   navigate("/evennements"); // redirige vers la page événements
 };
 

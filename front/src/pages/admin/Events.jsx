@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {CircleX, Pencil } from "lucide-react";
 import * as z from "zod";
+import { useToast } from "@/components/Toast.jsx";
 import { 
   flexRender, 
   getCoreRowModel, 
@@ -54,6 +55,7 @@ function Events(){
     const [modeEdit, setModeEdit] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [sorting, setSorting] = useState([]);
+    const toast = useToast();
 
     useEffect(() => {
         getEvents().then((data) => {
@@ -74,11 +76,12 @@ function Events(){
             return await createEvent(newEvent);
         },
         onSuccess: (data, variables, context) => {
+            toast.success('Événement créé avec succès');
             window.location.reload();
         },
         onError: (error) => {
             console.error('Error creating event:', error);
-            alert('Erreur lors de la création: ' + (error.response?.data?.error || error.message));
+            toast.error('Erreur lors de la création: ' + (error.response?.data?.error || error.message));
         },
     });
 
@@ -87,11 +90,12 @@ function Events(){
             return await deleteEvent(id);
         },
         onSuccess: (data, variables, context) => {
+            toast.success('Événement supprimé avec succès');
             window.location.reload();
         },
         onError: (error) => {
             console.error('Error deleting event:', error);
-            alert('Erreur lors de la suppression: ' + (error.response?.data?.error || error.message));
+            toast.error('Erreur lors de la suppression: ' + (error.response?.data?.error || error.message));
         },
     });
 
@@ -100,11 +104,12 @@ function Events(){
             return await updateEvent(updatedEvent.id, updatedEvent);
         },
         onSuccess: (data, variables, context) => {
+            toast.success('Événement mis à jour avec succès');
             window.location.reload();
         },
         onError: (error) => {
             console.error('Error updating event:', error);
-            alert('Erreur lors de la mise à jour: ' + (error.response?.data?.error || error.message));
+            toast.error('Erreur lors de la mise à jour: ' + (error.response?.data?.error || error.message));
         },
     });
 

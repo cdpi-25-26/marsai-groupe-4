@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getJuryMembers, getJuryFilms, assignFilmToJury, unassignFilmFromJury } from "../../api/jury.js";
 import { getAllVideos } from "../../api/videos.js";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useToast } from "@/components/Toast.jsx";
 import { 
   flexRender, 
   getCoreRowModel, 
@@ -34,6 +35,7 @@ function Jury() {
   const [sorting, setSorting] = useState([]);
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
+  const toast = useToast();
 
   useEffect(() => {
     loadJuryMembers();
@@ -89,10 +91,11 @@ function Jury() {
           setAssignedFilms(data.assignedFilms || []);
         });
       }
+      toast.success('Film assigné avec succès');
     },
     onError: (error) => {
       console.error('Error assigning film:', error);
-      alert(error.response?.data?.error || "Erreur lors de l'assignation");
+      toast.error(error.response?.data?.error || "Erreur lors de l'assignation");
     },
   });
 
@@ -107,10 +110,11 @@ function Jury() {
           setAssignedFilms(data.assignedFilms || []);
         });
       }
+      toast.success('Film désassigné avec succès');
     },
     onError: (error) => {
       console.error('Error unassigning film:', error);
-      alert(error.response?.data?.error || "Erreur lors de la suppression");
+      toast.error(error.response?.data?.error || "Erreur lors de la suppression");
     },
   });
 

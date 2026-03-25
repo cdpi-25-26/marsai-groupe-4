@@ -28,6 +28,7 @@ import Gallerie from "./pages/public/Gallerie.jsx";
 import Profile from "./pages/public/Profile.jsx";
 import { UploadRoleGuard } from "./middlewares/Upload.jsx";
 import { ContestProvider } from './utils/phasestatus.jsx';
+import { ToastProvider } from "./components/Toast.jsx";
 
 
 const queryClient = new QueryClient({
@@ -43,6 +44,7 @@ createRoot(document.getElementById("root")).render(
     <BrowserRouter>
     <ContestProvider>
       <QueryClientProvider client={queryClient}>
+        <ToastProvider>
         <Routes>
           {/* Routes publiques */}
           <Route path="/" element={<PublicLayout />}>
@@ -95,6 +97,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="cms" element={<Cms />} />
           </Route>
         </Routes>
+        </ToastProvider>
       </QueryClientProvider>
       </ContestProvider>
     </BrowserRouter>

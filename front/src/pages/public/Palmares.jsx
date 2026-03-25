@@ -73,14 +73,28 @@ export default function Palmares() {
 
   const topWinners = awards.slice(0, 3);
 
+  // Format the date for display (use current year or awards year if available)
+  const formattedDate = new Date().toLocaleDateString("fr-FR", {
+    year: "numeric",
+    month: "long"
+  });
+
   // Fonction utilitaire pour le thumbnail (comme dans Gallerie)
   const getThumbnailUrl = (thumbnail) => {
-  if (thumbnail) {
-    return `${UPLOADS_BASE}/${thumbnail}`;
-  }
-  // Fallback direct à la racine public/ (pas besoin d'uploads)
-  return `${UPLOADS_BASE}/thumbnail-placeholder.png`;
-};
+    if (thumbnail) {
+      return `${UPLOADS_BASE}/${thumbnail}`;
+    }
+    // Fallback to a transparent placeholder
+    return `${UPLOADS_BASE}/thumbnail-placeholder.png`;
+  };
+
+  // Safe fallback image (data URL to avoid network requests)
+  const handleImageError = (e) => {
+    if (e.target.getAttribute('data-error') !== 'true') {
+      e.target.setAttribute('data-error', 'true');
+      e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"%3E%3Crect width="400" height="300" fill="%23222"%2F%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="24" fill="%23666"%3EFILM%3C%2Ftext%3E%3C%2Fsvg%3E';
+    }
+  };
 
   return (
     <div
@@ -150,12 +164,9 @@ export default function Palmares() {
               </div>
 
               <img
-                src={`http://localhost:3000/uploads/images || 'placeholder.jpg'`}
+                src={getThumbnailUrl(award.Film?.thumbnail)}
                 alt={award.Film?.title || "Film"}
-                onError={(e) =>
-                  (e.target.src =
-                    "https://via.placeholder.com/300x200/333/fff?text=FILM")
-                }
+                onError={handleImageError}
                 className="h-40 w-full object-cover rounded-xl mb-4"
               />
 
@@ -205,12 +216,9 @@ export default function Palmares() {
             >
 
               <img
-                src={`http://localhost:3000/uploads/images || 'placeholder.jpg'`}
+                src={getThumbnailUrl(award.Film?.thumbnail)}
                 alt={award.Film?.title || "Film"}
-                onError={(e) =>
-                  (e.target.src =
-                    "https://via.placeholder.com/200x150/333/fff?text=FILM")
-                }
+                onError={handleImageError}
                 className="h-40 w-full object-cover rounded-xl mb-3"
               />
 

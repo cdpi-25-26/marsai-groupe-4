@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from "react-router";
 import { ThemeToggle } from "./ThemeToggle";
 import { useState, useEffect } from "react";
-import { Trophy, House, Search, Calendar, User, Gavel, LogOut, MehIcon } from "lucide-react";
+import { Trophy, House, Search, Calendar, User, Gavel, LogOut, MehIcon, FileVideo2Icon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import handleLogout from "../utils/helpers";
@@ -72,7 +72,7 @@ const navbarClass = scrolled
         {/* ICONS — desktop */}
         <div className="hidden md:flex gap-6">
           <NavLink to="/gallerie" className={iconLinkClass}>
-            <Search size={20} />
+            <FileVideo2Icon size={20} />
           </NavLink>
           <NavLink to="/" end className={iconLinkClass}>
             <House size={20} />

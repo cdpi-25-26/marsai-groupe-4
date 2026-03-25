@@ -10,6 +10,7 @@ import { Info } from "lucide-react";
 import { Image } from "lucide-react";
 import { useTranslation} from "react-i18next";
 import { useContest } from "../../utils/phasestatus";
+import { useToast } from "@/components/Toast.jsx";
 
 
 const MAX_SECONDS = 60;
@@ -122,8 +123,7 @@ export default function Upload() {
   const [serverError, setServerError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tempData, setTempData] = useState(null);
-  const [toastMessage, setToastMessage] = useState(null);
-const [toastVisible, setToastVisible] = useState(false);
+  const toast = useToast();
 
   const {
     register,
@@ -227,7 +227,7 @@ const [toastVisible, setToastVisible] = useState(false);
         throw new Error(errorData.error || "Erreur lors de l'upload");
       }
 
-      showToast("Tout a été envoyé avec succès !");
+      toast.success("Tout a été envoyé avec succès !");
       reset();
     } catch (err) {
       setServerError(err.message);
@@ -239,16 +239,6 @@ const [toastVisible, setToastVisible] = useState(false);
   const closeModal = () => {
     setIsModalOpen(false);
   };
-
- const showToast = (message) => {
-  setToastMessage(message);
-  setToastVisible(true);
-  
-  // Disparaît automatiquement après 4 secondes
-  setTimeout(() => {
-    setToastVisible(false);
-  }, 4000);
-};
  
   // === FORMULAIRE NORMAL PHASE 1 QUAND Y A ZERO VIDEO EN PHASE 2 ET 3 ===
   return (
@@ -613,23 +603,6 @@ const [toastVisible, setToastVisible] = useState(false);
           data={tempData}
         />
       </div>
-      {toastVisible && (
-  <div 
-    className="
-      fixed bottom-6 right-6 
-      bg-green-600/90 text-white 
-      px-6 py-4 rounded-xl shadow-2xl 
-      border border-green-400/30 
-      backdrop-blur-sm 
-      flex items-center gap-3 
-      animate-fade-in-up
-      z-50
-    "
-  >
-    <CircleCheck className="h-6 w-6" />
-    <span className="font-medium">{toastMessage}</span>
-  </div>
-)}
     </section>
   );
 }

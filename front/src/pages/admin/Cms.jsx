@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from '../../api/config';
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/Toast.jsx";
 
 function Cms() {
   const [enTranslations, setEnTranslations] = useState({});
@@ -10,6 +11,7 @@ function Cms() {
   const [selectedPage, setSelectedPage] = useState('');
   const [pages, setPages] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
+  const toast = useToast();
 
   useEffect(() => {
     fetchTranslations();
@@ -75,7 +77,7 @@ function Cms() {
       setSaving(false);
     } catch (error) {
       console.error('Error saving translations:', error);
-      alert('Error saving translations');
+      toast.error('Erreur lors de la sauvegarde des traductions');
       setSaving(false);
     }
   };
