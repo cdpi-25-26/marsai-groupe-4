@@ -2,39 +2,68 @@ import { Link } from "react-router";
 import "./Home.css";
 import { useTranslation } from "react-i18next";
 import { Sparkles } from "lucide-react";
-
-
-  
+import heroVideo from "../../assets/grokShowtime9.mp4"
 
 function Home() {
   const { t } = useTranslation();
+
+  const heroBackground = {
+    type: "video",
+    src: heroVideo,
+  };
+
   return (
     <>
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-overlay"></div>
+
+        {heroBackground.type === "video" ? (
+          <video className="hero-bg-video" autoPlay loop muted playsInline>
+            <source src={heroBackground.src} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        ) : (
+          <div
+            className="hero-bg-image"
+            style={{ backgroundImage: `url(${heroBackground.src})` }}
+          ></div>
+        )}
+
         <div className="hero-content">
-            <div class="btn-protocole">
-              <Sparkles class="btn-sparkle"/>
-              <h2>Le Protocole Temporel 2026</h2>
-              </div>
+          <div className="btn-protocole">
+            <Sparkles className="btn-sparkle" />
+            <h2>Le Protocole Temporel 2026</h2>
+          </div>
 
           <h1 className="logo-title">
             MARS<span className="gradient-text">AI</span>
           </h1>
 
           <h2 className="tagline">
-            {t("home.tagline_1")} <span className="highlight">{t("home.tagline_2")} </span> {t("home.tagline_3")}  {/** title */}
+            {t("home.tagline_1")}{" "}
+            <span className="highlight">{t("home.tagline_2")} </span>{" "}
+            {t("home.tagline_3")}
           </h2>
 
-          <p className="subtitle">
-            {t("home.subtitles")} 
-          </p>
+          <p className="subtitle">{t("home.subtitles")}</p>
 
           <div className="cta-buttons">
             <Link to="/gallerie" className="btn-primary">
-              {t("home.selection_button")} 
-              <svg className="btn-arrow" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              {t("home.selection_button")}
+              <svg
+                className="btn-arrow"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M5 12H19M19 12L12 5M19 12L12 19"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </Link>
             <Link to="/contact" className="btn-secondary">
               {t("home.contact_button")} <span className="plus">+</span>
@@ -71,7 +100,6 @@ function Home() {
           <Link to="./upload">
             <button className="btn-aventure">{t("home.adventure_button")} </button>
           </Link>
-          
         </div>
       </section>
 
@@ -109,7 +137,6 @@ function Home() {
         </div>
       </section>
 
-      {/* Films Section */}
       <section className="films-section">
         <div className="films-container">
           <div className="films-header">
@@ -240,11 +267,19 @@ function Home() {
             {t("home.sponsor_title")} <span className="sponsors-title-gradient">{t("home.sponsor_title2")}</span>
           </h2>
           <div className="sponsors-grid">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="sponsor-card">
-                <span className="sponsor-placeholder">SPONSOR</span>
+            
+              <div className="sponsor-card">
+                <span className="sponsor-placeholder"><img src="https://intra.pro.laplateforme.io//assets/img/logo.png"/></span>
               </div>
-            ))}
+              <div className="sponsor-card">
+           <span className="sponsor-placeholder"><img src="https://www.mobilefilmfestival.com/wp-content/uploads/2021/08/unric_logo-standard-e1629825347279.png"/></span>
+              </div>
+               <div className="sponsor-card">
+           <span className="sponsor-placeholder"><img src="https://www.mobilefilmfestival.com/wp-content/uploads/2021/09/logo-humeco-e1632396389569.png"/></span>
+              </div>
+               <div className="sponsor-card">
+           <span className="sponsor-placeholder"><img src="https://www.mobilefilmfestival.com/wp-content/uploads/2021/08/primary_full_color_horizontal-e1629826216782.png"/></span>
+              </div>
           </div>
         </div>
       </section>

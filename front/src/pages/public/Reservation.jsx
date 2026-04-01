@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { useToast } from "@/components/Toast.jsx";
 
 
 
@@ -14,6 +15,7 @@ import { useNavigate } from "react-router";
   const { t } = useTranslation();
     const { id } = useParams();
     const [event, setEvent] = useState(null);
+    const toast = useToast();
 
 useEffect(() => {
   fetch("http://localhost:3000/events")
@@ -56,7 +58,7 @@ const navigate = useNavigate(); // permet de rediriger
 
 const handleSubmit = (e) => {
   e.preventDefault(); // empêche le formulaire de recharger la page
-  alert("Réservation effectuée avec succès !"); // popup
+  toast.success("Réservation effectuée avec succès !");
   navigate("/evennements"); // redirige vers la page événements
 };
 
@@ -101,7 +103,7 @@ const handleSubmit = (e) => {
       <form onSubmit={handleSubmit} className="flex flex-wrap gap-5 w-full max-w-[800px] p-5 mt-8 mb-5 rounded-xl border border-white bg-[#262424]">
 
     <div className="flex flex-row-reverse items-center mt-4 w-11/12 mx-auto">
-      <h4 className="text-sm text-gray-400">{t("reservation_title")}</h4>
+      <h4 className="text-sm text-gray-400">{t("reservation.reservation_title")}</h4>
   <div className="flex-1 border-t border-gray-400 ml-4 self-center">
 
   </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from '../../api/config';
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/Toast.jsx";
 
 function Cms() {
   const [enTranslations, setEnTranslations] = useState({});
@@ -10,6 +11,7 @@ function Cms() {
   const [selectedPage, setSelectedPage] = useState('');
   const [pages, setPages] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
+  const toast = useToast();
 
   useEffect(() => {
     fetchTranslations();
@@ -75,7 +77,7 @@ function Cms() {
       setSaving(false);
     } catch (error) {
       console.error('Error saving translations:', error);
-      alert('Error saving translations');
+      toast.error('Erreur lors de la sauvegarde des traductions');
       setSaving(false);
     }
   };
@@ -95,7 +97,7 @@ function Cms() {
     <section className="container mx-auto px-4 py-8">
       <div className="bg-background rounded-lg shadow-md p-6 mb-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-gray-800">Translation CMS</h2>
+          <h2 className="text-2xl font-bold text-gray-300 uppercase font-bold tracking-[2px]">Translation CMS</h2>
           <Button 
             onClick={saveTranslations}
             disabled={saving}
@@ -130,14 +132,14 @@ function Cms() {
       </div>
 
       <div className="bg-background rounded-lg shadow-md overflow-hidden">
-        <div className="grid grid-cols-[200px_1fr_1fr] gap-4 p-4 bg-gray-800 text-white font-semibold">
-          <div>Key</div>
-          <div className="flex items-center gap-2">
-            <span>🇬🇧</span>
+        <div className="grid grid-cols-[200px_1fr_1fr] gap-4 p-4 bg-white/5 text-white font-semibold border border-white/10">
+          <div className='flex text-[var(--table-head)] tracking-[1.7px] h-10 py-2  text-[20px] align-middle uppercase font-bold whitespace-nowrap gap-2'>Key</div>
+          <div className="flex text-[var(--table-head)] tracking-[1.7px] h-10 py-2  text-[20px] align-middle uppercase font-bold whitespace-nowrap gap-2">
+            
             <span>English</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span>🇫🇷</span>
+          <div className="flex text-[var(--table-head)] tracking-[1.7px] h-10 py-2  text-[20px] align-middle uppercase font-bold whitespace-nowrap gap-2">
+            
             <span>French</span>
           </div>
         </div>
@@ -151,28 +153,28 @@ function Cms() {
             currentPageData.map(key => (
               <div 
                 key={key} 
-                className="grid grid-cols-[200px_1fr_1fr] gap-4 p-4 border-b border-gray-200 hover:bg-gray-50"
+                className="grid grid-cols-[200px_1fr_1fr] gap-4 p-4 border-b border-gray-200 hover:bg-zinc-500/10"
               >
                 <div className="flex items-center">
-                  <code className="bg-gray-100 px-2 py-1 rounded text-sm text-blue-600 break-all">
+                  <code className="px-3 py-1 bg-[var(--table-producer)] text-[var(--table-producer-text)] rounded-full text-sm font-medium">
                     {key}
                   </code>
                 </div>
                 <div>
                   <textarea
-                    value={enTranslations[selectedPage]?.[key] || ''}
-                    onChange={(e) => handleEnChange(selectedPage, key, e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-vertical min-h-15"
-                    rows={2}
-                  />
+  value={enTranslations[selectedPage]?.[key] || ''}
+  onChange={(e) => handleEnChange(selectedPage, key, e.target.value)}
+  className="w-full px-3 py-2 border border-zinc-500/50 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-vertical min-h-15 text-gray-900 dark:text-gray-100"
+  rows={2}
+/>
                 </div>
                 <div>
                   <textarea
-                    value={frTranslations[selectedPage]?.[key] || ''}
-                    onChange={(e) => handleFrChange(selectedPage, key, e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-vertical min-h-15"
-                    rows={2}
-                  />
+  value={frTranslations[selectedPage]?.[key] || ''}
+  onChange={(e) => handleFrChange(selectedPage, key, e.target.value)}
+  className="w-full px-3 py-2 border border-zinc-500/50 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-vertical min-h-15 text-gray-900 dark:text-gray-100"
+  rows={2}
+/>
                 </div>
               </div>
             ))

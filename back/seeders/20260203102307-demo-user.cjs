@@ -19,7 +19,7 @@ module.exports = {
         first_name: `Producer${i}`,
         last_name: `User`,
         email: `producer${i}@marsai.test`,
-        password: "$2b$10$examplehashedpasswordxxxxxxxxxxxxxxxxxxxxxxxxxxxx", // replace later with real hash
+        password: "$2b$10$F4CO5j/jBINAXep4SPiGku3yfnQ8z3rhTojpo4SkbeINMysf.QVMa",
         role: "PRODUCER",
 
         phone: null,
@@ -50,7 +50,7 @@ module.exports = {
         first_name: `Jury${i}`,
         last_name: `Member`,
         email: `jury${i}@marsai.test`,
-        password: "$2b$10$examplehashedpasswordxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        password: "$2b$10$F4CO5j/jBINAXep4SPiGku3yfnQ8z3rhTojpo4SkbeINMysf.QVMa",
         role: "JURY",
 
         phone: null,
@@ -81,7 +81,7 @@ module.exports = {
         first_name: `Admin${i}`,
         last_name: `User`,
         email: `admin${i}@marsai.test`,
-        password: "$2b$10$examplehashedpasswordxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        password: "$2b$10$F4CO5j/jBINAXep4SPiGku3yfnQ8z3rhTojpo4SkbeINMysf.QVMa",
         role: "ADMIN",
 
         phone: null,

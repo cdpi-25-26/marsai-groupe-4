@@ -1,99 +1,191 @@
-import React from 'react'
-import { useTranslation } from 'react-i18next'
+import React, { useState } from "react";
+import { NavLink } from "react-router";
+import { useTranslation } from "react-i18next";
+import { Facebook, Instagram, Youtube, Twitter } from "lucide-react";
 
 function Footer() {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
+const [email, setEmail]     = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleNewsletter = async () => {
+    if (!email || !email.includes("@")) {
+      setMessage(t("footer.invalid_email") || "Email invalide");
+      return;
+    }
+
+    try {
+      const res = await fetch("http://localhost:3000/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setMessage("Inscription réussie !");
+        setEmail(""); // clear input
+      } else {
+        setMessage(data.error || "Email déjà inscrit");
+      }
+    } catch (err) {
+      console.error(err);
+      setMessage("Erreur serveur");
+    }
+  };
+
+  // Optional: auto-clear message after 5 seconds
+  React.useEffect(() => {
+    if (!message) return;
+    const timer = setTimeout(() => setMessage(""), 5000);
+    return () => clearTimeout(timer);
+  }, [message]);
+
+  const footerLinkClass = ({ isActive }) =>
+    `block transition ${
+      isActive
+        ? "text-[var(--footer-text)]"
+        : "text-[var(--footer-credit)] hover:text-[var(--footer-text)]"
+    }`;
+
+  const handleNavigate = () => {
+    window.scrollTo(0, 0);
+  };
+
   return (
-    <div className="bg-black py-[96px] px-[40px] w-full">
-        <section className="max-w-[1000px] m-0 mx-auto">
-          <div className="grid grid-cols-3 gap-6  ">
-            <div className="flex flex-col gap-8">
-              <h1 className="text-white text-[36px] font-bold tracking-[-1.8px]">
-                MARS <span className="text-[#AD46FF]">AI</span>
-              </h1>
+    <footer className="bg-background py-[64px] sm:py-[96px] px-[20px] sm:px-[40px] w-full">
+      <section className="max-w-[1000px] mx-auto">
+        <div
+          className="
+            grid gap-[48px]
+            grid-cols-1
+            md:grid-cols-2
+            md:grid-rows-2
+            lg:grid-cols-3
+          "
+        >
+          <div className="flex flex-col gap-[32px]">
+            <h1 className="text-[var(--footer-text)] text-[32px] sm:text-[36px] font-bold tracking-[-1.8px]">
+              MARS <span className="text-[#AD46FF]">AI</span>
+            </h1>
 
-              <h1 className="text-white/30 text-start text-[18px] italic max-w-[300px]">
-                {t("footer.subtitle")}
-              </h1>
+            <p className="text-[var(--footer-subtitle)] text-[16px] sm:text-[18px] italic max-w-[300px]">
+              {t("footer.subtitle")}
+            </p>
 
-              <div className="grid grid-cols-4 max-w-[250px] gap-2">
-                <img
-                  className=""
-                  src="src/assets/login_png/Button.svg"
-                  alt=""
-                />
-                <img
-                  className=""
-                  src="src/assets/login_png/Button (1).svg"
-                  alt=""
-                />
-                <img
-                  className=""
-                  src="src/assets/login_png/Button (2).svg"
-                  alt=""
-                />
-                <img
-                  className=""
-                  src="src/assets/login_png/Button (3).svg"
-                  alt=""
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 text-start text-[16px]">
-              <div className="flex flex-col gap-[20px] text-white/40 ">
-                <h2 className="text-[#AD46FF] uppercase mb-[20px] text-[11px] tracking-[4.4px]">
-                  Navigation
-                </h2>
-                <h2>Galerie</h2>
-                <h2>Programme</h2>
-                <h2>Top 50</h2>
-                <h2>Billetterie</h2>
-              </div>
-
-              <div className="flex flex-col gap-[20px] text-white/40">
-                <h2 className="text-[#F6339A] uppercase mb-[20px] text-[11px] tracking-[4.4px]">
-                  Légal
-                </h2>
-                <h2>Partenaires</h2>
-                <h2>FAQ</h2>
-                <h2>Contact</h2>
-              </div>
-            </div>
-            <div>
-              <div className="flex flex-col w-[330px] rounded-[36px] border border-white/5  bg-[linear-gradient(45deg,rgba(13,13,13,1)_60%,rgba(173,70,255,0.2)_100%)] p-[40px] gap-[20px]">
-                <h2 className="text-start text-white font-bold text-[24px] tracking-[-0.6px]">
-                  RESTEZ <br />
-                  CONNECTÉ
-                </h2>
-
-                <div className="flex gap-[10px]">
-                  <input
-                    placeholder="Email Signal"
-                    type="text"
-                    className="w-full rounded-[14px] placeholder-white/10 text-[14px] border border-white/5 runded bg-white/3 p-[25px] h-[56px]"
-                  />{" "}
-                  <button className="text-center py-0 px-[20px] bg-white rounded-[14px] font-bold text-[11px] tracking-[1.1px]">
-                    OK
-                  </button>
-                </div>
-              </div>
+            <div className="grid grid-cols-4 max-w-[220px] gap-2 text-[var(--footer-text)]">
+              <Facebook />
+              <Instagram />
+              <Youtube />
+              <Twitter />
             </div>
           </div>
 
+          <div className="grid grid-cols-2 gap-[40px] text-[15px]">
+            <div className="flex flex-col gap-[18px]">
+              <h2 className="text-[#AD46FF] uppercase text-[11px] tracking-[4.4px] mb-[12px]">
+                Navigation
+              </h2>
 
-          <div className="flex justify-between tracking-[3px] text-[10px] text-white/20 py-[40px] px-0 border-t border-white/5 mt-[96px]">
-            <div>© 2026 MARS.A.I ● PROTOCOL MARSEILLE HUB</div>
-            <div>DESIGN SYSTÈME CYBER-PREMIUM LÉGAL</div>
+              <NavLink to="/gallerie" className={footerLinkClass} onClick={handleNavigate}>
+                {t("footer.gallery")}
+              </NavLink>
+
+              <NavLink to="/agenda" className={footerLinkClass} onClick={handleNavigate}>
+                {t("footer.program")}
+              </NavLink>
+
+              <NavLink to="/palmares" className={footerLinkClass} onClick={handleNavigate}>
+                Top 50
+              </NavLink>
+            </div>
+
+            <div className="flex flex-col gap-[18px]">
+              <h2 className="text-[#F6339A] uppercase text-[11px] tracking-[4.4px] mb-[12px]">
+                {t("footer.legal")}
+              </h2>
+
+              <NavLink to="/contact" className={footerLinkClass} onClick={handleNavigate}>
+                FAQ
+              </NavLink>
+
+              <NavLink to="/contact" className={footerLinkClass} onClick={handleNavigate}>
+                Contact
+              </NavLink>
+            </div>
           </div>
 
-        </section>
+          <div
+    style={{ background: "var(--email-gradient)" }}
+    className="
+      w-full md:w-auto rounded-[28px]
+      border border-[var(--email-gradient-border)]
+      p-[28px] sm:p-[40px]
+      flex flex-col gap-[20px]
+    "
+  >
+    <h2 className="text-[var(--footer-text)] font-bold text-[22px] sm:text-[24px] tracking-[-0.6px]">
+      {t("footer.stay")} <br /> {t("footer.connected")}
+    </h2>
 
-        
+    <div className="flex gap-[10px]">
+      <input
+        placeholder="Email Signal"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="
+          w-full h-[52px] rounded-[14px]
+          bg-[var(--email-bg)] border border-[var(--email-border)]
+          px-[18px] text-[14px] text-white
+          placeholder-[var(--email-placeholder)]
+        "
+      />
+      <button
+        onClick={handleNewsletter}
+        className="
+          px-[18px] bg-white text-black rounded-[14px]
+          font-bold text-[11px] tracking-[1.1px]
+          hover:bg-gray-200 transition
+          disabled:opacity-50 disabled:cursor-not-allowed
+        "
+        disabled={!email.trim() || !email.includes("@")}
+      >
+        OK
+      </button>
+    </div>
 
-        
-      </div>
-  )
+    {message && (
+      <p
+        className={`text-sm mt-3 ${
+          message.includes("réussie") || message.includes("Inscription")
+            ? "text-green-400"
+            : "text-red-400"
+        }`}
+      >
+        {message}
+      </p>
+    )}
+  </div>
+          </div>
+
+        <div
+          className="
+            mt-[60px] sm:mt-[96px]
+            pt-[32px]
+            border-t border-white/5
+            flex flex-col gap-[12px]
+            sm:flex-row sm:justify-between
+            text-[10px] tracking-[3px] text-[var(--footer-subtitle)]
+          "
+        >
+          <div>{t("footer.year")}</div>
+          <div>{t("footer.legal_text")}</div>
+        </div>
+      </section>
+    </footer>
+  );
 }
 
-export default Footer
+export default Footer;

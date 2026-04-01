@@ -99,6 +99,11 @@ phase_status: {
       allowNull: false,
       defaultValue: "phase1",
     },
+    edition_year: {
+  type: DataTypes.INTEGER,
+  allowNull: false,
+  defaultValue: 2026,  
+},
 }, {
   timestamps: true,
   tableName: "films",

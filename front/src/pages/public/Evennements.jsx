@@ -1,11 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CardEvennements from "../../components/CardEvennements.jsx";
 import { Search } from "lucide-react";
-import { ChevronLeft } from "lucide-react";
-import { Plus } from "lucide-react";
-import { useParams } from "react-router";
-import { useEffect } from "react";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 function Evennements() {
@@ -38,22 +33,15 @@ function Evennements() {
 
   return (
     <section
-      className="py-[154px]"
-      style={{
-        background: "var(--evennements-bg)",
-        color: "var(--evennements-text)",
-      }}
+      style={{ backgroundColor: "var(--evennements-bg)", color: "var(--evennements-text)" }}
+      className="pt-30 sm:pt-24 px-4 sm:px-6"
     >
       <div className="flex flex-col items-start justify-between p-6 gap-4">
         <div className="w-full">
           <h2 className="font-bold tracking-[-2.4px] text-4xl sm:text-5xl uppercase">
-            {t("evennements.management")}
+            {t("event.management")}
           </h2>
-
-          <h2
-            className="text-sm sm:text-[14px] uppercase tracking-[1.4px]"
-            style={{ color: "var(--evennements-text-soft)" }}
-          >
+          <h2 className="text-sm sm:text-[14px] uppercase tracking-[1.4px]" style={{ color: "var(--evennements-text-soft)" }}>
             {t("event.control_event")}
           </h2>
         </div>
@@ -63,17 +51,13 @@ function Evennements() {
         <div
           className="flex items-center text-[14px] border rounded-[16px] h-[54px] px-[20px]"
           style={{
-            background: "var(--evennements-input-bg)",
+            backgroundColor: "var(--evennements-input-bg)",
             borderColor: "var(--evennements-input-border)",
-            color: "var(--evennements-text-muted)",
+            color: "var(--evennements-text-muted)"
           }}
         >
           <Search size={20} className="mr-[20px]" />
-          <input
-            className="w-[200px] outline-none bg-transparent"
-            placeholder={t("event.search_placeholder")}
-            type="search"
-          />
+          <input className="w-[200px] outline-none bg-transparent" placeholder={t("event.search_placeholder")} type="search" />
         </div>
       </div>
 

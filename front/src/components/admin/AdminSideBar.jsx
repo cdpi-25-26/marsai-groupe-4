@@ -32,6 +32,7 @@ import {
 import handleLogout from "@/utils/helpers";
 import { ThemeToggle } from "../ThemeToggle";
 import YoutubeConnectButton from './YoutubeConnectButton';
+import PhaseButton from './PhaseButton'
 
 const navItems = [
   { title: "Overview", url: "/admin", icon: LayoutDashboard },
@@ -54,7 +55,7 @@ export default function AdminSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <NavLink to="/admin">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <div className="flex aspect-square size-8 m-2 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                   <LayoutDashboard className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
@@ -103,13 +104,18 @@ export default function AdminSidebar() {
         </SidebarMenuItem>
         <SidebarMenuItem>
           <SidebarMenuButton asChild tooltip="Toggle Theme">
-            <div className="flex items-center w-full hover:cursor-pointer">
+            <div className="flex items-center w-full hover:cursor-pointer mr-2">
               <LogIn />
               <YoutubeConnectButton />
             </div>
           </SidebarMenuButton>
         </SidebarMenuItem>
         <SidebarMenu>
+          <SidebarMenuItem>
+  <SidebarMenuButton asChild tooltip="Changer de phase">
+    <PhaseButton />
+  </SidebarMenuButton>
+</SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip="Back Home">
               <NavLink to="/">
