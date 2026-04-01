@@ -1,12 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { useTranslation } from "react-i18next";
 
-export default function AccessDeniedPage() {
+export default function AccessDeniedPage({
+  autoRedirectToLogin = false,
+  redirectDelaySeconds = 30,
+  alertMessage = "",
+}) {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const [secondsLeft, setSecondsLeft] = useState(redirectDelaySeconds);
+
+  useEffect(() => {
+    setSecondsLeft(redirectDelaySeconds);
+
+    if (!autoRedirectToLogin) {
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      navigate("/auth/login");
+    }, redirectDelaySeconds * 1000);
+
+    const intervalId = setInterval(() => {
+      setSecondsLeft((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => {
+      clearTimeout(timeoutId);
+      clearInterval(intervalId);
+    };
+  }, [autoRedirectToLogin, navigate, redirectDelaySeconds]);
 
   return (
 <>
@@ -30,6 +56,23 @@ export default function AccessDeniedPage() {
           <p className="mt-4 max-w-[75ch] text-white/70">
             {t("accessdenied.message_reason")}  
           </p>
+
+          {alertMessage && (
+            <p className="mt-3 rounded-xl border border-amber-400/40 bg-amber-500/10 px-4 py-3 text-sm font-semibold text-amber-200">
+              {alertMessage}
+            </p>
+          )}
+
+          {autoRedirectToLogin && (
+            <p className="mt-3 text-sm font-semibold text-amber-300">
+              {t("accessdenied.redirect_notice", {
+                seconds: secondsLeft,
+                defaultValue:
+                  "Temporary warning: you will be redirected to the login page in {{seconds}}s.",
+              })}
+            </p>
+          )}
+
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <button
               onClick={() => navigate("/")}

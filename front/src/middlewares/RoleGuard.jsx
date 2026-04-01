@@ -48,6 +48,12 @@ export function RoleGuard({ allowedRoles, children }) {
   if (allowedRoles.includes(user?.role)) {
     return children;
   } else {
-    return <AccessDeniedPage />;
+    return (
+      <AccessDeniedPage
+        autoRedirectToLogin
+        redirectDelaySeconds={30}
+        alertMessage="Sorry, you have to be logged in."
+      />
+    );
   }
 }
